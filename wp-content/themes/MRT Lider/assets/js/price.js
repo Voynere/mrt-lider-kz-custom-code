@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     accordionItems.forEach(item => {
         const btn = item.querySelector('.price__item-category');
         const content = item.querySelector('.price__item-wrapper');
-        
+        if (!btn || !content) {
+            return;
+        }
+
         btn.addEventListener('click', function() {
             // Закрываем все другие открытые элементы
             accordionItems.forEach(otherItem => {

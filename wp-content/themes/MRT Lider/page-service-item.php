@@ -594,33 +594,6 @@ get_header();
     });
 </script>
 
-<!-- Аккордеон -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // все элементы аккордеона
-        const accordionItems = document.querySelectorAll('.price__item');
-        
-        accordionItems.forEach(item => {
-            const btn = item.querySelector('.price__item-category');
-            const content = item.querySelector('.price__item-wrapper');
-            
-            btn.addEventListener('click', function() {
-                accordionItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.price__item-category').classList.remove('active');
-                        otherItem.querySelector('.price__item-wrapper').classList.remove('active');
-                    }
-                });
-                
-                item.classList.toggle('active');
-                btn.classList.toggle('active');
-                content.classList.toggle('active');
-            });
-        });
-    });
-</script>
-<!-- Аккордеон -->
 <?php get_footer(); ?>
 
 <?php
