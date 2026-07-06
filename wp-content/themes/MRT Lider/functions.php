@@ -79,6 +79,15 @@ add_action( 'wp_enqueue_scripts', function () {
         );
     }
 
+    $search_js = get_template_directory() . '/assets/js/search.js';
+    wp_enqueue_script(
+        'mrt-search',
+        get_template_directory_uri() . '/assets/js/search.js',
+        array(),
+        file_exists($search_js) ? filemtime($search_js) : '1.0.0',
+        true
+    );
+
     $selected_slug = mrt_resolve_selected_city();
     if (mrt_is_animals_branch($selected_slug) || is_page_template('home-animals.php')) {
         wp_enqueue_style(
@@ -218,6 +227,123 @@ add_action('wp_ajax_nopriv_send_tax_form', 'handle_tax_form');
 function handle_tax_form() {
     include get_template_directory() . '/template-parts/send-tax-form.php';
 }
+
+/**
+ * AJAX: site search (services in city, articles, FAQ).
+ */
+add_action('wp_ajax_mrt_site_search', 'mrt_handle_site_search');
+add_action('wp_ajax_nopriv_mrt_site_search', 'mrt_handle_site_search');
+function mrt_handle_site_search(): void {
+    $q = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+    $city = isset($_GET['city']) ? sanitize_text_field(wp_unslash($_GET['city'])) : '';
+    $cities = mrt_seo_get_cities();
+    if ($city === '' || !array_key_exists($city, $cities)) {
+        $city = mrt_get_selected_city_slug();
+    }
+
+    if (mb_strlen($q, 'UTF-8') < 2) {
+        wp_send_json_success(array('services' => array(), 'articles' => array(), 'faq' => array()));
+    }
+
+    $branch = mrt_get_branch($city);
+    $branch_slug = !empty($branch['branch_taxonomy']) ? $branch['branch_taxonomy'] : $city;
+
+    $services = array();
+    $svc_query = new WP_Query(array(
+        'post_type'      => 'service',
+        'post_status'    => 'publish',
+        'posts_per_page' => 8,
+        's'              => $q,
+        'tax_query'      => array(array(
+            'taxonomy' => 'branch',
+            'field'    => 'slug',
+            'terms'    => $branch_slug,
+        )),
+    ));
+    while ($svc_query->have_posts()) {
+        $svc_query->the_post();
+        $post_id = get_the_ID();
+        $service_url = trailingslashit(mrt_get_city_nav_url('uslugi-i-ceny', $city));
+        $service_terms = wp_get_post_terms($post_id, 'service_type');
+        if (!is_wp_error($service_terms) && !empty($service_terms)) {
+            $service_url = trailingslashit(home_url('/' . $city . '/uslugi-i-ceny/price/' . $service_terms[0]->slug));
+        }
+        $services[] = array(
+            'title' => get_the_title(),
+            'url'   => $service_url,
+        );
+    }
+    wp_reset_postdata();
+
+    $articles = array();
+    if (post_type_exists('article')) {
+        $art_query = new WP_Query(array(
+            'post_type'      => 'article',
+            'post_status'    => 'publish',
+            'posts_per_page' => 5,
+            's'              => $q,
+        ));
+        while ($art_query->have_posts()) {
+            $art_query->the_post();
+            $articles[] = array(
+                'title' => get_the_title(),
+                'url'   => get_permalink(),
+            );
+        }
+        wp_reset_postdata();
+    }
+
+    $faq = array();
+    $parent_answers = get_term_by('slug', 'answers', 'category');
+    if ($parent_answers && !is_wp_error($parent_answers)) {
+        $faq_posts = get_posts(array(
+            'post_type'      => 'post',
+            'post_status'    => 'publish',
+            'posts_per_page' => 20,
+            'tax_query'      => array(
+                'relation' => 'AND',
+                array(
+                    'taxonomy' => 'category',
+                    'field'    => 'slug',
+                    'terms'    => $city,
+                ),
+                array(
+                    'taxonomy'         => 'category',
+                    'field'            => 'term_id',
+                    'terms'            => (int) $parent_answers->term_id,
+                    'include_children' => true,
+                ),
+            ),
+        ));
+        foreach ($faq_posts as $faq_post) {
+            for ($i = 1; $i <= 50; $i++) {
+                $vopros = get_field('know_vopros_' . $i, $faq_post->ID);
+                if (!$vopros) {
+                    break;
+                }
+                if (mb_stripos($vopros, $q, 0, 'UTF-8') !== false) {
+                    $faq[] = array(
+                        'title' => wp_strip_all_tags($vopros),
+                        'url'   => mrt_get_city_nav_url('vopros-otvet', $city),
+                    );
+                    if (count($faq) >= 5) {
+                        break 2;
+                    }
+                }
+            }
+        }
+    }
+
+    wp_send_json_success(array(
+        'services' => $services,
+        'articles' => $articles,
+        'faq'      => $faq,
+    ));
+}
+
+add_action('wp_footer', function () {
+    get_template_part('template-parts/search-overlay');
+}, 5);
 
 
 // --- Метрика ---
