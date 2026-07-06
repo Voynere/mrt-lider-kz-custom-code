@@ -2,6 +2,7 @@
 
 require get_template_directory() . '/inc/mrt-city-config.php';
 require get_template_directory() . '/inc/mrt-header-helpers.php';
+require get_template_directory() . '/inc/mrt-city-routing.php';
 
 add_filter('body_class', function ($classes) {
     $slug = mrt_resolve_selected_city();
@@ -42,7 +43,7 @@ add_action( 'wp_enqueue_scripts', function () {
     wp_add_inline_script( 'fancybox-script', $init_js );
 	wp_enqueue_script( 'imask', 'https://unpkg.com/imask', array(), null, true );
 	wp_enqueue_script( 'imask', 'https://cdnjs.cloudflare.com/ajax/libs/imask/7.5.3/imask.min.js', array(), '7.5.3', true );
-	wp_enqueue_script( 'main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.6.3', true );
+	wp_enqueue_script( 'main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.6.4', true );
 	wp_enqueue_script( 'cookie', get_template_directory_uri() . '/assets/js/cookie.js', array('jquery'), '1.2.3', true );
 	wp_enqueue_script( 'city-chosen', get_template_directory_uri() . '/assets/js/city-chosen.js', array('jquery'), '1.0.3', true );
 	wp_enqueue_script( 'tax', get_template_directory_uri() . '/assets/js/tax.js', array('jquery'), 'null', true );
@@ -110,30 +111,8 @@ add_filter('upload_mimes', 'allow_svg_upload');
 
 // Хлебные крошки
 function custom_breadcrumbs() {
-
-    $known_city_slugs = array(
-        'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
-    );
-
-    // Определяем город: URL > cookie > fallback
-    $selected_city = 'almaty'; // fallback по умолчанию
-    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-    $path = parse_url($request_uri, PHP_URL_PATH);
-    $path = trim((string) $path, '/');
-    $path_parts = $path ? explode('/', $path) : array();
-    $url_city = !empty($path_parts[0]) ? sanitize_text_field($path_parts[0]) : '';
-
-    if ($url_city && in_array($url_city, $known_city_slugs, true)) {
-        $selected_city = $url_city;
-    } elseif (isset($_COOKIE['selected_city'])) {
-        $cookie_city = sanitize_text_field($_COOKIE['selected_city']);
-        if (in_array($cookie_city, $known_city_slugs, true)) {
-            $selected_city = $cookie_city;
-        }
-    }
-
-    // Формируем базовый URL для выбранного города
-    $city_base_url = trailingslashit(home_url('/') . $selected_city);
+    $selected_city = mrt_get_selected_city_slug();
+    $city_base_url = mrt_get_city_base_url($selected_city);
 
     echo '<div class="breadcrumbs"><div class="container"><ul class="breadcrumbs__list">';
 

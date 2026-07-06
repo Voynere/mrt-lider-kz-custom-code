@@ -14,33 +14,6 @@ $address_full = $branch['address_full'] ?? 'ул. Аубакирова, 17/1, с
 $address_short = $branch['address_short'] ?? 'ул. Аубакирова, 17/1';
 $theme_uri = get_template_directory_uri();
 
-$service_posts = get_posts(array(
-    'post_type'      => 'service',
-    'posts_per_page' => -1,
-    'fields'         => 'ids',
-    'tax_query'      => array(
-        array(
-            'taxonomy' => 'branch',
-            'field'    => 'slug',
-            'terms'    => $branch['branch_taxonomy'] ?? $selected_city,
-        ),
-    ),
-));
-
-$service_types = array();
-if (!empty($service_posts)) {
-    foreach ($service_posts as $post_id) {
-        $types = wp_get_post_terms($post_id, 'service_type');
-        if (!is_wp_error($types) && !empty($types)) {
-            foreach ($types as $type) {
-                if (!isset($service_types[$type->term_id])) {
-                    $service_types[$type->term_id] = $type;
-                }
-            }
-        }
-    }
-}
-
 $contacts_query = mrt_get_contacts_query($selected_city);
 $map_html = '';
 if ($contacts_query->have_posts()) {
@@ -114,23 +87,16 @@ get_header();
                 </article>
             </div>
 
-            <?php if (!empty($service_types)) : ?>
-                <div class="animals-prices">
-                    <h3 class="animals-prices__title">Услуги и цены</h3>
-                    <ul class="animals-prices__list">
-                        <?php foreach ($service_types as $service_type) :
-                            $url = site_url('/') . $selected_city . '/uslugi-i-ceny/price/' . $service_type->slug . '/';
-                            ?>
-                            <li>
-                                <a href="<?php echo esc_url($url); ?>">
-                                    <?php echo esc_html($service_type->name); ?>
-                                    <span>→</span>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
+            <?php
+            $services_url = mrt_get_city_nav_url('uslugi-i-ceny', $selected_city);
+            ?>
+            <div class="animals-prices">
+                <h3 class="animals-prices__title">Услуги и цены</h3>
+                <p class="animals-prices__lead">Полный прайс-лист, направления диагностики и дополнительные услуги — на отдельной странице.</p>
+                <a href="<?php echo esc_url($services_url); ?>" class="animals-btn animals-btn--primary">
+                    Смотреть прайс-лист
+                </a>
+            </div>
         </div>
     </section>
 

@@ -3,27 +3,30 @@
 Template Name: services
 */
 
-// --- Список валидных слагов городов ---
-$known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
-);
+// --- Список валидных слагов городов (для tax_query) ---
+$known_city_slugs = mrt_get_known_city_slugs();
 
-// --- Определяем город: URL > кука > fallback ---
-$selected_city = 'almaty'; // fallback
+$selected_city = mrt_get_selected_city_slug(['sync_cookie' => true]);
 
-$request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-$path = parse_url($request_uri, PHP_URL_PATH);
-$path = trim($path, '/');
-$path_parts = $path ? explode('/', $path) : array();
-$url_city = !empty($path_parts[0]) ? sanitize_text_field($path_parts[0]) : '';
-
-if ($url_city && in_array($url_city, $known_city_slugs, true)) {
-    $selected_city = $url_city;
-} elseif (isset($_COOKIE['selected_city'])) {
-    $cookie_city = sanitize_text_field($_COOKIE['selected_city']);
-    if (in_array($cookie_city, $known_city_slugs, true)) {
-        $selected_city = $cookie_city;
-    }
+if (mrt_is_animals_branch($selected_city)) {
+    get_header();
+    ?>
+    <main class="main animals-main">
+        <div class="main-background">
+            <?php custom_breadcrumbs(); ?>
+            <section class="services animals-services">
+                <div class="container">
+                    <div class="services__inner">
+                        <h1 class="services__title page-title">УСЛУГИ И ЦЕНЫ</h1>
+                        <?php get_template_part('template-parts/animals-services-content'); ?>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <?php
+    get_footer();
+    return;
 }
 
 // --- Вспомогательные функции ---

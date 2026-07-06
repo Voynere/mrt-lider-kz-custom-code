@@ -15,6 +15,28 @@ if (!function_exists('mrt_get_selected_city_slug')) {
         if (!in_array($default, mrt_get_city_slugs(), true)) {
             $default = 'almaty';
         }
+
+        $mrt_city_qv = get_query_var('mrt_city');
+        if ($mrt_city_qv !== '' && $mrt_city_qv !== false) {
+            $qv_slug = sanitize_key((string) $mrt_city_qv);
+            if (in_array($qv_slug, mrt_get_city_slugs(), true)) {
+                if (!empty($options['sync_cookie']) && !headers_sent()) {
+                    if (!isset($_COOKIE['selected_city']) || $_COOKIE['selected_city'] !== $qv_slug) {
+                        setcookie(
+                            'selected_city',
+                            $qv_slug,
+                            time() + 30 * DAY_IN_SECONDS,
+                            '/',
+                            $_SERVER['HTTP_HOST'] ?? '',
+                            is_ssl(),
+                            true
+                        );
+                    }
+                }
+                return $qv_slug;
+            }
+        }
+
         return mrt_resolve_selected_city($default, !empty($options['sync_cookie']));
     }
 }

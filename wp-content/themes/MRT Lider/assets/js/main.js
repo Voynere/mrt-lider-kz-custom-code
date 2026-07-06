@@ -313,7 +313,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const activeCity = getActiveCitySlug();
-        const navSelectors = '.header__nav a, .header__burger-nav a, .mobile-nav__list a, .footer__links a, .header__mobile-nav a';
+        const navSelectors = [
+            '.header__nav a',
+            '.header__burger-nav a',
+            '.mobile-nav__list a',
+            '.footer__links a',
+            '.header__mobile-nav a',
+            '.breadcrumbs a',
+            '.header__logo',
+            '.header__burger-logo a',
+            '.animals-prices a',
+            '.animals-btn[href]',
+        ].join(', ');
 
         document.querySelectorAll(navSelectors).forEach(link => {
             if (link.classList.contains('header__city-choice') || link.closest('.modal-city__content')) {
@@ -334,6 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const parts = pathname.split('/').filter(Boolean);
             if (!parts.length) {
+                if (link.classList.contains('header__logo') || link.closest('.header__burger-logo')) {
+                    link.setAttribute('href', `${window.location.origin}/${activeCity}/`);
+                }
                 return;
             }
 
@@ -342,6 +356,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 pageSlug = parts[1];
             } else if (citySpecificPagesJs.includes(parts[0])) {
                 pageSlug = parts[0];
+            } else if (knownCitySlugs.includes(parts[0].toLowerCase()) && parts.length === 1) {
+                link.setAttribute('href', `${window.location.origin}/${activeCity}/`);
+                return;
             }
 
             if (pageSlug && citySpecificPagesJs.includes(pageSlug)) {
@@ -447,17 +464,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const parts = pathname.split('/').filter(Boolean);
+            const activeCity = getActiveCitySlug();
+
             if (!parts.length) {
+                e.preventDefault();
+                window.location.href = `${window.location.origin}/${activeCity}/`;
                 return;
             }
 
-            const activeCity = getActiveCitySlug();
             let pageSlug = null;
             let linkCity = null;
 
             if (knownCitySlugs.includes(parts[0].toLowerCase())) {
                 linkCity = parts[0].toLowerCase();
                 pageSlug = parts[1] || null;
+                if (!pageSlug) {
+                    if (linkCity !== activeCity) {
+                        e.preventDefault();
+                        window.location.href = `${window.location.origin}/${activeCity}/`;
+                    }
+                    return;
+                }
             } else if (citySpecificPagesJs.includes(parts[0])) {
                 pageSlug = parts[0];
             } else {
@@ -480,8 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Навешиваем обработчики на все навигационные ссылки
         // Используем делегирование события для повышения надежности
         document.addEventListener('click', function (e) {
-            // Проверяем, является ли цель (или её родитель) навигационной ссылкой
-            const navLink = e.target.closest('.header__nav a, .header__burger-nav a, .mobile-nav__list a, .footer__links a, .header__mobile-nav a');
+            const navLink = e.target.closest(
+                '.header__nav a, .header__burger-nav a, .mobile-nav__list a, .footer__links a, .header__mobile-nav a, .breadcrumbs a, .header__logo, .header__burger-logo a, .animals-prices a, .animals-btn[href]'
+            );
             if (navLink) {
                 // Проверяем, не является ли это ссылка "Город не определен" или подобная
                 // которые не должны обрабатываться этой логикой
