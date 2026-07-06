@@ -291,13 +291,16 @@
 .header__bottom-main.childrens-clinic .header__bottom-wrapper {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(1, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 36px;
 }
 
-.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__info-item:first-child,
-.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__city:first-child,
-.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__bottom-socials:first-child {
+.header__bottom-main.childrens-clinic .header__bottom-wrapper > :first-child {
+  -ms-flex-item-align: start;
+      align-self: start;
+}
+
+.header__bottom-main.childrens-clinic .header__bottom-wrapper > :last-child:not(:only-child) {
   -ms-flex-item-align: end;
       align-self: end;
 }
