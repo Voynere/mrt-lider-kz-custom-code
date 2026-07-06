@@ -2,7 +2,9 @@
 
 require get_template_directory() . '/inc/mrt-city-config.php';
 require get_template_directory() . '/inc/mrt-header-helpers.php';
+require get_template_directory() . '/inc/mrt-service-helpers.php';
 require get_template_directory() . '/inc/mrt-city-routing.php';
+require get_template_directory() . '/inc/mrt-service-routing.php';
 
 add_filter('body_class', function ($classes) {
     $slug = mrt_resolve_selected_city();
@@ -104,6 +106,28 @@ add_action( 'wp_enqueue_scripts', function () {
         'animalsSlugs'  => array_values(array_filter(mrt_get_known_city_slugs(), 'mrt_is_animals_branch')),
         'citySpecificPages' => mrt_get_city_specific_page_slugs(),
     ));
+
+    $service_landing_css = get_template_directory() . '/assets/css/service-landing.css';
+    if (file_exists($service_landing_css) && (mrt_seo_is_service_landing() || !empty(get_query_var('mrt_subcat')))) {
+        wp_enqueue_style(
+            'mrt-service-landing',
+            get_template_directory_uri() . '/assets/css/service-landing.css',
+            array('style'),
+            filemtime($service_landing_css)
+        );
+    }
+
+    $request_uri_for_assets = $_SERVER['REQUEST_URI'] ?? '';
+    if (preg_match('#/uslugi-i-ceny/price/#', $request_uri_for_assets)) {
+        $price_js = get_template_directory() . '/assets/js/price.js';
+        wp_enqueue_script(
+            'price',
+            get_template_directory_uri() . '/assets/js/price.js',
+            array(),
+            file_exists($price_js) ? filemtime($price_js) : '1.0.0',
+            true
+        );
+    }
 });
 
 require get_template_directory() . '/vacancies.php';
@@ -123,31 +147,53 @@ function custom_breadcrumbs() {
     $selected_city = mrt_get_selected_city_slug();
     $city_base_url = mrt_get_city_base_url($selected_city);
 
-    echo '<div class="breadcrumbs"><div class="container"><ul class="breadcrumbs__list">';
-
-    // Главная страница выбранного города
-    echo '<li><a href="' . esc_url($city_base_url) . '">Главная</a></li>';
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+    $path = parse_url($request_uri, PHP_URL_PATH);
+    $path = trim((string) $path, '/');
+    $path_parts = $path ? explode('/', $path) : array();
 
     $post = get_post();
+    $is_uslugi_itself = ($post && $post->post_name === 'uslugi-i-ceny');
+    $is_uslugi_child = $post && $post->post_parent && ($parent = get_post($post->post_parent)) && $parent->post_name === 'uslugi-i-ceny';
+    $is_service_page = ($post && get_page_template_slug($post) === 'page-service-item.php');
 
-    $show_uslugi_parent = false;
-    if (is_page() && get_page_template_slug($post) === 'page-service-item.php') {
-        $show_uslugi_parent = true;
-    }
+    echo '<div class="breadcrumbs"><div class="container"><ul class="breadcrumbs__list">';
+    echo '<li><a href="' . esc_url($city_base_url) . '">Главная</a></li>';
 
-    // Формируем URL и заголовок страницы "Услуги и цены" с учётом города
     $uslugi_page_url = trailingslashit($city_base_url . 'uslugi-i-ceny');
-    $uslugi_page = get_page_by_path('uslugi-i-ceny');
-    $uslugi_page_title = $uslugi_page ? $uslugi_page->post_title : 'Услуги и цены';
+    $uslugi_title = 'Услуги и цены';
 
-    if ($uslugi_page && $show_uslugi_parent) {
+    $show_uslugi_link = ($is_service_page || $is_uslugi_child || (count($path_parts) >= 3 && ($path_parts[1] ?? '') === 'uslugi-i-ceny')) && !$is_uslugi_itself;
+
+    if ($show_uslugi_link) {
         echo '<li><svg width="8" height="17" viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.47L0.8625 0.5L8 8.5L0.8625 16.5L0 15.535L6.27083 8.5L0 1.47Z" fill="#404040"/></svg></li>';
-        echo '<li><a href="' . esc_url($uslugi_page_url) . '">' . esc_html($uslugi_page_title) . '</a></li>';
+        echo '<li><a href="' . esc_url($uslugi_page_url) . '">' . esc_html($uslugi_title) . '</a></li>';
     }
 
-    // === Основная логика для разных типов страниц ===
-    if (is_single()) {
-        // Для записей: рубрика -> заголовок
+    $current_title = get_the_title();
+
+    if (count($path_parts) >= 3 && ($path_parts[1] ?? '') === 'uslugi-i-ceny' && ($path_parts[2] ?? '') !== 'price') {
+        $subcat_slug = $path_parts[2];
+        $subcat_names = array(
+            'mrt-golovy' => 'МРТ Головы', 'mrt-pozvonochnika' => 'МРТ Позвоночника',
+            'mrt-sustavov' => 'МРТ Суставов', 'mrt-brushnoy-polosti' => 'МРТ Брюшной полости',
+            'mrt-malogo-taza' => 'МРТ Малого таза', 'mrt-serdca-i-sosudov' => 'МРТ Сердца и сосудов',
+            'mrt-grudnoy-kletki' => 'МРТ Грудной клетки', 'mrt-myagkih-tkaney' => 'МРТ Мягких тканей',
+            'kt' => 'КТ', 'uzi' => 'УЗИ', 'densitometriya' => 'Денситометрия',
+        );
+        $current_title = $subcat_names[$subcat_slug] ?? $subcat_slug;
+    } elseif (count($path_parts) >= 4 && ($path_parts[1] ?? '') === 'uslugi-i-ceny' && ($path_parts[2] ?? '') === 'price') {
+        $price_slug = $path_parts[3];
+        $service_term = get_term_by('slug', $price_slug, 'service_type');
+        if ($service_term) {
+            $current_title = $service_term->name;
+        }
+    }
+
+    if ($is_service_page || $is_uslugi_child || (count($path_parts) >= 2 && ($path_parts[1] ?? '') === 'uslugi-i-ceny')) {
+        echo '<li><svg width="8" height="17" viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.47L0.8625 0.5L8 8.5L0.8625 16.5L0 15.535L6.27083 8.5L0 1.47Z" fill="#404040"/></svg></li>';
+        echo '<li>' . esc_html($current_title) . '</li>';
+    } elseif (is_single()) {
         $categories = get_the_category();
         if (!empty($categories)) {
             $first_category = $categories[0];
@@ -155,14 +201,10 @@ function custom_breadcrumbs() {
             echo '<li><a href="' . esc_url(get_category_link($first_category->term_id)) . '">' . esc_html($first_category->name) . '</a></li>';
         }
         echo '<li><svg width="8" height="17" viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.47L0.8625 0.5L8 8.5L0.8625 16.5L0 15.535L6.27083 8.5L0 1.47Z" fill="#404040"/></svg></li>';
-        echo '<li>' . esc_html(get_the_title()) . '</li>';
-
-    } else {
-        // Для обычных страниц (не дочерних)
-        if (!is_front_page()) {
-            echo '<li><svg width="8" height="17" viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.47L0.8625 0.5L8 8.5L0.8625 16.5L0 15.535L6.27083 8.5L0 1.47Z" fill="#404040"/></svg></li>';
-            echo '<li>' . esc_html(get_the_title()) . '</li>';
-        }
+        echo '<li>' . esc_html($current_title) . '</li>';
+    } elseif (!is_front_page()) {
+        echo '<li><svg width="8" height="17" viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.47L0.8625 0.5L8 8.5L0.8625 16.5L0 15.535L6.27083 8.5L0 1.47Z" fill="#404040"/></svg></li>';
+        echo '<li>' . esc_html($current_title) . '</li>';
     }
 
     echo '</ul></div></div>';
@@ -265,7 +307,10 @@ function mrt_handle_site_search(): void {
         $post_id = get_the_ID();
         $service_url = trailingslashit(mrt_get_city_nav_url('uslugi-i-ceny', $city));
         $service_terms = wp_get_post_terms($post_id, 'service_type');
-        if (!is_wp_error($service_terms) && !empty($service_terms)) {
+        $post_name = get_post_field('post_name', $post_id);
+        if ($post_name) {
+            $service_url = mrt_get_service_landing_url($city, $post_name);
+        } elseif (!is_wp_error($service_terms) && !empty($service_terms)) {
             $service_url = trailingslashit(home_url('/' . $city . '/uslugi-i-ceny/price/' . $service_terms[0]->slug));
         }
         $services[] = array(
@@ -344,6 +389,17 @@ function mrt_handle_site_search(): void {
 add_action('wp_footer', function () {
     get_template_part('template-parts/search-overlay');
 }, 5);
+
+add_action('wp_ajax_mrt_resolve_city_switch', 'mrt_ajax_resolve_city_switch');
+add_action('wp_ajax_nopriv_mrt_resolve_city_switch', 'mrt_ajax_resolve_city_switch');
+function mrt_ajax_resolve_city_switch(): void {
+    $service_slug = sanitize_text_field(wp_unslash($_REQUEST['service'] ?? ''));
+    $target_city = sanitize_text_field(wp_unslash($_REQUEST['city'] ?? ''));
+    if ($service_slug === '' || $target_city === '') {
+        wp_send_json_error(array('message' => 'Missing params'), 400);
+    }
+    wp_send_json_success(array('url' => mrt_resolve_service_city_switch_url($service_slug, $target_city)));
+}
 
 
 // --- Метрика ---

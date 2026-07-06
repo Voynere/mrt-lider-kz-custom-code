@@ -59,7 +59,7 @@ add_filter('query_vars', 'mrt_city_routing_query_vars');
 
 if (!function_exists('mrt_maybe_flush_city_rewrite_rules')) {
     function mrt_maybe_flush_city_rewrite_rules(): void {
-        $version = '3';
+        $version = '4';
         if (get_option('mrt_city_rewrite_version') === $version) {
             return;
         }

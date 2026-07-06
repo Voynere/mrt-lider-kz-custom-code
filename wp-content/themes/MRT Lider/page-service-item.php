@@ -223,13 +223,23 @@ get_header();
                             if (empty($oblast)) $oblast = get_the_title();
                             $key = !empty($category) ? $category : 'Без категории';
                             if (!isset($grouped[$key])) $grouped[$key] = array();
-                            $grouped[$key][] = compact('oblast', 'price', 'discount');
+                            $grouped[$key][] = array(
+                                'oblast'    => $oblast,
+                                'price'     => $price,
+                                'discount'  => $discount,
+                                'post_slug' => get_post_field('post_name', get_the_ID()),
+                            );
                         endwhile;
                         wp_reset_postdata();
 
                         uksort($grouped, 'sort_service_categories');
 
-                        foreach ($grouped as $category => $items) : ?>
+                        foreach ($grouped as $category => $items) :
+                            $subcat_slug = mrt_normalize_subcat_slug(mrt_category_to_subcat_slug($category));
+                            $subcat_url = $subcat_slug
+                                ? home_url('/' . $selected_city . '/uslugi-i-ceny/' . $subcat_slug . '/')
+                                : '#';
+                        ?>
                             <div class="price__item">
                                 <button class="price__item-category">
                                     <p class="price__item-category-title"><?php echo esc_html($category); ?></p>
@@ -245,16 +255,36 @@ get_header();
                                         <p>Цена</p>
                                         <p>Скидка*</p>
                                     </div>
-                                    <?php foreach ($items as $item) : ?>
+                                    <?php foreach ($items as $item) :
+                                        $svc_url = !empty($item['post_slug'])
+                                            ? mrt_get_service_landing_url($selected_city, $item['post_slug'])
+                                            : '#';
+                                    ?>
                                         <div class="price__item-body">
+                                            <?php if ($svc_url !== '#') : ?>
+                                            <a href="<?php echo esc_url($svc_url); ?>" class="price__item-oblast" style="color:#6180A1;text-decoration:none;">
+                                                <?php echo esc_html($item['oblast']); ?>
+                                            </a>
+                                            <?php else : ?>
                                             <p class="price__item-oblast"><?php echo esc_html($item['oblast']); ?></p>
-                                            <p class="price__item-cena">
-                                                <?php 
-                                                    echo !empty($item['price']) ? esc_html($item['price']) . ' ' . esc_html($currency_symbol) : 'Цена не указана'; 
-                                                ?>
-                                            </p>
+                                            <?php endif; ?>
+                                            <?php
+                                            $price_parts = mrt_service_price_parts_from_meta(
+                                                $item['price'] ?? '',
+                                                $item['discount'] ?? '',
+                                                false
+                                            );
+                                            echo mrt_render_price_table_cell($price_parts, $currency_symbol);
+                                            ?>
                                             <p class="price__item-skidka">
-                                                <?php echo !empty($item['discount']) ? esc_html($item['discount']) . ' ' . esc_html($currency_symbol) : ''; ?>
+                                                <?php
+                                                if (($price_parts['mode'] ?? '') !== 'text') {
+                                                    $discount_amount = (int) ($price_parts['discount_amount'] ?? 0);
+                                                    echo $discount_amount > 0
+                                                        ? '−' . esc_html(number_format($discount_amount, 0, '', ' ')) . ' ' . esc_html($currency_symbol)
+                                                        : '';
+                                                }
+                                                ?>
                                             </p>
                                             <button class="price__item-button btn-blue booking-btn">
                                                 <p>Записаться</p>
@@ -265,6 +295,15 @@ get_header();
                                             </button>
                                         </div>
                                     <?php endforeach; ?>
+                                    <?php if ($subcat_url !== '#') : ?>
+                                    <a href="<?php echo esc_url($subcat_url); ?>" class="price__item-goto">
+                                        <span>Перейти</span>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#6180A1" />
+                                            <path d="M9.08108 8H16V14.9189M14.8108 9.18919L8 16" stroke="#6180A1" stroke-width="1.5" stroke-linecap="round" />
+                                        </svg>
+                                    </a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
