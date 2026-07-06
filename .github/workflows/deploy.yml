@@ -21,6 +21,8 @@ jobs:
         run: |
           set -euo pipefail
           tar czf custom-code.tar.gz \
+            favicon.svg \
+            favicon.ico \
             "wp-content/themes/MRT Lider" \
             wp-content/plugins/services-importer \
             scripts
@@ -83,10 +85,13 @@ jobs:
             mkdir -p "$TARGET/wp-content/themes" "$TARGET/wp-content/plugins"
             rsync -a --delete "$STAGING/wp-content/themes/MRT Lider/" "$THEME_TARGET/"
             rsync -a --delete "$STAGING/wp-content/plugins/services-importer/" "$PLUGIN_TARGET/"
+            install -m 644 "$STAGING/favicon.svg" "$TARGET/favicon.svg"
+            install -m 644 "$STAGING/favicon.ico" "$TARGET/favicon.ico"
 
             bash "$STAGING/scripts/verify-deploy-bundle.sh" "$TARGET" "production"
 
             chown -R mrt-lider.kz:mrt-lider.kz "$THEME_TARGET" "$PLUGIN_TARGET"
+            chown mrt-lider.kz:mrt-lider.kz "$TARGET/favicon.svg" "$TARGET/favicon.ico"
 
             echo "::group::Plugin updates"
             cd "$TARGET"

@@ -416,26 +416,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!headerTop || !headerBottom) return;
 
-    let headerHeight = headerTop.offsetHeight;
+    const MOBILE_BREAKPOINT = 768;
+    const COMPACT_SCROLL_OFFSET = 40;
 
-    function updateHeaderHeight() {
-        headerHeight = headerTop.offsetHeight;
+    let headerHeightBase = headerTop.offsetHeight;
+
+    function isMobileViewport() {
+        return window.innerWidth <= MOBILE_BREAKPOINT;
+    }
+
+    function measureBaseHeaderHeight() {
+        const wasSticky = headerTop.classList.contains('sticky-header');
+        const wasCompact = headerTop.classList.contains('header-compact');
+
+        headerTop.classList.remove('sticky-header', 'header-compact');
+        headerHeightBase = headerTop.offsetHeight;
+
+        if (wasSticky) {
+            headerTop.classList.add('sticky-header');
+        }
+        if (wasCompact) {
+            headerTop.classList.add('header-compact');
+        }
     }
 
     function handleScroll() {
-        if (window.scrollY > headerHeight) {
+        if (window.scrollY > headerHeightBase) {
             headerTop.classList.add('sticky-header');
-            headerBottom.style.marginTop = headerHeight + 'px';
+            headerBottom.style.marginTop = headerTop.offsetHeight + 'px';
+
+            if (isMobileViewport() && window.scrollY > headerHeightBase + COMPACT_SCROLL_OFFSET) {
+                headerTop.classList.add('header-compact');
+            } else {
+                headerTop.classList.remove('header-compact');
+            }
         } else {
-            headerTop.classList.remove('sticky-header');
+            headerTop.classList.remove('sticky-header', 'header-compact');
             headerBottom.style.marginTop = '';
         }
     }
 
-    // Инициализация
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', updateHeaderHeight);
+    function handleResize() {
+        measureBaseHeaderHeight();
+        if (!isMobileViewport()) {
+            headerTop.classList.remove('header-compact');
+        }
+        handleScroll();
+    }
 
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+
+    measureBaseHeaderHeight();
     handleScroll();
 });
 // --- Конец хэдер ---

@@ -1,0 +1,700 @@
+/* Ported header styles from mrt-lider.ru */
+
+.header__sticky-bar {
+  display: none;
+}
+
+.header__sticky-bar-col li {
+  margin: 0;
+}
+
+.header__top .sticky-logo {
+  display: none;
+}
+
+.header__top .default-logo {
+  display: block;
+}
+.header__top.sticky-header{transition:padding .25s ease}
+
+.header__sticky-more-drop a:hover {
+  color: #1EA2D7;
+}
+
+.header__logo .title-centre--sticky {
+  display: none;
+}
+
+.header__sticky-descriptor-line {
+  white-space: nowrap;
+}
+
+.header__schedule-opening.is-visible {
+  display: block;
+}
+
+.header__schedule-closing.is-visible {
+  display: block;
+}
+
+.header__sticky-descriptor-city {
+  white-space: nowrap;
+}
+
+  .header__top.sticky-header {
+    padding: 12px 0 22px;
+  }
+.header__top.sticky-header.header-compact{padding:8px 0 18px}
+
+.header__top.sticky-header .default-logo {
+  display: none;
+}
+
+.header__top.sticky-header .sticky-logo {
+  display: block;
+}
+
+  .header__sticky-descriptor-city {
+    font-size: 0.95em;
+  }
+
+  .header__top.sticky-header .header__mobile {
+    gap: 12px;
+  }
+
+  .header__sticky-bar-col--schedule {
+    grid-column: 1 / -1;
+  }
+
+.header__top.sticky-header .header__nav-item {
+  color: #303030;
+}
+
+.header__top.sticky-header .title-centre--default {
+  display: none;
+}
+
+.header__sticky-max:hover {
+  background: rgba(140, 255, 157, 0.28);
+}
+
+.header__schedule-opening strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+  .header__top.sticky-header .header__logo {
+    overflow: visible;
+  }
+
+.header__schedule-closing strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.header__bottom-socials .header__whatsapp-btn svg path {
+  fill: #8cff9d;
+}
+
+.header__top.sticky-header .header__search-btn svg path {
+  fill: #303030;
+}
+
+  .header__top.sticky-header .header__top-nav-block {
+    display: none;
+  }
+
+.header__top.sticky-header .header__logo .title-centre {
+  color: #1EA2D7;
+}
+
+  .header__sticky-max {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+.header__sticky-more--phone .header__sticky-more-current:hover {
+  color: #1EA2D7;
+}
+
+  .header__top.sticky-header .header__sticky-bar {
+    display: none !important;
+  }
+
+.header__sticky-bar-col li + li,
+.header__sticky-bar-col p + p {
+  margin-top: 2px;
+}
+
+.header__sticky-descriptor-line,
+.header__sticky-descriptor-city {
+  display: block;
+}
+.header__top.sticky-header.header-compact .header__sticky-descriptor-city{font-size:1em}
+
+  .header__top.sticky-header .header__mobile > div {
+    height: 38px;
+    width: 38px;
+  }
+
+.header__sticky-schedule-line {
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.header__top.sticky-header .header__mobile .header__mobile-btn {
+  width: 24px;
+  height: 24px;
+}
+
+.header__bottom-socials {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+.header__top.sticky-header.header-compact .header__logo{max-width:110px;max-height:50px;width:110px}
+
+.header__sticky-bar-col p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #303030;
+}
+
+.header__top.sticky-header .burger .burger__line {
+  background-color: var(--color-text-light-grey);
+}
+
+.header__top.sticky-header .header__search-btn {
+  border: 1px solid rgba(48, 48, 48, 0.5019607843);
+}
+
+  .header__top.sticky-header .header__logo .sticky-logo {
+    max-height: 64px;
+    max-width: 160px;
+  }
+
+  .header__top.sticky-header .header__logo .sticky-logo {
+    max-height: 72px;
+    max-width: 180px;
+  }
+
+  .header__top.sticky-header .header__mobile .header__mobile-btn {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header__top.sticky-header .header__mobile .header__mobile-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header__top.sticky-header .header__mobile .header__mobile-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__top.sticky-header .header__logo {
+    width: 160px;
+    max-width: 160px;
+    max-height: 64px;
+  }
+
+  .header__top.sticky-header .header__logo {
+    width: 180px;
+    max-width: 180px;
+    max-height: 72px;
+  }
+
+.header__schedule-closing--sticky.is-visible,
+.header__schedule-opening--sticky.is-visible {
+  display: inline-block;
+}
+
+  .header__top.sticky-header .header__logo .title-centre--sticky {
+    font-size: 9px;
+    bottom: -14px;
+    left: 32%;
+  }
+
+.header__top.sticky-header .container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+  .header__top.sticky-header .header__sticky-bar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 20px;
+  }
+
+    .header__bottom-socials .header__whatsapp:last-child,
+    .header__whatsapp-btn {
+        max-width: 256px;
+        height: 56px;
+    }
+
+.header__top.sticky-header .header__schedule-closing--sticky,
+.header__top.sticky-header .header__schedule-opening--sticky {
+  color: #92400e;
+}
+
+.header__sticky-bar-col {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #303030;
+  min-width: 0;
+}
+
+.header__top.sticky-header .header__mobile .header__mobile-btn svg path {
+  fill: var(--color-text-light-grey);
+  stroke: var(--color-text-light-grey);
+}
+
+  .header__top.sticky-header .header__logo .title-centre--sticky {
+    left: 32%;
+    max-width: min(168px, calc(100vw - 148px));
+    line-height: 1.15;
+  }
+
+.header__bottom-socials .header__whatsapp-btn {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 116px;
+}
+
+.header__top.sticky-header .header__top-content {
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  gap: 16px;
+}
+
+.header__bottom-main.childrens-clinic .header__bottom-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(1, 1fr);
+  gap: 36px;
+}
+
+.header__sticky-more-drop span,
+.header__sticky-more-drop a {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #303030;
+  text-decoration: none;
+  white-space: normal;
+}
+
+  .header__top.sticky-header .header__logo .title-centre--sticky {
+    font-size: 8px;
+    bottom: -13px;
+    left: 32%;
+    max-width: min(155px, calc(100vw - 140px));
+  }
+
+.header__top.sticky-header .header__schedule-closing--sticky.is-visible,
+.header__top.sticky-header .header__schedule-opening--sticky.is-visible {
+  display: inline-block;
+}
+.header__logo .title-centre--default,.header__top.sticky-header .header__logo .title-centre--sticky{transition:font-size .25s ease,bottom .25s ease,right .25s ease,left .25s ease}
+
+.header__sticky-more-current {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.header__top.sticky-header .header__logo {
+  position: relative;
+  max-height: 109px;
+  max-width: 218px;
+  width: 218px;
+  height: auto;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+/* ======= Изменения для кнопки мессенджера "Макс" ======= */
+
+/* 1. Скрываем кнопку Telegram на всех устройствах */
+.header__bottom-socials .header__whatsapp:first-child {
+    display: none;
+}
+
+.header__top.sticky-header .header__logo .sticky-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 109px;
+  max-width: 218px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.header__top.sticky-header .burger.active .burger__line.burger__line-top {
+  -webkit-transform: translate(3px, 3px);
+      -ms-transform: translate(3px, 3px);
+          transform: translate(3px, 3px);
+}
+.header__top.sticky-header.header-compact .header__logo .title-centre--sticky{font-size:7px;bottom:-13px;left:32%;max-width:min(150px,calc(100vw - 132px));line-height:1.1;letter-spacing:-.03em;right:auto}
+
+.header__bottom-main.childrens-clinic::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-white);
+}
+
+.header__top.sticky-header .burger.active .burger__line.burger__line-bottom {
+  -webkit-transform: translate(3px, -3px);
+      -ms-transform: translate(3px, -3px);
+          transform: translate(3px, -3px);
+}
+
+.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__info-item:first-child, .header__bottom-main.childrens-clinic .header__bottom-wrapper .header__city:first-child {
+  -ms-flex-item-align: end;
+      align-self: end;
+}
+
+.header__sticky-more-count {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  font-size: 11px;
+  line-height: 1;
+  color: #1EA2D7;
+  border: 1px solid rgba(30, 162, 215, 0.35);
+  border-radius: 999px;
+  padding: 2px 7px;
+  cursor: default;
+}
+
+  .header__burger-bottom {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: 24px;
+    width: 100%;
+  }
+
+.header__sticky-more:hover .header__sticky-more-drop,
+.header__sticky-more:focus-within .header__sticky-more-drop {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.header__top.sticky-header {
+  padding: 16px 0 26px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background-color: var(--color-white);
+  -webkit-box-shadow: 0px 4px 4px 0px rgba(48, 48, 48, 0.2509803922);
+          box-shadow: 0px 4px 4px 0px rgba(48, 48, 48, 0.2509803922);
+}
+
+    .header__bottom-socials .header__whatsapp:last-child,
+    .header__whatsapp-btn {
+        max-width: 256px;   /* Сохраняем ширину и на мобильных */
+        height: 56px;       /* Сохраняем высоту */
+        min-width: auto;    /* Позволяем кнопке быть компактнее, если контейнер меньше 256px */
+    }
+
+.header__schedule-opening {
+  display: none;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(251, 191, 36, 0.16);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  color: #fde68a;
+  font-size: 13px;
+  line-height: 1.35;
+  animation: mrt-closing-pulse 2.4s ease-in-out infinite;
+}
+
+.header__schedule-closing {
+  display: none;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(251, 191, 36, 0.16);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  color: #fde68a;
+  font-size: 13px;
+  line-height: 1.35;
+  animation: mrt-closing-pulse 2.4s ease-in-out infinite;
+}
+
+.header__top-nav-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 8px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 0;
+}
+
+.header__bottom-main {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 24px;
+}
+
+.header__top.sticky-header .header__logo .title-centre--sticky {
+  position: absolute;
+  left: 32%;
+  right: auto;
+  bottom: -14px;
+  display: block;
+  width: auto;
+  max-width: calc(68% - 4px);
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: left;
+  letter-spacing: -0.02em;
+  white-space: normal;
+  color: #1EA2D7;
+}
+
+.header__sticky-more {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #303030;
+}
+
+.header__top.sticky-header .header__schedule-closing--sticky strong,
+.header__top.sticky-header .header__schedule-opening--sticky strong,
+.header__top.sticky-header .header__schedule-closing--sticky .header__schedule-closing-min,
+.header__top.sticky-header .header__schedule-opening--sticky .header__schedule-opening-min {
+  color: #b45309;
+}
+
+.header__top.sticky-header .header__sticky-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(228px, auto) auto;
+  gap: 16px 24px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px solid rgba(48, 48, 48, 0.12);
+}
+
+.header__top-nav-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 24px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+  .header__burger-info.burger-socials {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    gap: 24px;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+
+  .header__top.sticky-header .header__top-content {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    gap: 12px;
+  }
+
+.header__top.sticky-header .header__mobile > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 42px;
+  width: 42px;
+  border: 1px solid var(--color-text-light-grey);
+  border-radius: 6px;
+}
+
+.header__schedule-closing--sticky,
+.header__schedule-opening--sticky {
+  margin-top: 4px;
+  padding: 5px 9px;
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: nowrap;
+  border-radius: 6px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #92400e;
+  background: rgba(251, 191, 36, 0.22);
+  border: 1px solid rgba(217, 119, 6, 0.45);
+}
+
+.header__sticky-bar-col--schedule {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: 2px;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: 100%;
+  min-width: 228px;
+}
+
+
+/* 2. Устанавливаем фиксированные размеры для кнопки "Макс" */
+.header__bottom-socials .header__whatsapp:last-child,
+.header__whatsapp-btn {
+    max-width: 256px;      /* Максимальная ширина 256px */
+    width: 100%;           /* Занимает всю доступную ширину, но не более max-width */
+    min-width: 200px;      /* Минимальная ширина, чтобы кнопка не сжималась слишком сильно на маленьких экранах */
+    height: 56px;          /* Фиксированная высота */
+    padding: 0 16px;       /* Регулируем отступы слева и справа */
+}
+
+.header__sticky-max {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  justify-self: end;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  min-width: 188px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: 1px solid #8CFF9D;
+  background: rgba(140, 255, 157, 0.15);
+  color: #059669;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.header__sticky-more-drop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 120;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 4px;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(48, 48, 48, 0.12);
+  background: #fff;
+  -webkit-box-shadow: 0 8px 24px rgba(48, 48, 48, 0.14);
+          box-shadow: 0 8px 24px rgba(48, 48, 48, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  -webkit-transform: translateY(-4px);
+      -ms-transform: translateY(-4px);
+          transform: translateY(-4px);
+  -webkit-transition: opacity 0.15s ease, visibility 0.15s ease, -webkit-transform 0.15s ease;
+  transition: opacity 0.15s ease, visibility 0.15s ease, -webkit-transform 0.15s ease;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease, -webkit-transform 0.15s ease;
+}

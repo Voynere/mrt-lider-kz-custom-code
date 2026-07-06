@@ -824,6 +824,7 @@ h6 {
   gap: 24px;
 }
 .header__city {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1213,32 +1214,23 @@ h6 {
       -ms-flex-align: start;
           align-items: start;
   position: absolute;
-  top: 238px;
-  left: 20px;
+  top: calc(100% + 8px);
+  left: 0;
   padding: 24px;
-  width: 100%;
-  max-width: 430px;
+  width: 430px;
+  max-width: calc(100vw - 40px);
+  box-sizing: border-box;
   background-color: var(--color-white);
   border-radius: 8px;
   z-index: 1000;
   -webkit-box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
           box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-@media (max-width: 1024px) {
-  .city-chosen {
-    top: 170px;
-  }
-}
 @media (max-width: 578px) {
   .city-chosen {
-    top: 160px;
+    width: 330px;
+    max-width: calc(100vw - 24px);
     padding: 24px 12px;
-    max-width: 330px;
-  }
-}
-@media (max-width: 390px) {
-  .city-chosen {
-    left: calc(50% - 165px);
   }
 }
 .city-chosen--visible {
@@ -1249,6 +1241,7 @@ h6 {
 .city-chosen__title {
   font-family: var(--font-f-inter);
   font-size: 16px;
+  line-height: 1.4;
   color: var(--color-text-light-grey);
   margin-bottom: 8px;
 }
@@ -1262,6 +1255,7 @@ h6 {
 }
 .city-chosen__text {
   font-size: 16px;
+  line-height: 1.4;
   font-family: var(--font-f-inter);
   color: var(--color-text-light-grey);
 }

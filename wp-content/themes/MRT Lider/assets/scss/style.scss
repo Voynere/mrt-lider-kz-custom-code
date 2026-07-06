@@ -641,6 +641,7 @@ h6 {
     }
 
     &__city {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -950,25 +951,19 @@ h6 {
     flex-direction: column;
     align-items: start;
     position: absolute;
-    top: 238px;
-    left: 20px;
+    top: calc(100% + 8px);
+    left: 0;
     padding: 24px;
-    width: 100%;
-    max-width: 430px;
+    width: 430px;
+    max-width: calc(100vw - 40px);
+    box-sizing: border-box;
     background-color: var(--color-white);
     border-radius: 8px;
     z-index: 1000;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    @media (max-width: 1024px) {
-        top: 170px;
-    }
     @media (max-width: 578px) {
-        top: 160px;
         padding: 24px 12px;
         max-width: 330px;
-    }
-    @media (max-width: 390px) {
-        left: calc(50% - 165px);
     }
     &--visible {
         display: flex;

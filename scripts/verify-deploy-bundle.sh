@@ -20,10 +20,12 @@ require_dir() {
 	fi
 }
 
+require_file "favicon.svg"
+require_file "favicon.ico"
 require_dir "wp-content/themes/MRT Lider"
 require_file "wp-content/themes/MRT Lider/functions.php"
 require_file "wp-content/themes/MRT Lider/style.css"
 require_dir "wp-content/plugins/services-importer"
 require_file "wp-content/plugins/services-importer/services-importer.php"
 
-echo "[$LABEL] OK: MRT Lider theme + services-importer bundle"
+echo "[$LABEL] OK: favicon + MRT Lider theme + services-importer bundle"
