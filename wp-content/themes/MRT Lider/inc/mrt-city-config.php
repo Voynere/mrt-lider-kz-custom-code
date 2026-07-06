@@ -32,7 +32,7 @@ if (!function_exists('mrt_get_branches')) {
                 'country'  => 'kz',
             ),
             'almaty_aubakirova' => array(
-                'label'           => 'МРТ животным',
+                'label'           => 'село Отеген батыра (МРТ животным)',
                 'subtitle'        => 'с. Отеген батыра',
                 'type'            => 'animals',
                 'currency'        => 'tenge',

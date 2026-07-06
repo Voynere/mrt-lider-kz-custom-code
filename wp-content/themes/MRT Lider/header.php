@@ -48,6 +48,12 @@
         }
         $sticky_phone_index_nav++;
     }
+
+    $mrt_show_animals_promo = mrt_should_show_animals_promo($selected_city_slug_nav);
+    $mrt_animals_promo = $mrt_show_animals_promo ? mrt_get_animals_promo_data() : null;
+    $header_logo_descriptor = mrt_is_animals_branch($selected_city_slug_nav)
+        ? 'мрт животным'
+        : 'центр диагностики';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -84,7 +90,7 @@
                             <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
                                 <img class="default-logo" src="<?php bloginfo('template_url')?>/assets/img/logo.svg" alt="Логотип МРТ Лидер">
                                 <img class="sticky-logo" src="<?php bloginfo('template_url')?>/assets/img/logo_no_shadow.svg" alt="Логотип">
-                                <h2 class="title-centre title-centre--default">центр диагностики</h2>
+                                <h2 class="title-centre title-centre--default"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                 <h2 class="title-centre title-centre--sticky">
                                     <span class="header__sticky-descriptor-line">Диагностический центр</span>
                                     <span class="header__sticky-descriptor-city"><?php echo esc_html($sticky_city_line_nav); ?></span>
@@ -210,7 +216,7 @@
 
                     <div class="header__bottom">
                         <div class="container">
-                            <div class="header__bottom-main">
+                            <div class="header__bottom-main<?php echo $mrt_show_animals_promo ? ' childrens-clinic' : ''; ?>">
                                 <div class="header__bottom-wrapper">
                                     <div class="header__city">
                                         <button class="header__city-choice">
@@ -219,6 +225,12 @@
                                         </button>
                                         <p class="header__city-selected" style="font-weight:bold"></p>
                                     </div>
+                                    <?php if ($mrt_animals_promo) : ?>
+                                        <ul class="header__info-item childrens">
+                                            <li><?php echo esc_html($mrt_animals_promo['title']); ?></li>
+                                            <li><?php echo esc_html($mrt_animals_promo['subtitle']); ?></li>
+                                        </ul>
+                                    <?php endif; ?>
                                 </div>
         
                                 <?php
@@ -245,6 +257,13 @@
                                                     }
                                                     ?>
                                                 </ul>
+                                                <?php if ($mrt_animals_promo) : ?>
+                                                    <ul class="header__info-item childrens">
+                                                        <?php foreach ($mrt_animals_promo['address_lines'] as $address_line) : ?>
+                                                            <li><?php echo esc_html($address_line); ?></li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php endif; ?>
                                                 </div>
         
                                             <!-- Телефоны -->
@@ -272,6 +291,15 @@
                                                     }
                                                     ?>
                                                 </ul>
+                                                <?php if ($mrt_animals_promo && !empty($mrt_animals_promo['phones'])) : ?>
+                                                    <ul class="header__info-item childrens">
+                                                        <?php foreach (array_slice($mrt_animals_promo['phones'], 0, 2) as $animals_phone) :
+                                                            $animals_tel_clean = preg_replace('/[^\d\+]/', '', $animals_phone);
+                                                        ?>
+                                                            <li><a href="tel:<?php echo esc_attr($animals_tel_clean); ?>" data-mrt-phone="header-animals"><?php echo esc_html($animals_phone); ?></a></li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php endif; ?>
                                                 </div>
         
                                             <!-- Часы работы -->
@@ -316,6 +344,19 @@
                                                     </p>
                                                     <?php endif; ?>
                                                 </div>
+                                                <?php if ($mrt_animals_promo) : ?>
+                                                    <div class="header__info-item header__schedule childrens">
+                                                        <?php if (!empty($mrt_animals_promo['schedule_lines'])) : ?>
+                                                            <?php foreach (array_slice($mrt_animals_promo['schedule_lines'], 0, 2) as $schedule_line) : ?>
+                                                                <p><?php echo esc_html($schedule_line); ?></p>
+                                                            <?php endforeach; ?>
+                                                        <?php else : ?>
+                                                            <p>Пн — Вс</p>
+                                                            <p>09:00 — 18:00</p>
+                                                        <?php endif; ?>
+                                                        <p class="header-tg-link"><a target="_blank" rel="noopener" href="<?php echo esc_url($mrt_animals_promo['url']); ?>">Перейти</a></p>
+                                                    </div>
+                                                <?php endif; ?>
                                                 </div>
         
                                         <?php else : ?>
@@ -353,6 +394,14 @@
                                             </a>
                                         </div>
                                     </div>
+                                    <?php if ($mrt_animals_promo) : ?>
+                                        <div class="header__whatsapp childrens">
+                                            <a href="<?php echo esc_url($mrt_animals_promo['url']); ?>" class="header__whatsapp-btn" target="_blank" rel="noopener">
+                                                <p>Перейти</p>
+                                                <img src="<?php bloginfo('template_url'); ?>/assets/img/arrow_whatsApp.svg" alt="">
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
 
                                 <div class="city-chosen" id="cityChosenBanner">
@@ -381,7 +430,7 @@
                                 <div class="header__burger-logo">
                                     <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
                                         <img src="<?php bloginfo('template_url')?>/assets/img/logo_no_shadow.svg" alt="Логотип">
-                                        <h2 class="title-centre">центр диагностики</h2>
+                                        <h2 class="title-centre"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                     </a>
                                 </div>
                                 <nav class="header__burger-nav">
@@ -449,13 +498,13 @@
                                     <a href="<?php echo esc_url($telegram_link); ?>" class="header__burger-socials"<?php echo $burger_telegram_attrs; ?> style="display: none !important;">
                                         <img src="<?php bloginfo('template_url')?>/assets/img/tg_black.svg" alt="">
                                     </a>
-                                    <a href="<?php echo esc_url($booking_href_nav); ?>" class="header__burger-socials"<?php echo $booking_attrs_nav; ?>>
+                                    <a href="<?php echo esc_url($booking_href_nav); ?>" class="header__burger-socials header__burger-booking"<?php echo $booking_attrs_nav; ?>>
                                         <?php if (!empty($mrt_city_contacts['booking_is_max'])) : ?>
                                         <img src="<?php bloginfo('template_url')?>/assets/img/max_black.svg" alt="">
                                         <?php else : ?>
                                         <svg width="24" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M25.6129 0.205994C25.6129 0.205994 28.2031 -0.804007 27.9872 1.64885C27.9153 2.65887 27.2677 6.19387 26.7641 10.0175L25.0373 21.3439C25.0373 21.3439 24.8934 23.0032 23.5983 23.2918C22.3031 23.5803 20.3605 22.2818 20.0007 21.9932C19.7129 21.7768 14.6045 18.5303 12.8057 16.9432C12.3021 16.5103 11.7265 15.6446 12.8777 14.6346L20.4325 7.42033C21.2959 6.5546 22.1593 4.5346 18.5617 6.98747L8.48873 13.8411C8.48873 13.8411 7.33753 14.5625 5.17907 13.9132L0.502281 12.4703C0.502281 12.4703 -1.22453 11.3882 1.72543 10.306C8.92047 6.91527 17.7703 3.4524 25.6129 0.205994Z" fill="#404040"/></svg>
                                         <?php endif; ?>
-                                        <span style="margin-left: 8px; color: #8CFF9D; font-size: 14px;"><?php echo esc_html($booking_label_nav); ?></span>
+                                        <span class="header__burger-booking-label"><?php echo esc_html($booking_label_nav); ?></span>
                                     </a>
                                 </div>
                                 <div class="header__burger-info">
@@ -483,7 +532,7 @@
                                         <li class="abc-container"><p class="abc">Т</p></li>
                                         <li><a href="#" data-city="taldykorgan">Талдыкорган</a></li>
                                         <li class="abc-container"><p class="abc">М</p></li>
-                                        <li><a href="#" data-city="almaty_aubakirova">МРТ животным · Отеген батыра</a></li>
+                                        <li><a href="#" data-city="almaty_aubakirova">село Отеген батыра (МРТ животным)</a></li>
                                     </ul>
                                 </div>
                             </div>

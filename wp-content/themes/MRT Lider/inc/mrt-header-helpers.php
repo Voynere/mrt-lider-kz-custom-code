@@ -274,3 +274,65 @@ if (!function_exists('mrt_header_booking_attrs')) {
         return ' aria-disabled="true" tabindex="-1" onclick="return false;"';
     }
 }
+
+if (!function_exists('mrt_should_show_animals_promo')) {
+    /** Показывать промо «МРТ животным» на стандартных филиалах KZ (кроме самого филиала животных). */
+    function mrt_should_show_animals_promo(string $city_slug): bool {
+        if (mrt_is_animals_branch($city_slug)) {
+            return false;
+        }
+
+        $branch = mrt_get_branch($city_slug);
+        return $branch
+            && ($branch['country'] ?? '') === 'kz'
+            && ($branch['type'] ?? '') === 'standard';
+    }
+}
+
+if (!function_exists('mrt_get_animals_promo_data')) {
+    function mrt_get_animals_promo_data(): array {
+        static $cached = null;
+        if (is_array($cached)) {
+            return $cached;
+        }
+
+        $branch = mrt_get_branch('almaty_aubakirova') ?: array();
+        $contacts = mrt_get_city_contacts_cached('almaty_aubakirova');
+
+        $phones = array();
+        $phones_group = $contacts['phones_group'] ?? array();
+        for ($index = 1; $index <= 4; $index++) {
+            $field_key = 'contacts_phone_' . $index;
+            if (!empty($phones_group[$field_key])) {
+                $phones[] = $phones_group[$field_key];
+            }
+        }
+
+        $schedule_lines = array();
+        $opening_hours = $contacts['opening_hours_group'] ?? array();
+        if (!empty($opening_hours['contacts_opening_days'])) {
+            $schedule_lines[] = $opening_hours['contacts_opening_days'];
+        }
+        for ($index = 1; $index <= 3; $index++) {
+            $field_key = 'contacts_opening_hours_' . $index;
+            if (!empty($opening_hours[$field_key])) {
+                $schedule_lines[] = $opening_hours[$field_key];
+            }
+        }
+
+        $address_short = $branch['address_short'] ?? 'ул. Аубакирова, 17/1';
+        $address_parts = array_map('trim', preg_split('/,\s*/u', $address_short, 2));
+        $address_lines = array_values(array_filter($address_parts));
+
+        $cached = array(
+            'url'            => trailingslashit(home_url('/almaty_aubakirova/')),
+            'title'          => 'МРТ животным',
+            'subtitle'       => $branch['subtitle'] ?? 'с. Отеген батыра',
+            'address_lines'  => $address_lines !== array() ? $address_lines : array('ул. Аубакирова, 17/1'),
+            'phones'         => $phones,
+            'schedule_lines' => $schedule_lines,
+        );
+
+        return $cached;
+    }
+}
