@@ -1,0 +1,121 @@
+name: Deploy custom code
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-mrt-lider-kz-production
+      cancel-in-progress: false
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Pack custom code bundle
+        run: |
+          set -euo pipefail
+          tar czf custom-code.tar.gz \
+            "wp-content/themes/MRT Lider" \
+            wp-content/plugins/services-importer \
+            scripts
+
+      - name: Backup current theme and plugin
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            TIMESTAMP=$(date +%s)
+            BACKUP_DIR="/tmp/mrt-lider-kz-deploy-backups/$TIMESTAMP"
+            THEME_PATH="${{ secrets.SERVER_PATH }}/wp-content/themes/MRT Lider"
+            PLUGIN_PATH="${{ secrets.SERVER_PATH }}/wp-content/plugins/services-importer"
+            mkdir -p "$BACKUP_DIR"
+            if [ -d "$THEME_PATH" ]; then
+              rsync -a "$THEME_PATH/" "$BACKUP_DIR/theme/" --exclude=node_modules --exclude=.git
+              echo "Theme backup saved to $BACKUP_DIR/theme"
+            else
+              echo "Theme directory not found, skipping backup"
+            fi
+            if [ -d "$PLUGIN_PATH" ]; then
+              rsync -a "$PLUGIN_PATH/" "$BACKUP_DIR/services-importer/" --exclude=node_modules --exclude=.git
+              echo "Plugin backup saved to $BACKUP_DIR/services-importer"
+            fi
+
+      - name: Upload custom code bundle
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "custom-code.tar.gz"
+          target: "/tmp/mrt-lider-kz-deploy-${{ github.run_id }}"
+
+      - name: Sync custom code into WordPress
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -euo pipefail
+
+            STAGING="/tmp/mrt-lider-kz-deploy-${{ github.run_id }}"
+            TARGET="${{ secrets.SERVER_PATH }}"
+            THEME_TARGET="$TARGET/wp-content/themes/MRT Lider"
+            PLUGIN_TARGET="$TARGET/wp-content/plugins/services-importer"
+
+            mkdir -p "$STAGING"
+            tar xzf "$STAGING/custom-code.tar.gz" -C "$STAGING"
+
+            bash "$STAGING/scripts/verify-deploy-bundle.sh" "$STAGING" "staging"
+
+            mkdir -p "$TARGET/wp-content/themes" "$TARGET/wp-content/plugins"
+            rsync -a --delete "$STAGING/wp-content/themes/MRT Lider/" "$THEME_TARGET/"
+            rsync -a --delete "$STAGING/wp-content/plugins/services-importer/" "$PLUGIN_TARGET/"
+
+            bash "$STAGING/scripts/verify-deploy-bundle.sh" "$TARGET" "production"
+
+            chown -R mrt-lider.kz:mrt-lider.kz "$THEME_TARGET" "$PLUGIN_TARGET"
+
+            echo "::group::Plugin updates"
+            cd "$TARGET"
+            wp --allow-root plugin update --all \
+              --exclude=services-importer \
+              --quiet || echo "[warn] plugin update skipped"
+            echo "::endgroup::"
+
+            echo "::group::Cache flush"
+            wp --allow-root cache flush --quiet 2>/dev/null || true
+            echo "::endgroup::"
+
+            rm -rf "$STAGING"
+            find /tmp -maxdepth 1 -type d -name 'mrt-lider-kz-deploy-*' -mtime +2 -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Cleanup old backups (keep last 10)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            BACKUP_ROOT="/tmp/mrt-lider-kz-deploy-backups"
+            if [ -d "$BACKUP_ROOT" ]; then
+              ls -dt "$BACKUP_ROOT"/*/ 2>/dev/null | tail -n +11 | xargs -r rm -rf
+              echo "Backup cleanup done. Remaining:"
+              ls -d "$BACKUP_ROOT"/*/ 2>/dev/null | wc -l
+            else
+              echo "No backup directory found, skipping cleanup"
+            fi

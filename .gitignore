@@ -1,0 +1,52 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.tmp_*
+
+# Environment-specific files
+wp-config.php
+.htaccess
+error_log
+
+# Runtime logs / archives
+logs/
+*.log
+*.sql
+*.gz
+*.zip
+
+# WordPress runtime and generated content
+cgi-bin/
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+wp-content/ai1wm-backups/
+wp-content/updraft/
+wp-content/wflogs/
+wp-content/debug.log
+wp-content/languages/
+
+# Generated site outputs
+llms.txt
+llms-full.txt
+
+# Plugins: ignore all by default, keep only managed ones
+wp-content/plugins/*
+!wp-content/plugins/index.php
+!wp-content/plugins/services-importer/
+
+# Themes: only MRT Lider is custom
+wp-content/themes/*
+!wp-content/themes/MRT Lider/
+
+# WordPress core (local copy only; not in GitHub)
+/index.php
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/readme.html
+/license.txt
