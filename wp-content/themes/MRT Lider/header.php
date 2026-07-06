@@ -67,7 +67,7 @@
     <!-- seo-2026-06-08-v4 -->
 </head>
 
-<body>
+<body <?php body_class(); ?>>
 <script>
 // Передаем PHP-массив в JavaScript
     const citySpecificPagesJs = <?php echo json_encode(mrt_get_city_specific_page_slugs()); ?>;
@@ -218,22 +218,6 @@
                                             <img src="<?php bloginfo('template_url')?>/assets/img/choice_city.svg" alt="Выбрать город">
                                         </button>
                                         <p class="header__city-selected" style="font-weight:bold"></p>
-
-                                        <div class="city-chosen" id="cityChosenBanner">
-                                            <h2 class="city-chosen__title">
-                                                Ваш город — <span id="cityChosenName">
-                                                    <?php
-                                                    $selected_city_slug_chosen = $selected_city_slug_nav;
-                                                    echo isset($city_map_chosen[$selected_city_slug_chosen]) ? esc_html($city_map_chosen[$selected_city_slug_chosen]) : 'Алматы';
-                                                    ?>
-                                                </span>
-                                            </h2>
-                                            <p class="city-chosen__text">Покажем услуги и акции для вашего города.</p>
-                                            <div class="city-chosen__buttons">
-                                                <button class="city-chosen__buttons-btn city-chosen__true" id="cityChosenYes">Да, верно</button>
-                                                <button class="city-chosen__buttons-btn city-chosen__false" id="cityChosenNo">Нет, другой</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
         
@@ -371,8 +355,23 @@
                                     </div>
                                 </div>
 
+                                <div class="city-chosen" id="cityChosenBanner">
+                                    <h2 class="city-chosen__title">
+                                        Ваш город — <span id="cityChosenName">
+                                            <?php
+                                            $selected_city_slug_chosen = $selected_city_slug_nav;
+                                            echo isset($city_map_chosen[$selected_city_slug_chosen]) ? esc_html($city_map_chosen[$selected_city_slug_chosen]) : 'Алматы';
+                                            ?>
+                                        </span>
+                                    </h2>
+                                    <p class="city-chosen__text">Покажем услуги и акции для вашего города.</p>
+                                    <div class="city-chosen__buttons">
+                                        <button class="city-chosen__buttons-btn city-chosen__true" id="cityChosenYes">Да, верно</button>
+                                        <button class="city-chosen__buttons-btn city-chosen__false" id="cityChosenNo">Нет, другой</button>
+                                    </div>
+                                </div>
+
                             </div> <!-- header__bottom-main -->
-                            </div>
                         </div>
                     </div> <!-- .header__bottom -->
 

@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             headerTop.classList.remove('sticky-header', 'header-compact');
-            headerBottom.style.marginTop = '';
+            headerBottom.style.marginTop = '0';
         }
     }
 
