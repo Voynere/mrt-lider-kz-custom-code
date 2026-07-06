@@ -291,12 +291,15 @@
 .header__bottom-main.childrens-clinic .header__bottom-wrapper {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, minmax(0, auto));
+  grid-template-rows: repeat(1, 1fr);
   gap: 36px;
-  align-content: space-between;
-  -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: end;
+}
+
+.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__info-item:first-child,
+.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__city:first-child,
+.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__bottom-socials:first-child {
+  -ms-flex-item-align: end;
+      align-self: end;
 }
 
 .header__bottom-main.childrens-clinic .header__info {
@@ -423,12 +426,6 @@
 
 .header__whatsapp.childrens {
   width: 100%;
-}
-
-.header__bottom-main.childrens-clinic > .header__bottom-wrapper:last-child .header__whatsapp.childrens {
-  -webkit-transform: translateY(10px);
-      -ms-transform: translateY(10px);
-          transform: translateY(10px);
 }
 
 .header__whatsapp.childrens .header__whatsapp-btn {
