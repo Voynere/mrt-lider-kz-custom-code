@@ -294,16 +294,15 @@
   grid-template-rows: repeat(2, minmax(0, auto));
   gap: 36px;
   align-content: space-between;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: end;
 }
 
-.header__bottom-main.childrens-clinic > .header__bottom-wrapper:last-child .header__bottom-socials {
-  -ms-flex-item-align: end;
-      align-self: end;
-}
-
-.header__bottom-main.childrens-clinic > .header__bottom-wrapper:last-child .header__whatsapp.childrens {
-  -ms-flex-item-align: start;
-      align-self: start;
+.header__bottom-main.childrens-clinic .header__info {
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
 }
 
 .header__sticky-more-drop span,
@@ -393,11 +392,6 @@
   -webkit-transform: translate(3px, -3px);
       -ms-transform: translate(3px, -3px);
           transform: translate(3px, -3px);
-}
-
-.header__bottom-main.childrens-clinic .header__bottom-wrapper .header__info-item:first-child, .header__bottom-main.childrens-clinic .header__bottom-wrapper .header__city:first-child {
-  -ms-flex-item-align: end;
-      align-self: end;
 }
 
 .header__info-item.childrens .header-tg-link {
@@ -949,6 +943,12 @@
   }
 
   .header__bottom-main.childrens-clinic {
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+  }
+
+  .header__bottom-main.childrens-clinic .header__info {
     -webkit-box-align: stretch;
         -ms-flex-align: stretch;
             align-items: stretch;
