@@ -41,10 +41,9 @@
   white-space: nowrap;
 }
 
-  .header__top.sticky-header {
-    padding: 12px 0 22px;
-  }
-.header__top.sticky-header.header-compact{padding:8px 0 18px}
+.header__top.sticky-header.header-compact {
+  padding: 8px 0 18px;
+}
 
 .header__top.sticky-header .default-logo {
   display: none;
@@ -54,6 +53,39 @@
   display: block;
 }
 
+.header__top.sticky-header .header__sticky-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(228px, auto) auto;
+  gap: 16px 24px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px solid rgba(48, 48, 48, 0.12);
+}
+
+@media (max-width: 1200px) {
+  .header__top.sticky-header .header__sticky-bar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 20px;
+  }
+
+  .header__sticky-bar-col--schedule {
+    grid-column: 1 / -1;
+  }
+
+  .header__sticky-max {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 867px) {
+  .header__top.sticky-header {
+    padding: 12px 0 22px;
+  }
+
   .header__sticky-descriptor-city {
     font-size: 0.95em;
   }
@@ -62,9 +94,18 @@
     gap: 12px;
   }
 
-  .header__sticky-bar-col--schedule {
-    grid-column: 1 / -1;
+  .header__top.sticky-header .header__logo {
+    overflow: visible;
   }
+
+  .header__top.sticky-header .header__top-nav-block {
+    display: none;
+  }
+
+  .header__top.sticky-header .header__sticky-bar {
+    display: none !important;
+  }
+}
 
 .header__top.sticky-header .header__nav-item {
   color: #303030;
@@ -83,10 +124,6 @@
   font-weight: 700;
 }
 
-  .header__top.sticky-header .header__logo {
-    overflow: visible;
-  }
-
 .header__schedule-closing strong {
   color: #fff;
   font-weight: 700;
@@ -100,26 +137,13 @@
   fill: #303030;
 }
 
-  .header__top.sticky-header .header__top-nav-block {
-    display: none;
-  }
-
 .header__top.sticky-header .header__logo .title-centre {
   color: #1EA2D7;
 }
 
-  .header__sticky-max {
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
 .header__sticky-more--phone .header__sticky-more-current:hover {
   color: #1EA2D7;
 }
-
-  .header__top.sticky-header .header__sticky-bar {
-    display: none !important;
-  }
 
 .header__sticky-bar-col li + li,
 .header__sticky-bar-col p + p {
@@ -223,17 +247,6 @@
       -ms-flex-align: center;
           align-items: center;
 }
-
-  .header__top.sticky-header .header__sticky-bar {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 12px 20px;
-  }
-
-    .header__bottom-socials .header__whatsapp:last-child,
-    .header__whatsapp-btn {
-        max-width: 256px;
-        height: 56px;
-    }
 
 .header__top.sticky-header .header__schedule-closing--sticky,
 .header__top.sticky-header .header__schedule-opening--sticky {
@@ -697,4 +710,96 @@
   transition: opacity 0.15s ease, visibility 0.15s ease, -webkit-transform 0.15s ease;
   transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
   transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease, -webkit-transform 0.15s ease;
+}
+
+/* Layout fixes: base theme overrides */
+.header__top-content {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 0;
+}
+
+.header__bottom .container {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  gap: 36px;
+}
+
+.header__bottom-main {
+  width: 100%;
+}
+
+.header__info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 0;
+}
+
+.header__logo {
+  position: relative;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+.header__logo .title-centre--default {
+  position: absolute;
+  bottom: -2px;
+  right: 2px;
+  font-size: 14px;
+  color: #62BEE3;
+}
+
+.header__bottom-socials .header__whatsapp-btn,
+.header__bottom-socials .header__whatsapp:last-child {
+  max-width: 220px;
+  min-width: 0;
+  width: auto;
+}
+
+.header__phones-more {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .header__logo .title-centre--default {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 867px) {
+  .header__bottom-main {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    gap: 16px;
+  }
+
+  .header__info {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    gap: 12px;
+    max-width: none;
+  }
+
+  .header__bottom-socials {
+    display: none !important;
+  }
 }

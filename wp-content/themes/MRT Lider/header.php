@@ -64,82 +64,6 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     
-    <style>
-        /* ======= СТИЛИ ДЛЯ КНОПКИ ЗАПИСИ (WhatsApp / Max) ======= */
-        /* Скрываем кнопку Telegram на всех устройствах */
-        .header__bottom-socials .header__whatsapp:first-child {
-        display: none !important;
-    }
-    
-    /* Стили для кнопки "Макс" — размер 256x56px (только для десктопа) */
-    .header__bottom-socials .header__whatsapp:last-child,
-    .header__whatsapp-btn {
-        max-width: 256px !important;
-        width: 256px !important;
-        min-width: 256px !important;
-        height: 56px !important;
-        padding: 0 16px !important;
-        background-color: rgba(140, 255, 157, 0.15) !important;
-        border: 1px solid #8CFF9D !important;
-        border-radius: 8px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 12px !important;
-        text-decoration: none !important;
-    }
-    
-    .header__whatsapp-btn p {
-        font-size: 16px !important;
-        font-weight: 600 !important;
-        color: #8CFF9D !important;
-        margin: 0 !important;
-        white-space: nowrap !important;
-    }
-    
-    /* ======= НА МОБИЛЬНЫХ УСТРОЙСТВАХ СКРЫВАЕМ ВЕСЬ БЛОК С КНОПКОЙ "МАКС" В ШАПКЕ ======= */
-    @media (max-width: 768px) {
-        /* Скрываем родительский контейнер с кнопкой */
-        .header__bottom-socials {
-            display: none !important;
-        }
-        
-        /* Также скрываем кнопку в бургер-меню, если она там есть */
-        .burger-socials {
-            display: none !important;
-        }
-    }
-    
-    /* Для бургер-меню на десктопе показываем кнопку */
-    @media (min-width: 769px) {
-        .burger-socials a:first-child {
-            display: none !important;
-        }
-        
-        .burger-socials a:last-child {
-            max-width: 256px !important;
-            width: 256px !important;
-            height: 56px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            background-color: rgba(140, 255, 157, 0.15) !important;
-            border: 1px solid #8CFF9D !important;
-            border-radius: 8px !important;
-        }
-        
-        .burger-socials a:last-child img {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .burger-socials a:last-child span {
-            margin-left: 8px;
-            color: #8CFF9D;
-            font-size: 14px;
-        }
-    }
-    </style>
     <!-- seo-2026-06-08-v4 -->
 </head>
 
@@ -158,7 +82,7 @@
                     <div class="header__top">
                         <div class="container">
                             <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
-                                <img class="default-logo" src="<?php bloginfo('template_url')?>/assets/img/logo-shadow.webp" alt="Логотип тест">
+                                <img class="default-logo" src="<?php bloginfo('template_url')?>/assets/img/logo.svg" alt="Логотип МРТ Лидер">
                                 <img class="sticky-logo" src="<?php bloginfo('template_url')?>/assets/img/logo_no_shadow.svg" alt="Логотип">
                                 <h2 class="title-centre title-centre--default">центр диагностики</h2>
                                 <h2 class="title-centre title-centre--sticky">
@@ -311,6 +235,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
         
                                 <?php
                                     $addresses_group = $mrt_city_contacts['addresses_group'];
@@ -342,15 +267,24 @@
                                             <div class="header__bottom-wrapper">
                                                 <ul class="header__info-item">
                                                     <?php
+                                                    $bottom_phones = [];
                                                     $phone_index = 1;
                                                     while ($phone_index <= 4) {
                                                         $field_key = 'contacts_phone_' . $phone_index;
                                                         if (!empty($phones_group[$field_key])) {
-                                                            $raw = $phones_group[$field_key];
-                                                            $tel_clean = preg_replace('/[^\d\+]/', '', $raw);
-                                                            echo '<li><a href="tel:' . esc_attr($tel_clean) . '" data-mrt-phone="header">' . esc_html($raw) . '</a></li>';
+                                                            $bottom_phones[] = $phones_group[$field_key];
                                                         }
                                                         $phone_index++;
+                                                    }
+                                                    if ($bottom_phones !== []) {
+                                                        $raw = $bottom_phones[0];
+                                                        $tel_clean = preg_replace('/[^\d\+]/', '', $raw);
+                                                        echo '<li><a href="tel:' . esc_attr($tel_clean) . '" data-mrt-phone="header">' . esc_html($raw) . '</a></li>';
+                                                        $extra_phones = count($bottom_phones) - 1;
+                                                        if ($extra_phones > 0) {
+                                                            $more_label = $extra_phones === 1 ? 'номер' : 'номера';
+                                                            echo '<li class="header__phones-more">+' . (int) $extra_phones . ' ' . esc_html($more_label) . '</li>';
+                                                        }
                                                     }
                                                     ?>
                                                 </ul>
