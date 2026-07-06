@@ -42,7 +42,7 @@ add_action( 'wp_enqueue_scripts', function () {
     wp_add_inline_script( 'fancybox-script', $init_js );
 	wp_enqueue_script( 'imask', 'https://unpkg.com/imask', array(), null, true );
 	wp_enqueue_script( 'imask', 'https://cdnjs.cloudflare.com/ajax/libs/imask/7.5.3/imask.min.js', array(), '7.5.3', true );
-	wp_enqueue_script( 'main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.6.2', true );
+	wp_enqueue_script( 'main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.6.3', true );
 	wp_enqueue_script( 'cookie', get_template_directory_uri() . '/assets/js/cookie.js', array('jquery'), '1.2.3', true );
 	wp_enqueue_script( 'city-chosen', get_template_directory_uri() . '/assets/js/city-chosen.js', array('jquery'), '1.0.3', true );
 	wp_enqueue_script( 'tax', get_template_directory_uri() . '/assets/js/tax.js', array('jquery'), 'null', true );
@@ -83,7 +83,7 @@ add_action( 'wp_enqueue_scripts', function () {
         wp_enqueue_style(
             'mrt-animals',
             get_template_directory_uri() . '/assets/css/animals.css',
-            array(),
+            array('mrt-header-ru'),
             filemtime(get_template_directory() . '/assets/css/animals.css')
         );
     }

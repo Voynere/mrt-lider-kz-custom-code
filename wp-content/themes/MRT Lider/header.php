@@ -1,5 +1,5 @@
 <?php
-    $selected_city_slug_nav = mrt_get_selected_city_slug();
+    $selected_city_slug_nav = mrt_get_selected_city_slug(['sync_cookie' => true]);
     $city_base_url_nav = mrt_get_city_base_url($selected_city_slug_nav);
     $city_home_url = $city_base_url_nav;
 

@@ -3,29 +3,8 @@
 Template Name: contacts
 */
 
-// Получаем выбранный город из куки
-// --- Список валидных слагов городов (должен совпадать с JS и WP) ---
-$known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
-);
-
-// --- Определяем выбранный город: сначала из URL, потом из куки ---
-$selected_city = 'almaty'; // fallback по умолчанию
-
-$request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-$path = trim(parse_url($request_uri, PHP_URL_PATH), '/');
-$path_parts = $path ? explode('/', $path) : array();
-$url_city = !empty($path_parts[0]) ? sanitize_text_field($path_parts[0]) : '';
-
-// Приоритет: URL > кука > fallback
-if ($url_city && in_array($url_city, $known_city_slugs, true)) {
-    $selected_city = $url_city;
-} elseif (isset($_COOKIE['selected_city'])) {
-    $cookie_city = sanitize_text_field($_COOKIE['selected_city']);
-    if (in_array($cookie_city, $known_city_slugs, true)) {
-        $selected_city = $cookie_city;
-    }
-}
+// Получаем выбранный город из URL / cookie
+$selected_city = mrt_resolve_selected_city('almaty', true);
 
 // Запрос поста для выбранного города с рубрикой "Контакты"
 $args = array(
@@ -61,7 +40,7 @@ $contacts_query = new WP_Query($args);
         <section class="contacts">
             <div class="container">
                 <div class="contacts__inner">
-                    <h1 class="contacts__title page-title">КОНТАКТЫ ЦЕНТРОВ МРТ ЛИДЕР</h1>
+                    <h1 class="contacts__title page-title"><?php echo esc_html(mrt_get_contacts_page_title($selected_city)); ?></h1>
                     <div class="contacts__map">
                         <div class="contacts__map-frame">
                             <?php

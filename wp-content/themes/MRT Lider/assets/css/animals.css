@@ -12,6 +12,52 @@ body.mrt-animals-branch .header__city-choice {
     color: var(--animals-green-dark);
 }
 
+/* Дескриптор: начало строки под буквой «Л» в «ЛИДЕР» */
+body.mrt-animals-branch .header__logo .title-centre--default,
+body.mrt-animals-branch .header__burger-logo .title-centre {
+    left: 38%;
+    right: auto;
+    bottom: -1px;
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-align: left;
+    white-space: nowrap;
+    max-width: none;
+}
+
+@media (max-width: 1024px) {
+    body.mrt-animals-branch .header__logo .title-centre--default,
+    body.mrt-animals-branch .header__burger-logo .title-centre {
+        left: 37%;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 867px) {
+    body.mrt-animals-branch .header__logo .title-centre--default,
+    body.mrt-animals-branch .header__burger-logo .title-centre {
+        left: 36%;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 578px) {
+    body.mrt-animals-branch .header__logo .title-centre--default,
+    body.mrt-animals-branch .header__burger-logo .title-centre {
+        left: 35%;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 395px) {
+    body.mrt-animals-branch .header__logo .title-centre--default,
+    body.mrt-animals-branch .header__burger-logo .title-centre {
+        left: 34%;
+        font-size: 8px;
+    }
+}
+
 .animals-hero {
     background: linear-gradient(135deg, var(--animals-green-light) 0%, var(--animals-warm) 55%, #fff 100%);
     padding: 48px 0 64px;

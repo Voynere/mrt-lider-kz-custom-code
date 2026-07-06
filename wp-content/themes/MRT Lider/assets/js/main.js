@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'astana': 'Астана',
         'karaganda': 'Караганда',
         'taldykorgan': 'Талдыкорган',
-        'almaty_aubakirova': 'МРТ животным',
+        'almaty_aubakirova': 'село Отеген батыра (МРТ животным)',
     };
 
     // --- Известные слаги городов (для парсинга URL) ---
@@ -214,7 +214,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Логика определения итогового города
         let finalCitySlug = 'almaty'; // Значение по умолчанию
 
-        if (cityFromUrl) {
+        if (typeof window.CURRENT_CITY_SLUG === 'string' && knownCitySlugs.includes(window.CURRENT_CITY_SLUG)) {
+            finalCitySlug = window.CURRENT_CITY_SLUG;
+            if (cityFromCookie !== window.CURRENT_CITY_SLUG) {
+                setCookie('selected_city', window.CURRENT_CITY_SLUG);
+            }
+        } else if (cityFromUrl) {
             // Если город есть в URL - он главный
             finalCitySlug = cityFromUrl;
             // Если он отличается от cookie - обновим cookie
@@ -256,9 +261,32 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
 
+    // --- Получение активного города: PHP (CURRENT_CITY_SLUG) > URL > cookie ---
+    function getActiveCitySlug() {
+        if (typeof window.CURRENT_CITY_SLUG === 'string' && knownCitySlugs.includes(window.CURRENT_CITY_SLUG)) {
+            return window.CURRENT_CITY_SLUG;
+        }
+
+        const currentPath = window.location.pathname;
+        const pathParts = currentPath.split('/').filter(part => part.length > 0);
+        if (pathParts.length > 0) {
+            const urlCitySlug = pathParts[0].toLowerCase();
+            if (knownCitySlugs.includes(urlCitySlug)) {
+                return urlCitySlug;
+            }
+        }
+
+        const cookieCity = getCookie('selected_city');
+        if (cookieCity && knownCitySlugs.includes(cookieCity)) {
+            return cookieCity;
+        }
+
+        return 'almaty';
+    }
+
     // --- Получение динамического базового url ---
     function getDynamicCityBaseUrl() {
-        const currentCitySlug = getCookie('selected_city') || 'almaty';
+        const currentCitySlug = getActiveCitySlug();
         return `${window.location.origin}/${currentCitySlug}/`;
     }
 
@@ -274,6 +302,55 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Инициализация при загрузке ---
     // Эта функция : определяет город, устанавливает куки, обновляет отображение
     const initialCity = initializeAndSetCity();
+
+    const citySpecificPagesJs = (typeof mrtCityConfig !== 'undefined' && Array.isArray(mrtCityConfig.citySpecificPages))
+        ? mrtCityConfig.citySpecificPages
+        : (typeof window.citySpecificPagesJs !== 'undefined' ? window.citySpecificPagesJs : []);
+
+    function refreshNavLinksForActiveCity() {
+        if (!Array.isArray(citySpecificPagesJs) || citySpecificPagesJs.length === 0) {
+            return;
+        }
+
+        const activeCity = getActiveCitySlug();
+        const navSelectors = '.header__nav a, .header__burger-nav a, .mobile-nav__list a, .footer__links a, .header__mobile-nav a';
+
+        document.querySelectorAll(navSelectors).forEach(link => {
+            if (link.classList.contains('header__city-choice') || link.closest('.modal-city__content')) {
+                return;
+            }
+
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:')) {
+                return;
+            }
+
+            let pathname;
+            try {
+                pathname = new URL(href, window.location.origin).pathname;
+            } catch (_) {
+                return;
+            }
+
+            const parts = pathname.split('/').filter(Boolean);
+            if (!parts.length) {
+                return;
+            }
+
+            let pageSlug = null;
+            if (knownCitySlugs.includes(parts[0].toLowerCase()) && parts.length >= 2) {
+                pageSlug = parts[1];
+            } else if (citySpecificPagesJs.includes(parts[0])) {
+                pageSlug = parts[0];
+            }
+
+            if (pageSlug && citySpecificPagesJs.includes(pageSlug)) {
+                link.setAttribute('href', `${window.location.origin}/${activeCity}/${pageSlug}/`);
+            }
+        });
+    }
+
+    refreshNavLinksForActiveCity();
 
     // --- Обработчики модального окна ---
     if (choiceCityBtn && modalCity && closeBtn && overlay) {
@@ -354,24 +431,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- НОВАЯ ЛОГИКА: Обработка кликов по навигационным ссылкам ---
-    // Предполагаем, что citySpecificPagesJs доступен глобально из header.php
-    if (typeof citySpecificPagesJs !== 'undefined' && Array.isArray(citySpecificPagesJs)) {
+    if (Array.isArray(citySpecificPagesJs) && citySpecificPagesJs.length > 0) {
 
-        // Функция для обработки клика по ссылке
         function handleNavLinkClick(e) {
             const href = this.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:')) {
+                return;
+            }
 
-            if (href && href.startsWith('/')) {
-                const slugMatch = href.match(/^\/([^\/\?#]+)/);
-                if (slugMatch && slugMatch[1]) {
-                    const pageSlug = slugMatch[1];
+            let pathname;
+            try {
+                pathname = new URL(href, window.location.origin).pathname;
+            } catch (_) {
+                return;
+            }
 
-                    if (citySpecificPagesJs.includes(pageSlug)) {
-                        e.preventDefault();
-                        const dynamicUrl = getDynamicNavUrl(pageSlug, citySpecificPagesJs);
-                        window.location.href = dynamicUrl;
-                    }
-                }
+            const parts = pathname.split('/').filter(Boolean);
+            if (!parts.length) {
+                return;
+            }
+
+            const activeCity = getActiveCitySlug();
+            let pageSlug = null;
+            let linkCity = null;
+
+            if (knownCitySlugs.includes(parts[0].toLowerCase())) {
+                linkCity = parts[0].toLowerCase();
+                pageSlug = parts[1] || null;
+            } else if (citySpecificPagesJs.includes(parts[0])) {
+                pageSlug = parts[0];
+            } else {
+                return;
+            }
+
+            if (!pageSlug || !citySpecificPagesJs.includes(pageSlug)) {
+                return;
+            }
+
+            const targetUrl = `${window.location.origin}/${activeCity}/${pageSlug}/`;
+            const normalizedPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
+
+            if (linkCity !== activeCity || normalizedPath !== `/${activeCity}/${pageSlug}/`) {
+                e.preventDefault();
+                window.location.href = targetUrl;
             }
         }
 
@@ -401,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         */
     } else {
-        console.error('Глобальная переменная citySpecificPagesJs не найдена или не является массивом. Проверьте header.php.');
+        console.error('Список city-specific страниц не найден. Проверьте header.php и mrtCityConfig.');
     }
     // --- КОНЕЦ НОВОЙ ЛОГИКИ ---
 
