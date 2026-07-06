@@ -184,6 +184,61 @@ document.addEventListener('DOMContentLoaded', () => {
         ? mrtCityConfig.knownSlugs
         : Object.keys(cityMap);
 
+    function getPathParts(pathname) {
+        return pathname.split('/').filter(Boolean);
+    }
+
+    function pathEndsWithSlash(pathname) {
+        return pathname.length > 1 && pathname.endsWith('/');
+    }
+
+    /** First path segment if it is a known branch slug (longest match). */
+    function getCitySlugFromPath(pathname) {
+        const parts = getPathParts(pathname);
+        if (!parts.length) {
+            return null;
+        }
+
+        const first = parts[0].toLowerCase();
+        return knownCitySlugs.includes(first) ? first : null;
+    }
+
+    /** Remove /{city}/ prefix; handles /{city} without trailing slash. */
+    function stripCityPrefixFromPath(pathname) {
+        const parts = getPathParts(pathname);
+        if (!parts.length) {
+            return '/';
+        }
+
+        const first = parts[0].toLowerCase();
+        if (!knownCitySlugs.includes(first)) {
+            return pathname || '/';
+        }
+
+        const rest = parts.slice(1);
+        if (!rest.length) {
+            return '/';
+        }
+
+        const tail = '/' + rest.join('/');
+        return pathEndsWithSlash(pathname) ? `${tail}/` : tail;
+    }
+
+    /** Build URL after city switch: /{newCity}/ + rest (never /{oldCity}/{newCity}). */
+    function buildCitySwitchUrl(pathname, newCitySlug) {
+        const remainder = stripCityPrefixFromPath(pathname);
+        if (remainder === '/') {
+            return `/${newCitySlug}/`;
+        }
+
+        const joined = `/${newCitySlug}${remainder}`;
+        if (pathEndsWithSlash(pathname) && !joined.endsWith('/')) {
+            return `${joined}/`;
+        }
+
+        return joined;
+    }
+
     // --- Функции обновления отображения ---
     function updateCityDisplay() {
         const savedCity = getCookie('selected_city');
@@ -357,7 +412,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (citySpecificPagesJs.includes(parts[0])) {
                 pageSlug = parts[0];
             } else if (knownCitySlugs.includes(parts[0].toLowerCase()) && parts.length === 1) {
+                if (parts[0].toLowerCase() !== activeCity) {
+                    return;
+                }
                 link.setAttribute('href', `${window.location.origin}/${activeCity}/`);
+                return;
+            }
+
+            if (pageSlug && knownCitySlugs.includes(pageSlug.toLowerCase())) {
                 return;
             }
 
@@ -401,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.modal-city__content a[data-city]').forEach(item => {
         item.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             const newCitySlug = this.getAttribute('data-city');
 
             if (!knownCitySlugs.includes(newCitySlug)) {
@@ -408,23 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Устанавливаем куки
             setCookie('selected_city', newCitySlug);
-
-            // Формируем новый URL
-            const currentPath = window.location.pathname;
-            let basePath = currentPath;
-            for (const slug of knownCitySlugs) {
-                if (currentPath.startsWith(`/${slug}/`)) {
-                    basePath = currentPath.substring(`/${slug}`.length);
-                    break;
-                }
-            }
-            if (basePath === '') basePath = '/';
-            const newUrl = `/${newCitySlug}${basePath === '/' ? '' : basePath}`;
-
-            // Делаем ПОЛНУЮ ПЕРЕЗАГРУЗКУ с новым URL
-            window.location.href = newUrl;
+            window.location.href = buildCitySwitchUrl(window.location.pathname, newCitySlug);
         });
     });
 
@@ -488,6 +536,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (citySpecificPagesJs.includes(parts[0])) {
                 pageSlug = parts[0];
             } else {
+                return;
+            }
+
+            if (pageSlug && knownCitySlugs.includes(pageSlug.toLowerCase())) {
+                e.preventDefault();
+                window.location.href = `${window.location.origin}/${pageSlug}/`;
                 return;
             }
 

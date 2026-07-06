@@ -48,6 +48,57 @@ if (!function_exists('mrt_get_city_base_url')) {
     }
 }
 
+if (!function_exists('mrt_strip_city_prefix_from_path')) {
+    /** Remove /{city}/ prefix from a request path; returns '/' for city home. */
+    function mrt_strip_city_prefix_from_path(string $path): string {
+        $path = '/' . trim($path, '/');
+        if ($path === '/') {
+            return '/';
+        }
+
+        $parts = array_values(array_filter(explode('/', trim($path, '/'))));
+        if ($parts === []) {
+            return '/';
+        }
+
+        $first = strtolower(sanitize_key($parts[0]));
+        if (!in_array($first, mrt_get_known_city_slugs(), true)) {
+            return $path;
+        }
+
+        $rest = array_slice($parts, 1);
+        if ($rest === []) {
+            return '/';
+        }
+
+        return trailingslashit('/' . implode('/', $rest));
+    }
+}
+
+if (!function_exists('mrt_build_city_switch_url')) {
+    /** Target URL when switching branch while preserving the rest of the path. */
+    function mrt_build_city_switch_url(string $target_city, string $current_path = ''): string {
+        $target_city = sanitize_key($target_city);
+        if (!in_array($target_city, mrt_get_known_city_slugs(), true)) {
+            $target_city = 'almaty';
+        }
+
+        if ($current_path === '') {
+            $request_uri = isset($_SERVER['REQUEST_URI'])
+                ? (string) wp_unslash($_SERVER['REQUEST_URI'])
+                : '/';
+            $current_path = (string) parse_url($request_uri, PHP_URL_PATH);
+        }
+
+        $remainder = mrt_strip_city_prefix_from_path($current_path);
+        if ($remainder === '/') {
+            return mrt_get_city_base_url($target_city);
+        }
+
+        return trailingslashit(home_url('/' . $target_city . trim($remainder, '/')));
+    }
+}
+
 if (!function_exists('mrt_get_city_specific_page_slugs')) {
     function mrt_get_city_specific_page_slugs(): array {
         return array(
