@@ -73,11 +73,13 @@ if (!$branch_term) {
 }
 
 // --- Определяем slug услуги из URL ---
-$service_slug = get_query_var('service_type', '');
+$service_slug = function_exists('mrt_get_service_type_from_request')
+    ? mrt_get_service_type_from_request()
+    : get_query_var('service_type', '');
 if (empty($service_slug)) {
     $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     $parts = explode('/', $path);
-    $idx = array_search('uslugi', $parts);
+    $idx = array_search('price', $parts, true);
     if ($idx !== false && isset($parts[$idx + 1]) && !empty($parts[$idx + 1])) {
         $service_slug = sanitize_text_field($parts[$idx + 1]);
     } else {

@@ -59,7 +59,7 @@ add_filter('query_vars', 'mrt_city_routing_query_vars');
 
 if (!function_exists('mrt_maybe_flush_city_rewrite_rules')) {
     function mrt_maybe_flush_city_rewrite_rules(): void {
-        $version = '2';
+        $version = '3';
         if (get_option('mrt_city_rewrite_version') === $version) {
             return;
         }
@@ -68,6 +68,45 @@ if (!function_exists('mrt_maybe_flush_city_rewrite_rules')) {
     }
 }
 add_action('init', 'mrt_maybe_flush_city_rewrite_rules', 99);
+
+if (!function_exists('mrt_get_service_type_from_request')) {
+    /** Slug вида услуги из query var или URL …/price/{slug}/. */
+    function mrt_get_service_type_from_request(): string {
+        $service_type = get_query_var('service_type');
+        if (is_string($service_type) && $service_type !== '') {
+            return sanitize_title($service_type);
+        }
+
+        $parts = mrt_get_request_path_parts();
+        $price_idx = array_search('price', $parts, true);
+        if ($price_idx !== false && isset($parts[$price_idx + 1]) && $parts[$price_idx + 1] !== '') {
+            return sanitize_title($parts[$price_idx + 1]);
+        }
+
+        return '';
+    }
+}
+
+if (!function_exists('mrt_service_price_template')) {
+    /**
+     * /{city}/uslugi-i-ceny/price/{service_type}/ → page-service-item.php (прайс-таблица).
+     * Без этого WordPress отдаёт родительскую страницу «Услуги и цены» (список карточек).
+     */
+    function mrt_service_price_template(string $template): string {
+        if (is_admin() || wp_doing_ajax()) {
+            return $template;
+        }
+
+        $service_type = mrt_get_service_type_from_request();
+        if ($service_type === '') {
+            return $template;
+        }
+
+        $detail_template = locate_template('page-service-item.php');
+        return $detail_template ?: $template;
+    }
+}
+add_filter('template_include', 'mrt_service_price_template', 25);
 
 if (!function_exists('mrt_fix_city_canonical_urls')) {
     /**
