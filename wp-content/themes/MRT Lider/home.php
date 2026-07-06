@@ -5,7 +5,7 @@ Template Name: home
 
 // --- ПЕРЕОПРЕДЕЛЕНИЕ $selected_city аналогично header.php---
 $known_city_slugs_home_php = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 if (!function_exists('get_city_slug_from_request_path_home_selected')) {

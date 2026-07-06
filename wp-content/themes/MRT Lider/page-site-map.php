@@ -5,7 +5,7 @@ Template Name: site-map
 ?>
 <?php
 $known_city_slugs_sitemap = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // Определяем город: URL > куки > fallback

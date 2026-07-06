@@ -1,0 +1,421 @@
+/* МРТ для животных — филиал almaty_aubakirova */
+
+:root {
+    --animals-green: #3d8b6e;
+    --animals-green-dark: #2f6f57;
+    --animals-green-light: #e8f5ef;
+    --animals-warm: #f7f3ed;
+    --animals-accent: #d4a574;
+}
+
+body.mrt-animals-branch .header__city-choice {
+    color: var(--animals-green-dark);
+}
+
+.animals-hero {
+    background: linear-gradient(135deg, var(--animals-green-light) 0%, var(--animals-warm) 55%, #fff 100%);
+    padding: 48px 0 64px;
+}
+
+.animals-hero__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.animals-hero__badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--animals-green-dark);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.animals-hero__title {
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.1;
+    color: #2a3d34;
+    margin-bottom: 16px;
+}
+
+.animals-hero__lead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #404040;
+    max-width: 560px;
+    margin-bottom: 20px;
+}
+
+.animals-hero__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+}
+
+.animals-hero__features li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 10px;
+    color: #323232;
+}
+
+.animals-hero__features li::before {
+    content: "🐾";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 14px;
+}
+
+.animals-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.animals-hero__address {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.animals-hero__visual {
+    position: relative;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.animals-hero__circle {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(61, 139, 110, 0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    z-index: 2;
+}
+
+.animals-hero__emoji {
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.animals-hero__circle p {
+    font-weight: 600;
+    color: var(--animals-green-dark);
+    line-height: 1.3;
+}
+
+.animals-hero__paw {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(61, 139, 110, 0.12);
+}
+
+.animals-hero__paw--1 {
+    top: 20px;
+    right: 40px;
+}
+
+.animals-hero__paw--2 {
+    bottom: 10px;
+    left: 20px;
+    width: 96px;
+    height: 96px;
+}
+
+.animals-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.animals-btn:hover {
+    transform: translateY(-1px);
+}
+
+.animals-btn--primary {
+    background: var(--animals-green);
+    color: #fff;
+}
+
+.animals-btn--primary:hover {
+    background: var(--animals-green-dark);
+    color: #fff;
+}
+
+.animals-btn--outline {
+    background: #fff;
+    color: var(--animals-green-dark);
+    border-color: var(--animals-green);
+}
+
+.animals-btn--light {
+    background: #fff;
+    color: var(--animals-green-dark);
+}
+
+.animals-main {
+    background: #fff;
+}
+
+.animals-section {
+    padding: 64px 0;
+}
+
+.animals-section--prep {
+    background: var(--animals-warm);
+}
+
+.animals-section__title {
+    font-size: clamp(28px, 4vw, 40px);
+    color: #2a3d34;
+    margin-bottom: 32px;
+}
+
+.animals-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.animals-card {
+    background: #fff;
+    border: 1px solid #e8ece9;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.animals-section--services .animals-card {
+    background: var(--animals-green-light);
+    border-color: transparent;
+}
+
+.animals-card__icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.animals-card h3 {
+    margin-bottom: 8px;
+    color: #2a3d34;
+}
+
+.animals-card p {
+    color: #555;
+    line-height: 1.5;
+}
+
+.animals-prices__title {
+    margin-bottom: 16px;
+    color: #2a3d34;
+}
+
+.animals-prices__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.animals-prices__list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #fff;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #323232;
+    border: 1px solid #e5ebe7;
+}
+
+.animals-prices__list a:hover {
+    border-color: var(--animals-green);
+    color: var(--animals-green-dark);
+}
+
+.animals-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+    counter-reset: step;
+}
+
+.animals-steps li {
+    counter-increment: step;
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 20px 20px 64px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.animals-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--animals-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.animals-steps strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #2a3d34;
+}
+
+.animals-steps span {
+    color: #555;
+    line-height: 1.5;
+}
+
+.animals-faq {
+    display: grid;
+    gap: 12px;
+}
+
+.animals-faq__item {
+    background: #fff;
+    border: 1px solid #e8ece9;
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.animals-faq__item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #2a3d34;
+}
+
+.animals-faq__item p {
+    margin-top: 12px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.animals-contacts {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.animals-contacts__address {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #404040;
+    margin-bottom: 16px;
+}
+
+.animals-contacts__phone {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--animals-green-dark);
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.animals-contacts__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.animals-contacts__map iframe,
+.animals-contacts__map > * {
+    width: 100%;
+    min-height: 360px;
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.animals-cta {
+    padding: 0 0 80px;
+}
+
+.animals-cta__inner {
+    background: linear-gradient(135deg, var(--animals-green) 0%, var(--animals-green-dark) 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 48px 32px;
+    text-align: center;
+}
+
+.animals-cta__inner h2 {
+    font-size: clamp(24px, 4vw, 36px);
+    margin-bottom: 12px;
+}
+
+.animals-cta__inner p {
+    margin-bottom: 24px;
+    opacity: 0.95;
+}
+
+@media (max-width: 1024px) {
+    .animals-hero__inner,
+    .animals-contacts {
+        grid-template-columns: 1fr;
+    }
+
+    .animals-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .animals-hero__visual {
+        min-height: 240px;
+    }
+}
+
+@media (max-width: 578px) {
+    .animals-hero {
+        padding-top: 24px;
+    }
+
+    .animals-section {
+        padding: 48px 0;
+    }
+
+    .animals-hero__circle {
+        width: 200px;
+        height: 200px;
+    }
+}

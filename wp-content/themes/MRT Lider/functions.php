@@ -1,5 +1,15 @@
 <?php
 
+require get_template_directory() . '/inc/mrt-city-config.php';
+
+add_filter('body_class', function ($classes) {
+    $slug = mrt_resolve_selected_city();
+    if (mrt_is_animals_branch($slug)) {
+        $classes[] = 'mrt-animals-branch';
+    }
+    return $classes;
+});
+
 add_action( 'wp_enqueue_scripts', function () {
 
 	$style_path = get_template_directory() . '/assets/css/style.min.css';
@@ -45,6 +55,22 @@ add_action( 'wp_enqueue_scripts', function () {
             true 
         );
     }
+
+    $selected_slug = mrt_resolve_selected_city();
+    if (mrt_is_animals_branch($selected_slug) || is_page_template('home-animals.php')) {
+        wp_enqueue_style(
+            'mrt-animals',
+            get_template_directory_uri() . '/assets/css/animals.css',
+            array(),
+            filemtime(get_template_directory() . '/assets/css/animals.css')
+        );
+    }
+
+    wp_localize_script('main', 'mrtCityConfig', array(
+        'cityMap'       => mrt_get_city_map(),
+        'knownSlugs'    => mrt_get_known_city_slugs(),
+        'animalsSlugs'  => array_values(array_filter(mrt_get_known_city_slugs(), 'mrt_is_animals_branch')),
+    ));
 });
 
 require get_template_directory() . '/vacancies.php';
@@ -63,7 +89,7 @@ add_filter('upload_mimes', 'allow_svg_upload');
 function custom_breadcrumbs() {
 
     $known_city_slugs = array(
-        'almaty', 'astana', 'karaganda', 'taldykorgan'
+        'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
     );
 
     // Определяем город: URL > cookie > fallback

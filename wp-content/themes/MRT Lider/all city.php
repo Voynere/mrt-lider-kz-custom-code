@@ -44,3 +44,4 @@
 Астана, Куйши Дина, 30/2 = = = data-city="astana_dina"
 Караганда = = = data-city="karaganda"
 Талдыкорган = = = data-city="taldykorgan"
+Алматы, Аубакирова 17/1 (МРТ животным) = = = data-city="almaty_aubakirova"

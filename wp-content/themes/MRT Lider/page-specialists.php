@@ -5,7 +5,7 @@ Template Name: specialists
 
 // --- Список валидных слагов городов ---
 $known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // --- Определяем город: URL > кука > fallback ---

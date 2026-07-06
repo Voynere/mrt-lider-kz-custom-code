@@ -5,7 +5,7 @@ Template Name: uslugi
 
 // --- Список валидных слагов городов ---
 $known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // --- Определяем город: URL > кука > fallback ---
@@ -192,7 +192,7 @@ function sort_service_categories($a, $b) {
 }
 
 // --- тенге вместо руб. ---
-$kazakhstan_cities = array('almaty', 'astana', 'karaganda', 'taldykorgan');
+$kazakhstan_cities = array('almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova');
 $use_tenge = in_array($selected_city, $kazakhstan_cities, true);
 $currency_symbol = $use_tenge ? '₸' : '₽';
 

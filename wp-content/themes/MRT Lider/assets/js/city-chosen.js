@@ -12,11 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const SELECTED_CITY_COOKIE_NAME = 'selected_city'; 
 
     // --- Карта городов должна быть такой же как и в main.js ---
-    const cityMapChosenJs = {
+    const cityMapChosenJs = (typeof mrtCityConfig !== 'undefined' && mrtCityConfig.cityMap)
+        ? mrtCityConfig.cityMap
+        : {
         'almaty': 'Алматы',
         'astana': 'Астана',
         'karaganda': 'Караганда',
-        'taldykorgan': 'Талдыкорган'
+        'taldykorgan': 'Талдыкорган',
+        'almaty_aubakirova': 'МРТ животным',
     };
 
     // --- Функции для работы с cookies ---

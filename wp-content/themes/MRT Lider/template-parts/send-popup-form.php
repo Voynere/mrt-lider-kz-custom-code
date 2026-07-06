@@ -16,7 +16,7 @@ $known_city_slugs_booking_form_php = array(
     'vladivostok', 'volgodonsk', 'irkutsk', 'karaganda', 'kemerovo', 'kirov',
     'komsomolsk', 'krasnoyarsk', 'kurgan', 'magadan', 'murmansk', 'naberezhnye_chelny',
     'nahodka', 'nizhnekamsk', 'nizhnij_novgorod', 'nizhnij_tagil', 'novosibirsk',
-    'petropavlovsk_kamchatskij', 'rostov', 'samara', 'serov', 'taldykorgan', 'tomsk',
+    'petropavlovsk_kamchatskij', 'rostov', 'samara', 'serov', 'taldykorgan', 'almaty_aubakirova', 'tomsk',
     'tumen', 'ussurijsk', 'khabarovsk'
 );
 
@@ -119,6 +119,9 @@ $email_subject = 'Новая запись из модального окна';
 $body = "Письмо отправлено с модального окна для города: " . esc_html($selected_city_booking_form) . "\n\n"; // Используем переопределенный $selected_city_booking_form
 $body .= "Имя: $name\n";
 $body .= "Телефон: $phone\n";
+if (!empty($_POST['pet'])) {
+    $body .= "Питомец: " . sanitize_text_field(wp_unslash($_POST['pet'])) . "\n";
+}
 
 // Заголовки
 $headers = array('Content-Type: text/plain; charset=UTF-8');

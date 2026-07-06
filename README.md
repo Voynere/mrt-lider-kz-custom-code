@@ -7,7 +7,7 @@
 - `wp-content/themes/MRT Lider/`
 - `wp-content/plugins/services-importer/`
 - `.github/workflows/` — деплой на сервер
-- `scripts/`, `docs/`
+- `scripts/`, `docs/` (включая `docs/rag/` — база знаний проекта)
 
 ## Что только локально / на сервере
 

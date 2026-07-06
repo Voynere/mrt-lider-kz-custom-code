@@ -6,7 +6,7 @@ Template Name: contacts
 // Получаем выбранный город из куки
 // --- Список валидных слагов городов (должен совпадать с JS и WP) ---
 $known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // --- Определяем выбранный город: сначала из URL, потом из куки ---

@@ -5,7 +5,7 @@ Template Name: vacancies
 
 // --- ЛОГИКА ОПРЕДЕЛЕНИЯ ГОРОДА ---
 $known_city_slugs_vacancies_php = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // Функция для определения города из URL запроса (дублируем из header.php)

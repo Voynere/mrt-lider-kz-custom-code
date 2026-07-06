@@ -1,26 +1,9 @@
 <?php
     // --- Список валидных слагов городов ---
-    $known_city_slugs = array(
-        'almaty', 'astana', 'karaganda', 'taldykorgan'
-    );
+    $known_city_slugs = mrt_get_known_city_slugs();
 
     // --- Определяем город: URL > кука > fallback ---
-    $selected_city_slug_nav = 'almaty';
-
-    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-    $path = parse_url($request_uri, PHP_URL_PATH);
-    $path = trim($path, '/');
-    $path_parts = $path ? explode('/', $path) : array();
-    $url_city = !empty($path_parts[0]) ? sanitize_text_field($path_parts[0]) : '';
-
-    if ($url_city && in_array($url_city, $known_city_slugs, true)) {
-        $selected_city_slug_nav = $url_city;
-    } elseif (isset($_COOKIE['selected_city'])) {
-        $cookie_city = sanitize_text_field($_COOKIE['selected_city']);
-        if (in_array($cookie_city, $known_city_slugs, true)) {
-            $selected_city_slug_nav = $cookie_city;
-        }
-    }
+    $selected_city_slug_nav = mrt_resolve_selected_city('almaty');
 
     // --- Подготовка URL и навигации ---
     $city_specific_pages = array('uslugi-i-ceny', 'specialisty', 'vopros-otvet', 'about', 'kontakty');
@@ -411,6 +394,10 @@
                                             <p class="abc">Т</p>
                                         </li>
                                         <li><a href="#" data-city="taldykorgan">Талдыкорган</a></li>
+                                        <li class="abc-container">
+                                            <p class="abc">М</p>
+                                        </li>
+                                        <li><a href="#" data-city="almaty_aubakirova">МРТ животным · Отеген батыра</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -426,6 +413,7 @@
                                     // Массив соответствий slug => Название на русском (такой же, как в JS)
                                     $city_map_chosen = array(
                                         'almaty' => 'Алматы',
+                                        'almaty_aubakirova' => 'МРТ животным',
                                         'angarsk' => 'Ангарск',
                                         'astana' => 'Астана',
                                         'achinsk' => 'Ачинск',

@@ -5,7 +5,7 @@ Template Name: organization
 
 // --- Список валидных слагов городов (должен совпадать с header.php и JS) ---
 $known_city_slugs = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // --- Определяем город: URL > куки > fallback ---

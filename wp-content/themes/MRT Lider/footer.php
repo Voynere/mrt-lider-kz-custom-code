@@ -1,7 +1,7 @@
 <?php
 // Определение города аналогично header.php
 $known_city_slugs_footer_php = array(
-    'almaty', 'astana', 'karaganda', 'taldykorgan'
+    'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
 );
 
 // Функция для определения города из URL запроса (аналогично header.php для независимости)

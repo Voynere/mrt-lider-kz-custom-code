@@ -169,15 +169,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Карта городов (должна быть идентична той, что в PHP) ---
-    const cityMap = {
+    const cityMap = (typeof mrtCityConfig !== 'undefined' && mrtCityConfig.cityMap)
+        ? mrtCityConfig.cityMap
+        : {
         'almaty': 'Алматы',
         'astana': 'Астана',
         'karaganda': 'Караганда',
         'taldykorgan': 'Талдыкорган',
+        'almaty_aubakirova': 'МРТ животным',
     };
 
     // --- Известные слаги городов (для парсинга URL) ---
-    const knownCitySlugs = Object.keys(cityMap);
+    const knownCitySlugs = (typeof mrtCityConfig !== 'undefined' && mrtCityConfig.knownSlugs)
+        ? mrtCityConfig.knownSlugs
+        : Object.keys(cityMap);
 
     // --- Функции обновления отображения ---
     function updateCityDisplay() {
