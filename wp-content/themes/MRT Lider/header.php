@@ -502,7 +502,7 @@
                                         <?php if (!empty($mrt_city_contacts['booking_is_max'])) : ?>
                                         <img src="<?php bloginfo('template_url')?>/assets/img/max_black.svg" alt="">
                                         <?php else : ?>
-                                        <svg width="24" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M25.6129 0.205994C25.6129 0.205994 28.2031 -0.804007 27.9872 1.64885C27.9153 2.65887 27.2677 6.19387 26.7641 10.0175L25.0373 21.3439C25.0373 21.3439 24.8934 23.0032 23.5983 23.2918C22.3031 23.5803 20.3605 22.2818 20.0007 21.9932C19.7129 21.7768 14.6045 18.5303 12.8057 16.9432C12.3021 16.5103 11.7265 15.6446 12.8777 14.6346L20.4325 7.42033C21.2959 6.5546 22.1593 4.5346 18.5617 6.98747L8.48873 13.8411C8.48873 13.8411 7.33753 14.5625 5.17907 13.9132L0.502281 12.4703C0.502281 12.4703 -1.22453 11.3882 1.72543 10.306C8.92047 6.91527 17.7703 3.4524 25.6129 0.205994Z" fill="#404040"/></svg>
+                                        <img src="<?php bloginfo('template_url'); ?>/assets/img/arrow_whatsApp.svg" alt="">
                                         <?php endif; ?>
                                         <span class="header__burger-booking-label"><?php echo esc_html($booking_label_nav); ?></span>
                                     </a>
