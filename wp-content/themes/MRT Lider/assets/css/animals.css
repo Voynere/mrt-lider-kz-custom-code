@@ -475,6 +475,10 @@ body.mrt-animals-branch .header__burger-logo .title-centre {
 
 /* --- Страница «Услуги и цены» (филиал животных) --- */
 
+.animals-services {
+    padding-bottom: 72px;
+}
+
 .animals-services .services__inner {
     max-width: 100%;
 }
