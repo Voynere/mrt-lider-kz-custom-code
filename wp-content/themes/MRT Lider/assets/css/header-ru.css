@@ -425,6 +425,12 @@
   width: 100%;
 }
 
+.header__bottom-main.childrens-clinic > .header__bottom-wrapper:last-child .header__whatsapp.childrens {
+  -webkit-transform: translateY(6px);
+      -ms-transform: translateY(6px);
+          transform: translateY(6px);
+}
+
 .header__whatsapp.childrens .header__whatsapp-btn {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
