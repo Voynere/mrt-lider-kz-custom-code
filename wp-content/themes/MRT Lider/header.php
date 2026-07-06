@@ -54,6 +54,13 @@
     $header_logo_descriptor = mrt_is_animals_branch($selected_city_slug_nav)
         ? 'мрт животным'
         : 'центр диагностики';
+    $header_logo_file = mrt_is_animals_branch($selected_city_slug_nav)
+        ? 'logo-animals.svg'
+        : 'logo.svg';
+    $header_logo_sticky_file = mrt_is_animals_branch($selected_city_slug_nav)
+        ? 'logo-animals.svg'
+        : 'logo_no_shadow.svg';
+    $theme_img_uri = get_template_directory_uri() . '/assets/img/';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -88,8 +95,8 @@
                     <div class="header__top">
                         <div class="container">
                             <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
-                                <img class="default-logo" src="<?php bloginfo('template_url')?>/assets/img/logo.svg" alt="Логотип МРТ Лидер">
-                                <img class="sticky-logo" src="<?php bloginfo('template_url')?>/assets/img/logo_no_shadow.svg" alt="Логотип">
+                                <img class="default-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_file); ?>" alt="Логотип МРТ Лидер">
+                                <img class="sticky-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="Логотип">
                                 <h2 class="title-centre title-centre--default"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                 <h2 class="title-centre title-centre--sticky">
                                     <span class="header__sticky-descriptor-line">Диагностический центр</span>
@@ -429,7 +436,7 @@
                             <div class="header__burger-top">
                                 <div class="header__burger-logo">
                                     <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
-                                        <img src="<?php bloginfo('template_url')?>/assets/img/logo_no_shadow.svg" alt="Логотип">
+                                        <img src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="Логотип">
                                         <h2 class="title-centre"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                     </a>
                                 </div>
