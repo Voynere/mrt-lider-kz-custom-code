@@ -26,14 +26,14 @@ if (!function_exists('mrt_get_branches')) {
                 'type'              => 'standard',
                 'currency'          => 'tenge',
                 'country'           => 'kz',
-                'yandex_metrika_id' => 110469944,
+                'yandex_metrika_id' => 110468879,
             ),
             'taldykorgan' => array(
                 'label'             => 'Талдыкорган',
                 'type'              => 'standard',
                 'currency'          => 'tenge',
                 'country'           => 'kz',
-                'yandex_metrika_id' => 110468879,
+                'yandex_metrika_id' => 110469944,
             ),
             'almaty_aubakirova' => array(
                 'label'           => 'МРТ животным «MRI Animal»',
