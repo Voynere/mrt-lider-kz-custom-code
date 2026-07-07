@@ -39,20 +39,38 @@ function mrt_seo_get_cities() {
     return function_exists('mrt_get_city_map') ? mrt_get_city_map() : [];
 }
 
+if (!function_exists('mrt_logo_url')) {
+    function mrt_logo_url(): string {
+        $candidates = array(
+            '/assets/img/logo.svg',
+            '/assets/img/logo_no_shadow.svg',
+            '/assets/img/Logo-wth-text.png',
+        );
+        foreach ($candidates as $rel) {
+            if (file_exists(get_template_directory() . $rel)) {
+                return get_template_directory_uri() . $rel;
+            }
+        }
+        return get_template_directory_uri() . '/assets/img/logo.svg';
+    }
+}
+
 /**
  * Reverse-поиск: имя города → slug.
  * Пример: mrt_get_city_slug_by_name('Тюмень') → 'tumen'
  * Регистронезависимый. Возвращает slug или '' если не найдено.
  */
-function mrt_get_city_slug_by_name(string $name): string {
-    $cities = mrt_seo_get_cities();
-    $name_lower = mb_strtolower($name, 'UTF-8');
-    foreach ($cities as $slug => $city_name) {
-        if (mb_strtolower($city_name, 'UTF-8') === $name_lower) {
-            return $slug;
+if (!function_exists('mrt_get_city_slug_by_name')) {
+    function mrt_get_city_slug_by_name(string $name): string {
+        $cities = mrt_seo_get_cities();
+        $name_lower = mb_strtolower($name, 'UTF-8');
+        foreach ($cities as $slug => $city_name) {
+            if (mb_strtolower($city_name, 'UTF-8') === $name_lower) {
+                return $slug;
+            }
         }
+        return '';
     }
-    return '';
 }
 
 /**
