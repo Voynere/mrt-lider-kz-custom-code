@@ -96,8 +96,10 @@ jobs:
             echo "::group::Plugin updates"
             cd "$TARGET"
             wp --allow-root plugin update --all \
-              --exclude=services-importer \
+              --exclude=services-importer,all-in-one-seo-pack \
               --quiet || echo "[warn] plugin update skipped"
+            wp --allow-root plugin delete all-in-one-seo-pack --quiet 2>/dev/null || true
+            chown -R mrt-lider.kz:mrt-lider.kz "$TARGET/wp-content/plugins"
             echo "::endgroup::"
 
             echo "::group::Cache flush"
