@@ -2,6 +2,29 @@
 /*
 Template Name: about
 */
+
+$selected_city = mrt_get_selected_city_slug(['sync_cookie' => true]);
+
+if (mrt_is_animals_branch($selected_city)) {
+    get_header();
+    ?>
+    <main class="main animals-main">
+        <div class="main-background">
+            <?php custom_breadcrumbs(); ?>
+            <section class="about-us animals-about">
+                <div class="container">
+                    <div class="about-us__inner">
+                        <h1 class="maps__title page-title">О ЦЕНТРЕ</h1>
+                        <?php get_template_part('template-parts/animals-about-content'); ?>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <?php
+    get_footer();
+    return;
+}
 ?>
 
 <?php get_header(); ?>

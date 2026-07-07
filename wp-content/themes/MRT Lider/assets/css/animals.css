@@ -669,3 +669,157 @@ body.mrt-animals-branch .header__burger-logo .title-centre {
         font-size: 14px;
     }
 }
+
+/* --- Страница «О компании» (филиал животных) --- */
+
+.animals-about {
+    padding-bottom: 72px;
+}
+
+.animals-about .about-us__inner {
+    max-width: 100%;
+}
+
+.animals-about__content {
+    display: grid;
+    gap: 40px;
+}
+
+.animals-about__intro p,
+.animals-about__mission p {
+    color: #404040;
+    font-size: 17px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+}
+
+.animals-about__intro p:last-child,
+.animals-about__mission p:last-child {
+    margin-bottom: 0;
+}
+
+.animals-about__subtitle {
+    font-size: clamp(22px, 3vw, 32px);
+    color: #2a3d34;
+    margin: 0;
+}
+
+.animals-about__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.animals-about__card {
+    background: var(--animals-green-light);
+    border: 1px solid rgba(61, 139, 110, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+    height: 100%;
+}
+
+.animals-about__card-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.animals-about__card h3 {
+    font-size: 18px;
+    color: var(--animals-green-dark);
+    margin: 0 0 8px;
+}
+
+.animals-about__card p {
+    color: #555;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.animals-about__highlights {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, var(--animals-green-light) 0%, var(--animals-warm) 100%);
+    border-radius: 20px;
+}
+
+.animals-about__highlight {
+    text-align: center;
+    padding: 8px;
+}
+
+.animals-about__highlight-value {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    color: var(--animals-green-dark);
+    line-height: 1.2;
+    margin: 0 0 6px;
+}
+
+.animals-about__highlight-label {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.animals-about__mission {
+    padding: 32px;
+    background: #fff;
+    border: 1px solid #e5ebe7;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+}
+
+.animals-about__mission a {
+    color: var(--animals-green-dark);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.animals-about__mission a:hover {
+    color: var(--animals-green);
+}
+
+.animals-about__address {
+    margin-top: 20px !important;
+    padding-top: 20px;
+    border-top: 1px solid #e8ece9;
+    color: #323232 !important;
+}
+
+@media (max-width: 1024px) {
+    .animals-about__cards {
+        grid-template-columns: 1fr;
+    }
+
+    .animals-about__highlights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 578px) {
+    .animals-about {
+        padding-bottom: 48px;
+    }
+
+    .animals-about__highlights {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .animals-about__mission {
+        padding: 24px 20px;
+    }
+
+    .animals-about__intro p,
+    .animals-about__mission p {
+        font-size: 16px;
+    }
+}
