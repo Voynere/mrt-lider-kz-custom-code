@@ -1047,7 +1047,6 @@ h6 {
   padding: 24px 40px;
   margin: 0px 10px;
   height: auto;
-  max-height: 77vh;
   visibility: hidden;
   -webkit-transform: translateY(-150%);
       -ms-transform: translateY(-150%);
@@ -1102,10 +1101,6 @@ h6 {
   display: -ms-flexbox;
   display: flex;
   gap: 80px;
-  height: 100%;
-  max-height: 75vh;
-  overflow-y: auto;
-  padding-right: 8px;
 }
 @media (max-width: 1250px) {
   .modal-city__content {
