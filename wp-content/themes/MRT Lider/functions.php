@@ -5,6 +5,7 @@ require get_template_directory() . '/inc/mrt-header-helpers.php';
 require get_template_directory() . '/inc/mrt-service-helpers.php';
 require get_template_directory() . '/inc/mrt-city-routing.php';
 require get_template_directory() . '/inc/mrt-service-routing.php';
+require get_template_directory() . '/inc/mrt-animals-seo.php';
 
 add_filter('body_class', function ($classes) {
     $slug = mrt_resolve_selected_city();
@@ -97,6 +98,14 @@ add_action( 'wp_enqueue_scripts', function () {
             get_template_directory_uri() . '/assets/css/animals.css',
             array('mrt-header-ru'),
             filemtime(get_template_directory() . '/assets/css/animals.css')
+        );
+        $metrika_js = get_template_directory() . '/assets/js/mrt-metrika.js';
+        wp_enqueue_script(
+            'mrt-metrika',
+            get_template_directory_uri() . '/assets/js/mrt-metrika.js',
+            array(),
+            file_exists($metrika_js) ? filemtime($metrika_js) : '1.0.0',
+            true
         );
     }
 
@@ -419,7 +428,37 @@ function add_city_metrics_settings_page() {
 // --- регистрация настроек ---
 add_action('admin_init', 'register_city_metrics_settings');
 function register_city_metrics_settings() {
-    register_setting('city_metrics_settings_group', 'city_metrics_data');
+    register_setting(
+        'city_metrics_settings_group',
+        'city_metrics_data',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'mrt_sanitize_city_metrics_data',
+        )
+    );
+}
+
+if (!function_exists('mrt_sanitize_city_metrics_data')) {
+    /** Оставляет только метрики KZ-филиалов; RU-slug'и отбрасываются при сохранении. */
+    function mrt_sanitize_city_metrics_data($input) {
+        if (!is_array($input)) {
+            return array();
+        }
+
+        $allowed_slugs = array_keys(mrt_get_metrics_cities_list());
+        $sanitized = array();
+
+        foreach ($allowed_slugs as $slug) {
+            foreach (array('yandex_', 'ga_') as $prefix) {
+                $key = $prefix . $slug;
+                if (array_key_exists($key, $input)) {
+                    $sanitized[$key] = wp_unslash($input[$key]);
+                }
+            }
+        }
+
+        return $sanitized;
+    }
 }
 
 // --- Функция отрисовки страницы настроек ---
@@ -427,39 +466,8 @@ function render_city_metrics_settings_page() {
     // текущие данные
     $options = get_option('city_metrics_data', array());
 
-    // Список городов
-    $cities_list = array(
-        'almaty' => 'Алматы',
-        'angarsk' => 'Ангарск',
-        'astana' => 'Астана',
-        'achinsk' => 'Ачинск',
-        'blagoveshhensk' => 'Благовещенск',
-        'bratsk' => 'Братск',
-        'vladivostok' => 'Владивосток',
-        'volgodonsk' => 'Волгодонск',
-        'irkutsk' => 'Иркутск',
-        'karaganda' => 'Караганда',
-        'kemerovo' => 'Кемерово',
-        'kirov' => 'Киров',
-        'komsomolsk' => 'Комсомольск-на-Амуре',
-        'krasnoyarsk' => 'Красноярск',
-        'kurgan' => 'Курган',
-        'magadan' => 'Магадан',
-        'murmansk' => 'Мурманск',
-        'nahodka' => 'Находка',
-        'nizhnekamsk' => 'Нижнекамск',
-        'nizhnij_novgorod' => 'Нижний Новгород',
-        'nizhnij_tagil' => 'Нижний Тагил',
-        'novosibirsk' => 'Новосибирск',
-        'petropavlovsk_kamchatskij' => 'Петропавловск-Камчатский',
-        'rostov' => 'Ростов-на-Дону',
-        'samara' => 'Самара',
-        'taldykorgan' => 'Талдыкорган',
-        'tomsk' => 'Томск',
-        'tumen' => 'Тюмень',
-        'ussurijsk' => 'Уссурийск',
-        'khabarovsk' => 'Хабаровск'
-    );
+    // Только KZ-филиалы (country=kz в mrt-city-config.php)
+    $cities_list = mrt_get_metrics_cities_list();
     ?>
     <div class="wrap">
         <h1>Метрики для городов</h1>
@@ -506,7 +514,11 @@ function render_city_metrics_settings_page() {
 add_action('wp_head', 'insert_city_specific_metrics_from_options', 99); 
 function insert_city_specific_metrics_from_options() {
 
-    $current_city_slug = isset($_COOKIE['selected_city']) ? sanitize_text_field($_COOKIE['selected_city']) : 'khabarovsk';
+    $known = mrt_get_known_city_slugs();
+    $current_city_slug = mrt_resolve_selected_city('almaty', false);
+    if (!in_array($current_city_slug, $known, true)) {
+        $current_city_slug = 'almaty';
+    }
 
     // --- Получение метрик из wp_options ---
     $options = get_option('city_metrics_data', array());
@@ -516,6 +528,14 @@ function insert_city_specific_metrics_from_options() {
 
     $yandex_code = isset($options[$yandex_code_key]) ? $options[$yandex_code_key] : '';
     $ga_code = isset($options[$ga_code_key]) ? $options[$ga_code_key] : '';
+
+    // Филиал животных: fallback на счётчик Алматы, если свой не задан
+    if ($yandex_code === '' && $current_city_slug === 'almaty_aubakirova') {
+        $yandex_code = isset($options['yandex_almaty']) ? $options['yandex_almaty'] : '';
+    }
+    if ($ga_code === '' && $current_city_slug === 'almaty_aubakirova') {
+        $ga_code = isset($options['ga_almaty']) ? $options['ga_almaty'] : '';
+    }
 
     // --- Вывод метрик ---
     if ($yandex_code) {
@@ -531,5 +551,11 @@ function insert_city_specific_metrics_from_options() {
         // Выводим код Google Analytics
         echo $ga_code . "\n";
     }
+
+    $metrika_id = '';
+    if ($yandex_code && preg_match('/ym\s*\(\s*(\d+)/', $yandex_code, $m)) {
+        $metrika_id = $m[1];
+    }
+    echo '<script>window.mrtMetrikaId=' . ($metrika_id ? (int) $metrika_id : 'null') . ';</script>' . "\n";
 }
 // --- Конец метрики ---

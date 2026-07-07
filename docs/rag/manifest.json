@@ -1,6 +1,6 @@
 {
   "project": "mrt-lider-kz",
-  "version": "2026-07-06",
+  "version": "2026-07-07",
   "description": "RAG knowledge base for MRT Lider Kazakhstan WordPress site",
   "chunks": [
     {
@@ -37,6 +37,11 @@
       "id": "deploy-wp-admin",
       "file": "chunks/07-wp-admin-checklist.md",
       "tags": ["wordpress-admin", "setup", "checklist"]
+    },
+    {
+      "id": "animals-contextual-ads",
+      "file": "chunks/08-animals-contextual-ads.md",
+      "tags": ["animals", "yandex-direct", "seov", "advertising", "metrika", "utm"]
     }
   ]
 }

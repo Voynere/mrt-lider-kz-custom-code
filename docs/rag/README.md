@@ -23,11 +23,18 @@ cat docs/rag/manifest.json
 | animals-branch | `chunks/05-animals-branch-almaty-aubakirova.md` | МРТ для животных, Аубакирова |
 | templates | `chunks/06-templates.md` | PHP-шаблоны страниц |
 | deploy-wp-admin | `chunks/07-wp-admin-checklist.md` | Чеклист настройки на проде |
+| animals-contextual-ads | `chunks/08-animals-contextual-ads.md` | Контекстная реклама МРТ животным, seov, UTM, Метрика |
+
+## Локальная папка seov (не в Git)
+
+Кампании, CSV семантики и объявления — в `seov/` (см. `.gitignore`). RAG-чанк `08-animals-contextual-ads.md` хранит историю и ссылки.
 
 ## Ключевые файлы кода
 
 - `wp-content/themes/MRT Lider/inc/mrt-city-config.php` — конфиг филиалов
 - `wp-content/themes/MRT Lider/home-animals.php` — лендинг для животных
+- `wp-content/themes/MRT Lider/inc/mrt-animals-seo.php` — SEO title/meta для animals
+- `wp-content/themes/MRT Lider/assets/js/mrt-metrika.js` — UTM + reachGoal
 - `wp-content/themes/MRT Lider/assets/css/animals.css` — стили animals-филиала
 
 ## Обновление RAG

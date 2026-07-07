@@ -33,6 +33,9 @@ wp-content/languages/
 llms.txt
 llms-full.txt
 
+# SEO / контекстная реклама (локально, не на GitHub)
+seov/
+
 # Plugins: ignore all by default, keep only managed ones
 wp-content/plugins/*
 !wp-content/plugins/index.php

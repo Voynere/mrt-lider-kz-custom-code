@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
         data.append('phone', phone);
         data.append('pet', petInput ? petInput.value.trim() : '');
         data.append('nonce', '<?php echo wp_create_nonce('booking_form_nonce'); ?>');
+        if (typeof window.mrtAppendUtmToFormData === 'function') {
+            window.mrtAppendUtmToFormData(data);
+        }
 
         fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', {
             method: 'POST',
@@ -89,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.text())
         .then(result => {
+            if (result.indexOf('успешно') !== -1 && typeof window.mrtReachGoal === 'function') {
+                window.mrtReachGoal('animals_booking_submit');
+            }
             alert(result);
             form.reset();
         })

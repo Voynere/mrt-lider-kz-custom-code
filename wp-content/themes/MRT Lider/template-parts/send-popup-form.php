@@ -123,6 +123,17 @@ if (!empty($_POST['pet'])) {
     $body .= "Питомец: " . sanitize_text_field(wp_unslash($_POST['pet'])) . "\n";
 }
 
+$utm_keys = array('utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term');
+$utm_lines = array();
+foreach ($utm_keys as $utm_key) {
+    if (!empty($_POST[$utm_key])) {
+        $utm_lines[] = $utm_key . ': ' . sanitize_text_field(wp_unslash($_POST[$utm_key]));
+    }
+}
+if ($utm_lines !== array()) {
+    $body .= "\nUTM:\n" . implode("\n", $utm_lines) . "\n";
+}
+
 // Заголовки
 $headers = array('Content-Type: text/plain; charset=UTF-8');
 

@@ -57,6 +57,11 @@ City-specific страницы работают с префиксом:
 4. Импортировать прайс: лист Excel `almaty_aubakirova`
 5. (Опционально) FAQ-посты с рубрикой `almaty_aubakirova`
 
+## Контекстная реклама
+
+Локальные материалы: `seov/` (gitignored).  
+RAG и история: `docs/rag/chunks/08-animals-contextual-ads.md`.
+
 ## Конфиг в коде
 
 ```php

@@ -29,8 +29,9 @@ get_header();
     <div class="container">
         <div class="animals-hero__inner">
             <div class="animals-hero__content">
-                <span class="animals-hero__badge">Филиал МРТ Лидер</span>
+                <span class="animals-hero__badge">MRI Animal · мрт животным · Philips 1,5 Т</span>
                 <h1 class="animals-hero__title">МРТ для животных</h1>
+                <p class="animals-hero__price">от <strong>50 000 ₸</strong> за исследование</p>
                 <p class="animals-hero__lead">
                     Точная и безопасная магнитно-резонансная томография для собак, кошек и других питомцев.
                     Заключение ветеринарного специалиста — в день обследования.
@@ -39,6 +40,7 @@ get_header();
                     <li>Аппарат 1,5 Тесла экспертного класса</li>
                     <li>Опытные врачи-диагносты</li>
                     <li>Комфортные условия для питомца и хозяина</li>
+                    <li>~30 км от Алматы · с. Отеген батыра</li>
                 </ul>
                 <div class="animals-hero__actions">
                     <button type="button" class="animals-btn animals-btn--primary booking-btn">

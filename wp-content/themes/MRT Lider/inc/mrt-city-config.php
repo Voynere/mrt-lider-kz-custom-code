@@ -64,6 +64,20 @@ if (!function_exists('mrt_get_city_map')) {
     }
 }
 
+if (!function_exists('mrt_get_metrics_cities_list')) {
+    /** slug => label — только KZ-филиалы для WP Admin «Метрики городов». */
+    function mrt_get_metrics_cities_list(): array {
+        $list = array();
+        foreach (mrt_get_branches() as $slug => $branch) {
+            if (($branch['country'] ?? '') !== 'kz') {
+                continue;
+            }
+            $list[$slug] = $branch['label'];
+        }
+        return $list;
+    }
+}
+
 if (!function_exists('mrt_get_branch')) {
     function mrt_get_branch($slug) {
         $branches = mrt_get_branches();
