@@ -555,9 +555,21 @@ function insert_city_specific_metrics_from_options() {
     $yandex_code = isset($options[$yandex_code_key]) ? $options[$yandex_code_key] : '';
     $ga_code = isset($options[$ga_code_key]) ? $options[$ga_code_key] : '';
 
+    // ID счётчика из темы — приоритет над WP Admin (защита от перепутанных slug в options).
+    $theme_metrika_id = mrt_get_branch_yandex_metrika_id($current_city_slug);
+    if ($theme_metrika_id) {
+        $yandex_code = mrt_build_yandex_metrika_snippet($theme_metrika_id);
+    }
+
     // Филиал животных: fallback на счётчик Алматы, если свой не задан
     if ($yandex_code === '' && $current_city_slug === 'almaty_aubakirova') {
         $yandex_code = isset($options['yandex_almaty']) ? $options['yandex_almaty'] : '';
+        if ($yandex_code === '') {
+            $almaty_id = mrt_get_branch_yandex_metrika_id('almaty');
+            if ($almaty_id) {
+                $yandex_code = mrt_build_yandex_metrika_snippet($almaty_id);
+            }
+        }
     }
     if ($ga_code === '' && $current_city_slug === 'almaty_aubakirova') {
         $ga_code = isset($options['ga_almaty']) ? $options['ga_almaty'] : '';

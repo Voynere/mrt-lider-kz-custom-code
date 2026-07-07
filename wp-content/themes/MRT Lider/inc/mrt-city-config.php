@@ -8,28 +8,32 @@ if (!function_exists('mrt_get_branches')) {
     function mrt_get_branches() {
         return array(
             'almaty' => array(
-                'label'    => 'Алматы',
-                'type'     => 'standard',
-                'currency' => 'tenge',
-                'country'  => 'kz',
+                'label'             => 'Алматы',
+                'type'              => 'standard',
+                'currency'          => 'tenge',
+                'country'           => 'kz',
+                'yandex_metrika_id' => 110465113,
             ),
             'astana' => array(
-                'label'    => 'Астана',
-                'type'     => 'standard',
-                'currency' => 'tenge',
-                'country'  => 'kz',
+                'label'             => 'Астана',
+                'type'              => 'standard',
+                'currency'          => 'tenge',
+                'country'           => 'kz',
+                'yandex_metrika_id' => 110466202,
             ),
             'karaganda' => array(
-                'label'    => 'Караганда',
-                'type'     => 'standard',
-                'currency' => 'tenge',
-                'country'  => 'kz',
+                'label'             => 'Караганда',
+                'type'              => 'standard',
+                'currency'          => 'tenge',
+                'country'           => 'kz',
+                'yandex_metrika_id' => 110469944,
             ),
             'taldykorgan' => array(
-                'label'    => 'Талдыкорган',
-                'type'     => 'standard',
-                'currency' => 'tenge',
-                'country'  => 'kz',
+                'label'             => 'Талдыкорган',
+                'type'              => 'standard',
+                'currency'          => 'tenge',
+                'country'           => 'kz',
+                'yandex_metrika_id' => 110468879,
             ),
             'almaty_aubakirova' => array(
                 'label'           => 'МРТ животным «MRI Animal»',
@@ -61,6 +65,46 @@ if (!function_exists('mrt_get_city_map')) {
             $map[$slug] = $branch['label'];
         }
         return $map;
+    }
+}
+
+if (!function_exists('mrt_get_branch_yandex_metrika_id')) {
+    /**
+     * ID счётчика Яндекс.Метрики из конфига филиала (источник истины в теме).
+     */
+    function mrt_get_branch_yandex_metrika_id($slug) {
+        $branch = mrt_get_branch($slug);
+        if (!$branch || empty($branch['yandex_metrika_id'])) {
+            return null;
+        }
+
+        return (int) $branch['yandex_metrika_id'];
+    }
+}
+
+if (!function_exists('mrt_build_yandex_metrika_snippet')) {
+    /** Стандартный snippet счётчика Яндекс.Метрики для wp_head. */
+    function mrt_build_yandex_metrika_snippet($counter_id) {
+        $counter_id = (int) $counter_id;
+        if ($counter_id <= 0) {
+            return '';
+        }
+
+        return sprintf(
+            "<!-- Yandex.Metrika counter -->\n"
+            . "<script type=\"text/javascript\">\n"
+            . "    (function(m,e,t,r,i,k,a){\n"
+            . "        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};\n"
+            . "        m[i].l=1*new Date();\n"
+            . "        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}\n"
+            . "        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)\n"
+            . "    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=%1$d', 'ym');\n\n"
+            . "    ym(%1\$d, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:\"dataLayer\", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});\n"
+            . "</script>\n"
+            . "<noscript><div><img src=\"https://mc.yandex.ru/watch/%1\$d\" style=\"position:absolute; left:-9999px;\" alt=\"\" /></div></noscript>\n"
+            . "<!-- /Yandex.Metrika counter -->",
+            $counter_id
+        );
     }
 }
 
