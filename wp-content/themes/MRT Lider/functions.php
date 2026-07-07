@@ -5,6 +5,7 @@ require get_template_directory() . '/inc/mrt-header-helpers.php';
 require get_template_directory() . '/inc/mrt-service-helpers.php';
 require get_template_directory() . '/inc/mrt-city-routing.php';
 require get_template_directory() . '/inc/mrt-service-routing.php';
+require get_template_directory() . '/inc/mrt-animals-faq.php';
 require get_template_directory() . '/seo-config.php';
 
 add_theme_support('title-tag');

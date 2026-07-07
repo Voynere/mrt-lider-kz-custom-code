@@ -214,6 +214,14 @@ function mrt_seo_animals_home_description(): string {
     return 'MRI Animal — мрт животным. Ветеринарное МРТ для собак и кошек. Philips 1,5 Т, заключение в день. с. Отеген батыра, ул. Аубакирова 17/1. Запись онлайн и WhatsApp.';
 }
 
+function mrt_seo_animals_faq_title(): string {
+    return 'Вопросы и ответы о МРТ для животных — MRI Animal | МРТ Лидер';
+}
+
+function mrt_seo_animals_faq_description(): string {
+    return 'Ответы на частые вопросы о ветеринарной МРТ: подготовка, седация, стоимость, противопоказания, запись. MRI Animal — МРТ для собак и кошек в с. Отеген батыра.';
+}
+
 
 /**
  * Проверяет, является ли текущая страница дочерней от «uslugi-i-ceny».
@@ -344,6 +352,11 @@ function mrt_seo_title_parts($title) {
     }
     if (mrt_seo_is_animals_context() && $page_slug === 'uslugi-i-ceny') {
         $title['title'] = 'Цены на МРТ для животных — MRI Animal | МРТ Лидер';
+        $title['tagline'] = ''; $title['site'] = '';
+        return $title;
+    }
+    if (mrt_seo_is_animals_context() && $page_slug === 'vopros-otvet') {
+        $title['title'] = mrt_seo_animals_faq_title();
         $title['tagline'] = ''; $title['site'] = '';
         return $title;
     }
@@ -482,6 +495,9 @@ function mrt_seo_pre_title($title) {
     if (mrt_seo_is_animals_context() && $page_slug === 'uslugi-i-ceny') {
         return 'Цены на МРТ для животных — MRI Animal | МРТ Лидер';
     }
+    if (mrt_seo_is_animals_context() && $page_slug === 'vopros-otvet') {
+        return mrt_seo_animals_faq_title();
+    }
     if (mrt_seo_is_city_home()) {
         $city_gen = mrt_seo_city_genitive($city);
         return "МРТ в {$city_gen} — сеть диагностических центров МРТ Лидер";
@@ -542,6 +558,8 @@ function mrt_seo_meta_tags() {
 
     if (mrt_seo_is_animals_context() && mrt_seo_is_city_home()) {
         $description = mrt_seo_animals_home_description();
+    } elseif (mrt_seo_is_animals_context() && $page_slug === 'vopros-otvet') {
+        $description = mrt_seo_animals_faq_description();
     } elseif (mrt_seo_is_city_home() && $city_meta) {
         $description = $city_meta['home_desc'];
     } elseif ($subcat_meta && strpos($subcat_meta, 'price_') !== 0) {
@@ -1378,6 +1396,22 @@ function mrt_seo_schema_jsonld() {
 
     // FAQPage
     if (mrt_seo_url_page_slug() === 'vopros-otvet') {
+        if (mrt_seo_is_animals_context() && function_exists('mrt_get_animals_faq_items')) {
+            $faq_items = [];
+            foreach (mrt_get_animals_faq_items() as $faq_row) {
+                $answer_text = wp_strip_all_tags($faq_row['a']);
+                if (!empty($faq_row['q']) && !empty($answer_text)) {
+                    $faq_items[] = [
+                        '@type' => 'Question',
+                        'name' => $faq_row['q'],
+                        'acceptedAnswer' => ['@type' => 'Answer', 'text' => $answer_text],
+                    ];
+                }
+            }
+            if (!empty($faq_items)) {
+                $schema['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => $faq_items];
+            }
+        } else {
         $parent_cat = get_term_by('slug', 'answers', 'category');
         if ($parent_cat) {
             $faq_posts = get_posts([
@@ -1401,6 +1435,7 @@ function mrt_seo_schema_jsonld() {
             if (!empty($faq_items)) {
                 $schema['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => $faq_items];
             }
+        }
         }
     }
 

@@ -3,6 +3,131 @@
 Template Name: answers
 */
 
+$selected_city = mrt_get_selected_city_slug(['sync_cookie' => true]);
+
+if (mrt_is_animals_branch($selected_city)) {
+    get_header();
+    ?>
+    <main class="main animals-main">
+        <div class="main-background">
+            <?php custom_breadcrumbs(); ?>
+            <section class="answers animals-answers">
+                <div class="container">
+                    <div class="answers__inner">
+                        <div class="answers__head">
+                            <h1 class="answers__title page-title">ЧТО НУЖНО ЗНАТЬ?</h1>
+                            <div class="answers__search">
+                                <input type="text" class="answers__search-inp" placeholder="Поиск по вопросу">
+                                <button type="button" class="answers__search-btn" aria-label="Поиск">
+                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.7617 15.7344C19.7383 14.1979 20.3112 12.375 20.3112 10.4154C20.3112 4.9401 15.8776 0.5 10.4089 0.5C4.93359 0.5 0.5 4.9401 0.5 10.4154C0.5 15.8906 4.93359 20.3307 10.4023 20.3307C12.388 20.3307 14.237 19.7448 15.7865 18.7422L16.2357 18.4297L23.306 25.5L25.5 23.2669L18.4362 16.1966L18.7617 15.7344ZM15.9557 4.875C17.4336 6.35286 18.2474 8.31901 18.2474 10.4089C18.2474 12.4987 17.4336 14.4648 15.9557 15.9427C14.4779 17.4206 12.5117 18.2344 10.4219 18.2344C8.33203 18.2344 6.36588 17.4206 4.88802 15.9427C3.41016 14.4648 2.59635 12.4987 2.59635 10.4089C2.59635 8.31901 3.41016 6.35286 4.88802 4.875C6.36588 3.39714 8.33203 2.58333 10.4219 2.58333C12.5117 2.58333 14.4779 3.39714 15.9557 4.875Z" fill="white" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="answers__content animals-answers__content">
+                            <div class="answers__specialist answers__content-item animals-answers__intro">
+                                <div class="answers__specialist-container animals-answers__intro-icon" aria-hidden="true">
+                                    <span class="animals-answers__emoji">🐾</span>
+                                </div>
+                                <p class="answers__specialist-info">
+                                    Ответы на частые вопросы о ветеринарной МРТ в центре
+                                    «MRI Animal» — МРТ животным в селе Отеген батыра.
+                                    Не нашли ответ? Задайте свой вопрос — мы поможем.
+                                </p>
+                                <button type="button" class="answers__category-button btn-blue booking-btn animals-answers__ask-btn">
+                                    <p>Задать свой вопрос</p>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#404040" />
+                                        <path d="M9.08108 8H16V14.9189M14.8108 9.18919L8 16" stroke="#404040" stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <?php get_template_part('template-parts/animals-answers-content'); ?>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <?php get_template_part('template-parts/tour-or-animals-map'); ?>
+        </div>
+    </main>
+
+    <div class="booking" id="booking">
+        <div class="booking__overlay">
+            <form class="booking__form" action="#">
+                <button type="button" class="booking__close-btn" aria-label="Закрыть">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="#404040" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="booking__form-wrapper">
+                    <input type="text" class="booking__form-input" placeholder="Введите имя" required>
+                    <input type="text" class="booking__form-input" placeholder="Введите телефон" required>
+                    <input type="text" class="booking__form-input" placeholder="Тема вопроса" required>
+                    <textarea name="" id="" class="textarea booking__form-input" placeholder="Текст вопроса"></textarea>
+                    <button class="booking__form-btn btn-blue">
+                        <p>Записаться на приём</p>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#404040" />
+                            <path d="M9.08108 8H16V14.9189M14.8108 9.18919L8 16" stroke="#404040" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="booking__form-privacy">
+                    Нажимая на кнопку, вы автоматически соглашаетесь с
+                    <a href="<?php echo esc_url(site_url('/privacy/')); ?>">Политикой обработки персональных данных.</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.booking__form');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const name = form.querySelector('input[placeholder="Введите имя"]').value;
+                    const phone = form.querySelector('input[placeholder="Введите телефон"]').value;
+                    const subject = form.querySelector('input[placeholder="Тема вопроса"]').value;
+                    const message = form.querySelector('textarea').value;
+                    const data = new FormData();
+                    data.append('action', 'send_contact_form');
+                    data.append('name', name);
+                    data.append('phone', phone);
+                    data.append('subject', subject);
+                    data.append('message', message);
+                    data.append('nonce', '<?php echo wp_create_nonce('contact_form_nonce'); ?>');
+                    fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        alert(result);
+                        form.reset();
+                    })
+                    .catch(error => {
+                        alert('Ошибка отправки формы.');
+                        console.error('Ошибка:', error);
+                    });
+                });
+            }
+            const phoneInput = document.querySelector('input[placeholder="Введите телефон"]');
+            if (phoneInput && typeof IMask !== 'undefined') {
+                IMask(phoneInput, {
+                    mask: '+{7} (000) 000-00-00',
+                    lazy: false,
+                    placeholderChar: '_'
+                });
+            }
+        });
+    </script>
+    <?php
+    get_footer();
+    return;
+}
+
 // --- Список валидных слагов городов ---
 $known_city_slugs = array(
     'almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova'
