@@ -47,6 +47,28 @@ if (!function_exists('mrt_get_branches')) {
                 'branch_taxonomy' => 'almaty_aubakirova',
                 'map_embed'       => 'https://yandex.ru/map-widget/v1/?um=constructor%3Aplaceholder&amp;source=constructor',
                 'home_template'   => 'home-animals.php',
+                'centre_photos'   => array(
+                    array(
+                        'file' => 'animals/centre/01-mri-room.png',
+                        'alt'  => 'Кабинет МРТ MRI Animal — Philips 1,5 Т',
+                    ),
+                    array(
+                        'file' => 'animals/centre/02-mri-scan.png',
+                        'alt'  => 'МРТ-исследование животного под контролем врача',
+                    ),
+                    array(
+                        'file' => 'animals/centre/03-flyer-front.png',
+                        'alt'  => 'Филиал МРТ для животных MRI Animal в с. Отеген батыра',
+                    ),
+                    array(
+                        'file' => 'animals/centre/04-flyer-back.png',
+                        'alt'  => 'Услуги и цены MRI Animal — диагностика для питомцев',
+                    ),
+                    array(
+                        'file' => 'animals/centre/05-equipment.png',
+                        'alt'  => 'Современный аппарат МРТ экспертного класса',
+                    ),
+                ),
             ),
         );
     }
@@ -371,6 +393,146 @@ if (!function_exists('mrt_get_animals_map_html')) {
             esc_url($map_url),
             esc_attr('Карта филиала MRI Animal')
         );
+    }
+}
+
+if (!function_exists('mrt_parse_acf_centre_photo_item')) {
+    /**
+     * Normalize one ACF photos_centre_* value to gallery item or null.
+     *
+     * @return array{full: string, thumb: string, alt: string}|null
+     */
+    function mrt_parse_acf_centre_photo_item($item, $default_alt = '') {
+        if (empty($item)) {
+            return null;
+        }
+
+        $full_url  = '';
+        $thumb_url = '';
+        $alt_text  = $default_alt;
+
+        if (is_int($item) || ctype_digit((string) $item)) {
+            $attach_id = (int) $item;
+            $full_url  = wp_get_attachment_image_url($attach_id, 'full');
+            $thumb_url = wp_get_attachment_image_url($attach_id, 'medium') ?: $full_url;
+            $alt_text  = get_post_meta($attach_id, '_wp_attachment_image_alt', true) ?: $default_alt;
+        } elseif (is_array($item)) {
+            if (!empty($item['url'])) {
+                $full_url = $item['url'];
+            }
+            if (!empty($item['sizes']['medium'])) {
+                $thumb_url = $item['sizes']['medium'];
+            } elseif (!empty($item['sizes']['thumbnail'])) {
+                $thumb_url = $item['sizes']['thumbnail'];
+            } else {
+                $thumb_url = $full_url;
+            }
+            if (!empty($item['alt'])) {
+                $alt_text = $item['alt'];
+            } elseif (!empty($item['ID'])) {
+                $alt_text = get_post_meta((int) $item['ID'], '_wp_attachment_image_alt', true) ?: $default_alt;
+            }
+        } elseif (is_string($item)) {
+            $full_url  = $item;
+            $thumb_url = $item;
+        }
+
+        if (!$full_url) {
+            return null;
+        }
+
+        return array(
+            'full'  => esc_url_raw($full_url),
+            'thumb' => esc_url_raw($thumb_url ?: $full_url),
+            'alt'   => sanitize_text_field($alt_text),
+        );
+    }
+}
+
+if (!function_exists('mrt_get_centre_photos_from_post')) {
+    /**
+     * @return array<int, array{full: string, thumb: string, alt: string}>
+     */
+    function mrt_get_centre_photos_from_post($post_id) {
+        $photos = array();
+        $photos_group = get_field('photos_centre', $post_id) ?: array();
+        $default_alt = get_the_title($post_id);
+
+        for ($i = 1; $i <= 8; $i++) {
+            $field_key = 'photos_centre_' . $i;
+            if (empty($photos_group[$field_key])) {
+                continue;
+            }
+
+            $parsed = mrt_parse_acf_centre_photo_item($photos_group[$field_key], $default_alt);
+            if ($parsed) {
+                $photos[] = $parsed;
+            }
+        }
+
+        return $photos;
+    }
+}
+
+if (!function_exists('mrt_get_branch_centre_photo_fallbacks')) {
+    /**
+     * Theme asset gallery from branch config when ACF photos_centre is empty.
+     *
+     * @return array<int, array{full: string, thumb: string, alt: string}>
+     */
+    function mrt_get_branch_centre_photo_fallbacks($city_slug) {
+        $branch = mrt_get_branch($city_slug);
+        if (!$branch || empty($branch['centre_photos']) || !is_array($branch['centre_photos'])) {
+            return array();
+        }
+
+        $base_uri = get_template_directory_uri() . '/assets/img/';
+        $photos = array();
+
+        foreach ($branch['centre_photos'] as $photo) {
+            if (empty($photo['file'])) {
+                continue;
+            }
+
+            $url = $base_uri . ltrim($photo['file'], '/');
+            $photos[] = array(
+                'full'  => esc_url_raw($url),
+                'thumb' => esc_url_raw($url),
+                'alt'   => sanitize_text_field($photo['alt'] ?? 'MRI Animal'),
+            );
+        }
+
+        return $photos;
+    }
+}
+
+if (!function_exists('mrt_get_centre_photos')) {
+    /**
+     * Centre gallery: ACF photos_centre on contacts post, then branch theme fallbacks.
+     *
+     * @return array<int, array{full: string, thumb: string, alt: string}>
+     */
+    function mrt_get_centre_photos($city_slug, $limit = 5) {
+        $photos = array();
+        $query = mrt_get_contacts_query($city_slug);
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $photos = mrt_get_centre_photos_from_post(get_the_ID());
+            }
+            wp_reset_postdata();
+        }
+
+        if (empty($photos)) {
+            $photos = mrt_get_branch_centre_photo_fallbacks($city_slug);
+        }
+
+        if ($limit > 0) {
+            $photos = array_slice($photos, 0, $limit);
+        }
+
+        return $photos;
     }
 }
 

@@ -225,144 +225,16 @@ $is_animals_contacts = mrt_is_animals_branch($selected_city);
             </div>
         </section>
 
-        <section class="photos<?php echo $is_animals_contacts ? ' animals-photos' : ''; ?>">
-            <div class="container">
-                <div class="photos__inner">
-                    <h2 class="page-title">НАШ ЦЕНТР</h2>
-                    <div class="photos__content">
-                        <?php
-                        // Запрашиваем пост контактов для выбранного города
-                        $photos_args = array(
-                            'post_type'      => 'post',
-                            'posts_per_page' => 1,
-                            'tax_query'      => array(
-                                'relation' => 'AND',
-                                array(
-                                    'taxonomy' => 'category',
-                                    'field'    => 'slug',
-                                    'terms'    => $selected_city,
-                                ),
-                                array(
-                                    'taxonomy' => 'category',
-                                    'field'    => 'slug',
-                                    'terms'    => 'contacty',
-                                )
-                            )
-                        );
-                        $photos_query = new WP_Query( $photos_args );
-
-                        // Временный массив для хранения обработанных изображений
-                        $centre_photos = array();
-
-                        if ( $photos_query->have_posts() ) :
-                            while ( $photos_query->have_posts() ) : $photos_query->the_post();
-                                // Получаем группу полей с фотографиями центра
-                                $photos_group = get_field( 'photos_centre' ) ?: array();
-
-                                // Проверяем до 8 полей и собираем реальные URL/миниатюры/alt
-                                for ( $i = 1; $i <= 8; $i++ ) {
-                                    $field_key = 'photos_centre_' . $i;
-                                    if ( empty( $photos_group[ $field_key ] ) ) {
-                                        continue;
-                                    }
-
-                                    $item = $photos_group[ $field_key ];
-
-                                    $full_url  = '';
-                                    $thumb_url = '';
-                                    $alt_text  = '';
-
-                                    // ID (число)
-                                    if ( is_int( $item ) || ctype_digit( (string) $item ) ) {
-                                        $attach_id = (int) $item;
-                                        $full_url  = wp_get_attachment_image_url( $attach_id, 'full' );
-                                        // Подберите размер миниатюры под вашу вёрстку — 'medium' / 'thumbnail' / 'large'
-                                        $thumb_url = wp_get_attachment_image_url( $attach_id, 'medium' ) ?: $full_url;
-                                        $alt_text  = get_post_meta( $attach_id, '_wp_attachment_image_alt', true );
-                                    }
-                                    // Если ACF вернул массив
-                                    elseif ( is_array( $item ) ) {
-                                        if ( ! empty( $item['url'] ) ) {
-                                            $full_url = $item['url'];
-                                        }
-                                        if ( ! empty( $item['sizes']['medium'] ) ) {
-                                            $thumb_url = $item['sizes']['medium'];
-                                        } elseif ( ! empty( $item['sizes']['thumbnail'] ) ) {
-                                            $thumb_url = $item['sizes']['thumbnail'];
-                                        } else {
-                                            $thumb_url = $full_url;
-                                        }
-                                        if ( ! empty( $item['alt'] ) ) {
-                                            $alt_text = $item['alt'];
-                                        } elseif ( ! empty( $item['ID'] ) ) {
-                                            $alt_text = get_post_meta( $item['ID'], '_wp_attachment_image_alt', true );
-                                        }
-                                    }
-                                    // Прямая строка — URL
-                                    elseif ( is_string( $item ) ) {
-                                        $full_url  = $item;
-                                        $thumb_url = $item;
-                                    }
-
-                                    // Если получили URL — добавляем в массив
-                                    if ( $full_url ) {
-                                        $centre_photos[] = array(
-                                            'full'  => esc_url_raw( $full_url ),
-                                            'thumb' => esc_url_raw( $thumb_url ?: $full_url ),
-                                            'alt'   => sanitize_text_field( $alt_text ?: get_the_title() ),
-                                        );
-                                    }
-                                } // end for
-                            endwhile;
-                            wp_reset_postdata();
-                        endif;
-
-                        // Обрезаем до 5 изображений
-                        if ( ! empty( $centre_photos ) ) :
-                            $centre_photos = array_slice( $centre_photos, 0, 5 );
-
-                            // Разбиваем на верх/низ (3 + 2)
-                            $top_photos    = array_slice( $centre_photos, 0, 3 );
-                            $bottom_photos = array_slice( $centre_photos, 3, 2 );
-                            ?>
-                            <div class="photos__top">
-                                <?php foreach ( $top_photos as $index => $img ) : ?>
-                                    <a href="<?php echo esc_url( $img['full'] ); ?>"
-                                    class="photos__item"
-                                    data-fancybox="photos-gallery">
-                                        <img src="<?php echo esc_url( $img['thumb'] ); ?>"
-                                            alt="<?php echo esc_attr( $img['alt'] ); ?>"
-                                            class="photos__item-img" loading="lazy">
-                                    </a>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <div class="photos__bottom">
-                                <?php foreach ( $bottom_photos as $index => $img ) : ?>
-                                    <a href="<?php echo esc_url( $img['full'] ); ?>"
-                                    class="photos__item"
-                                    data-fancybox="photos-gallery">
-                                        <img src="<?php echo esc_url( $img['thumb'] ); ?>"
-                                            alt="<?php echo esc_attr( $img['alt'] ); ?>"
-                                            class="photos__item-img" loading="lazy">
-                                    </a>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <div class="photos__more">
-                                <a href="" class="photos__more-link">
-                                    Ещё фото
-                                </a>
-                            </div>
-                        <?php else : ?>
-                            <div class="photos__empty">
-                                <p>Фотографий центра для выбранного города не найдено.</p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <?php
+        get_template_part(
+            'template-parts/centre-photos',
+            null,
+            array(
+                'selected_city' => $selected_city,
+                'section_class' => $is_animals_contacts ? 'animals-photos' : '',
+            )
+        );
+        ?>
 
         <?php
         // Contacts already has a map at the top; skip duplicate animals map at bottom.

@@ -247,6 +247,107 @@ body.mrt-animals-branch .header__burger-logo .title-centre {
     background: var(--animals-warm);
 }
 
+/* --- Главная animals: stats + why --- */
+
+.animals-section--stats {
+    padding-top: 56px;
+    padding-bottom: 24px;
+}
+
+.animals-section--why {
+    padding-top: 24px;
+    padding-bottom: 48px;
+}
+
+.animals-home__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 28px;
+    background: linear-gradient(135deg, var(--animals-green-light) 0%, var(--animals-warm) 100%);
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animals-home__stats.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animals-home__stat {
+    text-align: center;
+    padding: 8px;
+}
+
+.animals-home__stat-value {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    color: var(--animals-green-dark);
+    line-height: 1.2;
+    margin: 0 0 6px;
+}
+
+.animals-home__stat-label {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.animals-home__why {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.animals-home__why-card {
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e5ebe7;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+}
+
+.animals-home__why-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.animals-home__why-card h3 {
+    font-size: 18px;
+    color: var(--animals-green-dark);
+    margin: 0 0 8px;
+}
+
+.animals-home__why-card p {
+    color: #555;
+    line-height: 1.5;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .animals-home__stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .animals-home__why {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 578px) {
+    .animals-home__stats {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+}
+
 .animals-section__title {
     font-size: clamp(28px, 4vw, 40px);
     color: #2a3d34;

@@ -110,6 +110,21 @@ add_action( 'wp_enqueue_scripts', function () {
             file_exists($metrika_js) ? filemtime($metrika_js) : '1.0.0',
             true
         );
+
+        if (
+            is_page_template('home-animals.php')
+            || (function_exists('mrt_seo_is_animals_context') && function_exists('mrt_seo_is_city_home')
+                && mrt_seo_is_animals_context() && mrt_seo_is_city_home())
+        ) {
+            $animals_home_stats_js = get_template_directory() . '/assets/js/animals-home-stats.js';
+            wp_enqueue_script(
+                'animals-home-stats',
+                get_template_directory_uri() . '/assets/js/animals-home-stats.js',
+                array(),
+                file_exists($animals_home_stats_js) ? filemtime($animals_home_stats_js) : '1.0.0',
+                true
+            );
+        }
     }
 
     wp_localize_script('main', 'mrtCityConfig', array(

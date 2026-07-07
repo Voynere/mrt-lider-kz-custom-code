@@ -61,7 +61,92 @@ get_header();
     </div>
 </section>
 
+<?php
+$animals_home_stats = array(
+    array(
+        'value'      => '1,5 Т',
+        'label'      => 'МРТ Philips экспертного класса',
+        'animate'    => false,
+    ),
+    array(
+        'value'      => '50 000',
+        'suffix'     => ' ₸',
+        'label'      => 'базовая стоимость исследования',
+        'animate'    => true,
+        'data_count' => 50000,
+    ),
+    array(
+        'value'      => '20–60',
+        'label'      => 'минут — длительность сканирования',
+        'animate'    => false,
+    ),
+    array(
+        'value'      => 'в день',
+        'label'      => 'заключение ветеринарного специалиста',
+        'animate'    => false,
+    ),
+);
+
+$animals_home_why = array(
+    array(
+        'icon'  => '🔬',
+        'title' => 'Точная диагностика',
+        'text'  => 'Высокое разрешение снимков для неврологии, ортопедии и онкопоиска у питомцев.',
+    ),
+    array(
+        'icon'  => '👨‍⚕️',
+        'title' => 'Опытные врачи',
+        'text'  => 'Исследования проводят и описывают специалисты с опытом в ветеринарной МРТ.',
+    ),
+    array(
+        'icon'  => '🐾',
+        'title' => 'Комфорт питомца',
+        'text'  => 'Спокойная обстановка, седация по показаниям, хозяин может быть рядом.',
+    ),
+    array(
+        'icon'  => '📋',
+        'title' => 'Запись без очередей',
+        'text'  => 'Обследование по предварительной записи в удобное время — ~30 км от Алматы.',
+    ),
+);
+?>
+
 <main class="main animals-main">
+    <section class="animals-section animals-section--stats">
+        <div class="container">
+            <h2 class="animals-section__title">MRI Animal в цифрах</h2>
+            <div class="animals-home__stats">
+                <?php foreach ($animals_home_stats as $stat) : ?>
+                    <div class="animals-home__stat">
+                        <?php if (!empty($stat['animate']) && !empty($stat['data_count'])) : ?>
+                            <p class="animals-home__stat-value"
+                               data-count="<?php echo esc_attr((string) $stat['data_count']); ?>"
+                               data-suffix="<?php echo esc_attr($stat['suffix'] ?? ''); ?>">0<?php echo esc_html($stat['suffix'] ?? ''); ?></p>
+                        <?php else : ?>
+                            <p class="animals-home__stat-value"><?php echo esc_html($stat['value']); ?></p>
+                        <?php endif; ?>
+                        <p class="animals-home__stat-label"><?php echo esc_html($stat['label']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="animals-section animals-section--why">
+        <div class="container">
+            <h2 class="animals-section__title">Почему выбирают нас</h2>
+            <div class="animals-home__why">
+                <?php foreach ($animals_home_why as $card) : ?>
+                    <article class="animals-home__why-card">
+                        <span class="animals-home__why-icon" aria-hidden="true"><?php echo esc_html($card['icon']); ?></span>
+                        <h3><?php echo esc_html($card['title']); ?></h3>
+                        <p><?php echo esc_html($card['text']); ?></p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
     <section class="animals-section animals-section--services">
         <div class="container">
             <h2 class="animals-section__title">Что диагностируем</h2>
