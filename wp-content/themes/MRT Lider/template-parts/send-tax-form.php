@@ -59,52 +59,9 @@ if ($city_slug_from_url_tax_form !== false) {
 // --- КОНЕЦ ЛОГИКИ ОПРЕДЕЛЕНИЯ ГОРОДА ---
 
 // --- Получаем email города ---
-// Используем переопределенный $selected_city_tax_form вместо оригинального $selected_city
-
-$args = array(
-    'post_type'      => 'post',
-    'posts_per_page' => 1,
-    'tax_query'      => array(
-        'relation' => 'AND',
-        array(
-            'taxonomy' => 'category',
-            'field'    => 'slug',
-            'terms'    => $selected_city_tax_form, // Используем переопределенный $selected_city_tax_form
-        ),
-        array(
-            'taxonomy' => 'category',
-            'field'    => 'slug',
-            'terms'    => 'contacty', // Убедитесь, что это правильный slug рубрики "Контакты"
-        )
-    )
-);
-$contacts_query = new WP_Query($args);
-
-$to = 'prooo100mix@yandex.ru'; // Email по умолчанию
-
-$telegram_chat_ids = array(); // По умолчанию
-
-if ($contacts_query->have_posts()) {
-    $contacts_query->the_post();
-    $emails_group = get_field('contacts_emails');
-    if (!empty($emails_group) && !empty($emails_group['contacts_email_1'])) {
-        $to = sanitize_email($emails_group['contacts_email_1']);
-    }
-	$telegram_group = get_field('telegram_chats');
-		if (!empty($telegram_group)) {
-			$chat_ids = array();
-			if (!empty($telegram_group['telegram_chat_1'])) {
-				$chat_ids[] = $telegram_group['telegram_chat_1'];
-			}
-			if (!empty($telegram_group['telegram_chat_2'])) {
-				$chat_ids[] = $telegram_group['telegram_chat_2'];
-			}
-			if (!empty($chat_ids)) {
-				$telegram_chat_ids = $chat_ids;
-			}
-		}
-    wp_reset_postdata(); 
-}
+$form_notifications = mrt_get_form_notification_settings($selected_city_tax_form);
+$to = $form_notifications['email'];
+$telegram_chat_ids = $form_notifications['telegram_chat_ids'];
 // --- Конец получения email ---
 
 // --- Сбор данных формы ---

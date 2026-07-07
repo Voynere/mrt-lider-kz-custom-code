@@ -41,6 +41,7 @@ if (!function_exists('mrt_get_branches')) {
                 'type'            => 'animals',
                 'currency'        => 'tenge',
                 'country'         => 'kz',
+                'form_email'      => 'mri-animal@mail.ru',
                 'address_short'   => 'ул. Аубакирова, 17/1',
                 'address_full'    => 'ул. Аубакирова, 17/1, село Отеген батыра, Илийский район, Алматинская область',
                 'branch_taxonomy' => 'almaty_aubakirova',
@@ -229,6 +230,59 @@ if (!function_exists('mrt_get_contacts_query')) {
                 ),
             ),
         ));
+    }
+}
+
+if (!function_exists('mrt_get_form_notification_settings')) {
+    /**
+     * Email и Telegram для заявок с форм: конфиг филиала → ACF → дефолт.
+     *
+     * @return array{email: string, telegram_chat_ids: string[]}
+     */
+    function mrt_get_form_notification_settings($city_slug) {
+        $default_email = 'prooo100mix@yandex.ru';
+        $settings = array(
+            'email'               => $default_email,
+            'telegram_chat_ids'   => array(),
+        );
+
+        $branch = mrt_get_branch($city_slug);
+        if ($branch && !empty($branch['form_email'])) {
+            $settings['email'] = sanitize_email($branch['form_email']);
+        }
+
+        $query = mrt_get_contacts_query($city_slug);
+        if (!$query->have_posts()) {
+            return $settings;
+        }
+
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            if (empty($branch['form_email'])) {
+                $emails_group = get_field('contacts_emails');
+                if (!empty($emails_group['contacts_email_1'])) {
+                    $settings['email'] = sanitize_email($emails_group['contacts_email_1']);
+                }
+            }
+
+            $telegram_group = get_field('telegram_chats');
+            if (!empty($telegram_group)) {
+                $chat_ids = array();
+                if (!empty($telegram_group['telegram_chat_1'])) {
+                    $chat_ids[] = $telegram_group['telegram_chat_1'];
+                }
+                if (!empty($telegram_group['telegram_chat_2'])) {
+                    $chat_ids[] = $telegram_group['telegram_chat_2'];
+                }
+                if (!empty($chat_ids)) {
+                    $settings['telegram_chat_ids'] = $chat_ids;
+                }
+            }
+        }
+        wp_reset_postdata();
+
+        return $settings;
     }
 }
 
