@@ -366,7 +366,12 @@ $contacts_query = new WP_Query($args);
             </div>
         </section>
 
-        <?php get_template_part('template-parts/tour-or-animals-map'); ?>
+        <?php
+        // Contacts already has a map at the top; skip duplicate animals map at bottom.
+        if (!mrt_is_animals_branch($selected_city)) {
+            get_template_part('template-parts/tour-or-animals-map');
+        }
+        ?>
 
     </div>
 </main>
