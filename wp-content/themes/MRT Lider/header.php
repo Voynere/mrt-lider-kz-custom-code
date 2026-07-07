@@ -290,10 +290,9 @@
                                                         $raw = $bottom_phones[0];
                                                         $tel_clean = preg_replace('/[^\d\+]/', '', $raw);
                                                         echo '<li><a href="tel:' . esc_attr($tel_clean) . '" data-mrt-phone="header">' . esc_html($raw) . '</a></li>';
-                                                        $extra_phones = count($bottom_phones) - 1;
-                                                        if ($extra_phones > 0) {
-                                                            $more_label = $extra_phones === 1 ? 'номер' : 'номера';
-                                                            echo '<li class="header__phones-more">+' . (int) $extra_phones . ' ' . esc_html($more_label) . '</li>';
+                                                        $extra_phones = array_slice($bottom_phones, 1);
+                                                        if ($extra_phones !== []) {
+                                                            mrt_render_bottom_phones_extra($extra_phones);
                                                         }
                                                     }
                                                     ?>

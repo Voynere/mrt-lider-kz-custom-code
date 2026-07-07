@@ -315,6 +315,27 @@ if (!function_exists('mrt_page_needs_closing_countdown')) {
     }
 }
 
+if (!function_exists('mrt_render_bottom_phones_extra')) {
+    function mrt_render_bottom_phones_extra(array $phones): void {
+        if ($phones === []) {
+            return;
+        }
+
+        $count = count($phones);
+        $more_label = $count === 1 ? 'номер' : 'номера';
+
+        echo '<li class="header__phones-more">';
+        echo '<span class="header__phones-more-trigger" tabindex="0" role="button" aria-haspopup="true">+' . (int) $count . ' ' . esc_html($more_label) . '</span>';
+        echo '<div class="header__phones-more-drop" role="menu">';
+        foreach ($phones as $phone) {
+            $tel_clean = preg_replace('/[^\d\+]/', '', $phone);
+            echo '<a href="tel:' . esc_attr($tel_clean) . '" role="menuitem" data-mrt-phone="header">' . esc_html($phone) . '</a>';
+        }
+        echo '</div>';
+        echo '</li>';
+    }
+}
+
 if (!function_exists('mrt_render_sticky_contact_more')) {
     function mrt_render_sticky_contact_more(array $items, string $type = 'address'): void {
         if ($items === array()) {
