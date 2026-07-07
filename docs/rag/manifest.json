@@ -42,6 +42,11 @@
       "id": "animals-contextual-ads",
       "file": "chunks/08-animals-contextual-ads.md",
       "tags": ["animals", "yandex-direct", "seov", "advertising", "metrika", "utm"]
+    },
+    {
+      "id": "seo-module-kz",
+      "file": "chunks/09-seo-module-kz.md",
+      "tags": ["seo", "schema", "sitemap", "aioseo", "canonical", "og"]
     }
   ]
 }

@@ -141,12 +141,7 @@ if (!function_exists('mrt_get_city_nav_url')) {
     }
 }
 
-if (!function_exists('mrt_seo_get_cities')) {
-    /** Alias for RU header compatibility. */
-    function mrt_seo_get_cities(): array {
-        return mrt_get_city_map();
-    }
-}
+// mrt_seo_get_cities() — в seo-config.php
 
 if (!function_exists('mrt_kz_city_in_line')) {
     function mrt_kz_city_in_line(string $slug): string {

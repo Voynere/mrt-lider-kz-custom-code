@@ -85,7 +85,8 @@ Snippet: `seov/metrika-counters.md` → WP Admin → **Метрики город
 
 | Файл | Что сделано |
 |------|-------------|
-| `inc/mrt-animals-seo.php` | Title, meta description, Open Graph для animals |
+| `inc/mrt-animals-seo.php` | удалён → логика в `seo-config.php` |
+| `seo-config.php` | SEO title/meta, OG, JSON-LD @graph, sitemap, robots (без AIOSEO) |
 | `home-animals.php` | MRI Animal · мрт животным, цена в hero, гео-подсказка |
 | `assets/css/animals.css` | Стили блока цены |
 | `assets/js/mrt-metrika.js` | UTM + reachGoal |

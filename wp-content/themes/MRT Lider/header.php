@@ -74,7 +74,6 @@
 
 <head>
     <meta charset="<?php bloginfo('charset') ?>">
-    <meta name="facebook-domain-verification" content="baawbxh7yddo6g4edqe7wqeclmm57y" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

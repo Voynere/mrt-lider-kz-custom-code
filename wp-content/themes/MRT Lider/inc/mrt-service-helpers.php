@@ -9,34 +9,6 @@ if (!function_exists('mrt_get_kz_cities')) {
     }
 }
 
-if (!function_exists('mrt_seo_city_genitive')) {
-    function mrt_seo_city_genitive($slug): string {
-        $map = array(
-            'almaty'            => 'Алматы',
-            'astana'            => 'Астане',
-            'karaganda'         => 'Караганде',
-            'taldykorgan'       => 'Талдыкоргане',
-            'almaty_aubakirova' => 'Отеген батыра',
-        );
-
-        $slug = sanitize_key((string) $slug);
-        if (isset($map[$slug])) {
-            return $map[$slug];
-        }
-
-        $branch = mrt_get_branch($slug);
-        return $branch['label'] ?? $slug;
-    }
-}
-
-if (!function_exists('mrt_seo_canonical_url')) {
-    function mrt_seo_canonical_url(): string {
-        $request_uri = isset($_SERVER['REQUEST_URI']) ? (string) wp_unslash($_SERVER['REQUEST_URI']) : '/';
-        $path = (string) parse_url($request_uri, PHP_URL_PATH);
-        return home_url($path ?: '/');
-    }
-}
-
 if (!function_exists('mrt_get_city_phone')) {
     function mrt_get_city_phone(string $city = ''): array {
         if ($city === '') {
@@ -567,12 +539,6 @@ if (!function_exists('mrt_render_price_hero_block')) {
 if (!function_exists('mrt_render_concessional_price_notice')) {
     function mrt_render_concessional_price_notice(string $city): string {
         return '';
-    }
-}
-
-if (!function_exists('mrt_seo_get_branch_rating')) {
-    function mrt_seo_get_branch_rating(string $city = ''): ?array {
-        return null;
     }
 }
 
