@@ -57,6 +57,7 @@ JS: `assets/js/main.js` — префикс города в ссылках мен
 - `inc/mrt-service-routing.php`, `inc/mrt-service-helpers.php`
 - Шаблоны: `page-service-landing.php`, `page-subservice.php`, `service-content.php`, `subservice-content.php`
 - Стили: `assets/css/service-landing.css`
+- **Документация URL и статус по городам:** `docs/rag/chunks/12-service-landing-urls-kz.md`
 
 ## Поиск по сайту
 

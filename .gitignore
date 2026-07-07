@@ -36,6 +36,10 @@ llms-full.txt
 # SEO / контекстная реклама (локально, не на GitHub)
 seov/
 
+# Yandex Direct CLI secrets and reports
+tools/yandex-direct/.env
+tools/yandex-direct/reports/
+
 # Plugins: ignore all by default, keep only managed ones
 wp-content/plugins/*
 !wp-content/plugins/index.php

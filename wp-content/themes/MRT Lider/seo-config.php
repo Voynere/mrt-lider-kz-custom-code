@@ -223,6 +223,11 @@ function mrt_seo_animals_faq_description(): string {
 }
 
 
+function mrt_seo_animals_prices_description(): string {
+    return 'Прайс MRI Animal — мрт животным от 50 000 ₸. Седация и контраст +25 000 ₸. Philips 1,5 Т, заключение в день. с. Отegen батыра, ул. Аубакирова 17/1. Запись онлайн.';
+}
+
+
 /**
  * Проверяет, является ли текущая страница дочерней от «uslugi-i-ceny».
  * Обрабатывает URL вида /{city}/uslugi-i-ceny/price/{service}/
@@ -558,6 +563,10 @@ function mrt_seo_meta_tags() {
 
     if (mrt_seo_is_animals_context() && mrt_seo_is_city_home()) {
         $description = mrt_seo_animals_home_description();
+    } elseif (mrt_seo_is_animals_context() && $page_slug === 'uslugi-i-ceny' && !$is_price_child) {
+        $description = mrt_seo_animals_prices_description();
+    } elseif (mrt_seo_is_animals_context() && $page_slug === 'kontakty') {
+        $description = 'Контакты MRI Animal — мрт животным в с. Отegen батыра. ул. Аубакирова 17/1. Телефоны, WhatsApp, запись на МРТ для собак и кошек.';
     } elseif (mrt_seo_is_animals_context() && $page_slug === 'vopros-otvet') {
         $description = mrt_seo_animals_faq_description();
     } elseif (mrt_seo_is_city_home() && $city_meta) {
@@ -1747,6 +1756,13 @@ function mrt_seo_sitemap_landings() {
     $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
     foreach ($cities as $city_slug => $city_name) {
+        if (mrt_is_animals_branch($city_slug)) {
+            continue;
+        }
+
+        $branch = mrt_get_branch($city_slug);
+        $branch_slug = !empty($branch['branch_taxonomy']) ? $branch['branch_taxonomy'] : $city_slug;
+
         $services = $wpdb->get_results($wpdb->prepare(
             "SELECT DISTINCT p.ID, p.post_name, p.post_modified_gmt FROM {$wpdb->posts} p
              INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
@@ -1755,7 +1771,7 @@ function mrt_seo_sitemap_landings() {
              WHERE p.post_type = 'service' AND p.post_status = 'publish'
              AND tt.taxonomy = 'branch' AND t.slug = %s
              ORDER BY p.post_name",
-            $city_slug
+            $branch_slug
         ));
 
         foreach ($services as $svc) {

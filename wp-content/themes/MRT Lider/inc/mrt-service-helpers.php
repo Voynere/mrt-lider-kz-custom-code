@@ -542,15 +542,57 @@ if (!function_exists('mrt_render_concessional_price_notice')) {
     }
 }
 
+if (!function_exists('mrt_city_hidden_subcategory_slugs')) {
+    /** @return list<string> */
+    function mrt_city_hidden_subcategory_slugs(string $city): array {
+        return [];
+    }
+}
+
+if (!function_exists('mrt_city_hidden_subcategory_prefixes')) {
+    /** @return list<string> */
+    function mrt_city_hidden_subcategory_prefixes(string $city): array {
+        if (mrt_is_animals_branch($city)) {
+            return ['mrt', 'kt', 'uzi', 'densitometriya'];
+        }
+
+        return [];
+    }
+}
+
 if (!function_exists('mrt_is_subcategory_hidden_for_city')) {
     function mrt_is_subcategory_hidden_for_city(string $subcategory_slug, string $city): bool {
+        if (mrt_is_animals_branch($city)) {
+            return true;
+        }
+
+        $slug = sanitize_key($subcategory_slug);
+        if (in_array($slug, mrt_city_hidden_subcategory_slugs($city), true)) {
+            return true;
+        }
+
+        foreach (mrt_city_hidden_subcategory_prefixes($city) as $prefix) {
+            if ($slug === $prefix || str_starts_with($slug, $prefix . '-')) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
 
 if (!function_exists('mrt_is_service_hidden_for_city')) {
     function mrt_is_service_hidden_for_city(int $service_id, string $city): bool {
-        return false;
+        if (mrt_is_animals_branch($city)) {
+            return true;
+        }
+
+        $category = (string) get_post_meta($service_id, 'si_category', true);
+        if ($category === '') {
+            return false;
+        }
+
+        return mrt_is_subcategory_hidden_for_city(mrt_category_to_subcat_slug($category), $city);
     }
 }
 

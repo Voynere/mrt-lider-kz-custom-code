@@ -132,6 +132,17 @@ if (!function_exists('mrt_route_service_landing')) {
         set_query_var('mrt_city', $city);
         set_query_var('mrt_service_landing', $landing_slug);
 
+        if (mrt_is_animals_branch($city)) {
+            global $wp_query;
+            $wp_query->set_404();
+            status_header(404);
+            nocache_headers();
+            get_header();
+            echo '<main class="main"><div class="container"><p>Услуга не найдена.</p></div></main>';
+            get_footer();
+            exit;
+        }
+
         $svc = get_page_by_path($landing_slug, OBJECT, 'service');
         if (!$svc) {
             global $wpdb;

@@ -57,6 +57,16 @@
       "id": "session-2026-07-07",
       "file": "chunks/11-session-2026-07-07.md",
       "tags": ["session", "changelog", "animals", "2026-07-07"]
+    },
+    {
+      "id": "service-landing-urls-kz",
+      "file": "chunks/12-service-landing-urls-kz.md",
+      "tags": ["landing", "services", "routing", "kz", "url"]
+    },
+    {
+      "id": "yandex-direct-kz-api",
+      "file": "chunks/13-yandex-direct-kz-api.md",
+      "tags": ["yandex-direct", "api", "advertising", "kz", "cli"]
     }
   ]
 }
