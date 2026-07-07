@@ -122,19 +122,8 @@ get_header();
             </div>
         </section>
 
-        <div class="tour">
-            <div class="container">
-                <div class="tour__inner">
-                    <img src="<?php bloginfo('template_url')?>/assets/img/3d_tour.jpg" alt="">
-                    <a href="#" class="tour__content">
-                        <h2 class="tour__title"><span>ПРОЙДИТЕ 3D ТУР</span> <span>ПО КЛИНИКЕ</span> <span>«МРТ ЛИДЕР»</span></h2>
-                        <div class="tour__play">
-                            <img src="<?php bloginfo('template_url')?>/assets/img/play_video.svg" alt="">
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php get_template_part('template-parts/tour-or-animals-map'); ?>
+
     </div>
 </main>
 

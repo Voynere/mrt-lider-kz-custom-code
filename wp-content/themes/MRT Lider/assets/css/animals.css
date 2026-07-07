@@ -433,6 +433,36 @@ body.mrt-animals-branch .header__burger-logo .title-centre {
     overflow: hidden;
 }
 
+.animals-map-block {
+    padding: 40px 0 80px;
+}
+
+.animals-map-block__title {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--animals-green-dark);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.animals-map-block__address {
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #404040;
+    margin-bottom: 24px;
+}
+
+.animals-map-block__embed iframe,
+.animals-map-block__embed > * {
+    width: 100%;
+    min-height: 400px;
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    display: block;
+}
+
 .animals-cta {
     padding: 0 0 80px;
 }

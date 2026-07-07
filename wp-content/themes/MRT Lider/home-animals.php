@@ -14,13 +14,7 @@ $address_full = $branch['address_full'] ?? 'ул. Аубакирова, 17/1, с
 $address_short = $branch['address_short'] ?? 'ул. Аубакирова, 17/1';
 $theme_uri = get_template_directory_uri();
 
-$contacts_query = mrt_get_contacts_query($selected_city);
-$map_html = '';
-if ($contacts_query->have_posts()) {
-    $contacts_query->the_post();
-    $map_html = get_field('contacts_map');
-    wp_reset_postdata();
-}
+$map_html = mrt_get_animals_map_html($selected_city);
 
 get_header();
 ?>
@@ -167,22 +161,7 @@ get_header();
                     </div>
                 </div>
                 <div class="animals-contacts__map">
-                    <?php
-                    if (!empty($map_html)) {
-                        echo $map_html;
-                    } else {
-                        ?>
-                        <iframe
-                            src="https://yandex.ru/map-widget/v1/?text=<?php echo rawurlencode($address_full); ?>&amp;z=15"
-                            width="100%"
-                            height="360"
-                            frameborder="0"
-                            allowfullscreen="true"
-                            title="Карта филиала MRI Animal"
-                        ></iframe>
-                        <?php
-                    }
-                    ?>
+                    <?php echo $map_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ACF iframe or escaped fallback ?>
                 </div>
             </div>
         </div>

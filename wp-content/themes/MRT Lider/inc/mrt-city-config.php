@@ -218,6 +218,37 @@ if (!function_exists('mrt_get_contact_phone')) {
     }
 }
 
+if (!function_exists('mrt_get_animals_map_html')) {
+    /**
+     * Embedded map for animals branch: ACF contacts_map or Yandex widget by address.
+     */
+    function mrt_get_animals_map_html($city_slug = null) {
+        if ($city_slug === null) {
+            $city_slug = mrt_resolve_selected_city('almaty_aubakirova', true);
+        }
+
+        $contacts_query = mrt_get_contacts_query($city_slug);
+        if ($contacts_query->have_posts()) {
+            $contacts_query->the_post();
+            $map_html = get_field('contacts_map');
+            wp_reset_postdata();
+            if (!empty($map_html)) {
+                return $map_html;
+            }
+        }
+
+        $branch = mrt_get_branch($city_slug) ?: mrt_get_branch('almaty_aubakirova');
+        $address_full = $branch['address_full'] ?? 'ул. Аубакирова, 17/1, село Отеген батыра, Илийский район, Алматинская область';
+        $map_url = 'https://yandex.ru/map-widget/v1/?text=' . rawurlencode($address_full) . '&z=15';
+
+        return sprintf(
+            '<iframe src="%s" width="100%%" height="360" frameborder="0" allowfullscreen="true" title="%s"></iframe>',
+            esc_url($map_url),
+            esc_attr('Карта филиала MRI Animal')
+        );
+    }
+}
+
 if (!function_exists('mrt_get_whatsapp_href')) {
     function mrt_get_whatsapp_href($city_slug) {
         $query = mrt_get_contacts_query($city_slug);
