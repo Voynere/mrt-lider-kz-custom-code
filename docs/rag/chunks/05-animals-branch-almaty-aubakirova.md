@@ -1,8 +1,14 @@
-# Филиал МРТ для животных — almaty_aubakirova
+# Филиал МРТ для животных — almaty_aubakirova (MRI Animal)
 
-## Назначение
+## Брендинг
 
-Специализированный филиал **МРТ для животных** (собаки, кошки, другие питомцы).
+| Параметр | Значение |
+|----------|----------|
+| Slug | `almaty_aubakirova` |
+| type | `animals` |
+| label | МРТ животным «MRI Animal» |
+| subtitle | с. Отеген батыра |
+| form_email | `mri-animal@mail.ru` |
 
 ## Адрес
 
@@ -13,64 +19,77 @@
 
 ```
 https://mrt-lider.kz/almaty_aubakirova/
+https://mrt-lider.kz/almaty_aubakirova/uslugi-i-ceny/
+https://mrt-lider.kz/almaty_aubakirova/about/
+https://mrt-lider.kz/almaty_aubakirova/vopros-otvet/
+https://mrt-lider.kz/almaty_aubakirova/kontakty/
 ```
 
-## Slug и тип
+## Определение в коде
 
-| Параметр | Значение |
-|----------|----------|
-| Slug | `almaty_aubakirova` |
-| type | `animals` |
-| label | МРТ животным |
-| branch_taxonomy | `almaty_aubakirova` |
+```php
+mrt_is_animals_branch($selected_city); // type === 'animals'
+```
 
-## Шаблон
+Body class: `mrt-animals-branch`
 
-Файл: `wp-content/themes/MRT Lider/home-animals.php`  
-Template Name: `home-animals`
+## Шаблоны и partials
 
-Отличия от стандартной `home.php`:
-- Зелёная «pet-friendly» вёрстка (`assets/css/animals.css`)
-- Контент про подготовку питомца, FAQ для владельцев
-- Форма записи с полем «Кличка и вид питомца»
-- Карта: ACF `contacts_map` или fallback Yandex embed по адресу
-- Класс body: `mrt-animals-branch`
+| Страница | Файл | Partial |
+|----------|------|---------|
+| Главная | `home-animals.php` | — |
+| Услуги | `page-services.php` (early return) | `animals-services-content.php` |
+| О центре | `page-maps.php` (early return) | `animals-about-content.php` |
+| FAQ | `page-answers.php` (early return) | `animals-answers-content.php` |
+| Контакты | `page-contacts.php` | классы `animals-contacts-*` |
+| Карта вместо 3D | `tour-or-animals-map.php` | `animals-map-block.php` |
+
+Данные FAQ: `inc/mrt-animals-faq.php`
 
 ## Стили и скрипты
 
-- CSS: `assets/css/animals.css` (подключается в `functions.php` для animals-филиала)
-- Модалка записи: `template-parts/booking-modal.php`
-- Кнопки `.booking-btn` → `assets/js/booking.js`
+- CSS: `assets/css/animals.css`, `assets/css/header-ru.css` (promo header)
+- Лого: `assets/img/logo-animals.svg`
+- Модалка записи: `template-parts/booking-modal.php` + `booking.js`
+- Карта: `mrt_get_animals_map_html()` в `mrt-city-config.php`
 
-## Навигация
+## Шапка
 
-Филиал в модальном выборе городов: **«МРТ животным · Отеген батыра»**
+- Попап городов: секция `.modal-city__animals-*` (отдельно от алфавита)
+- Телефоны: основной + «+3 номера» с hover-dropdown (`mrt_render_bottom_phones_extra`)
+- Кнопка WhatsApp «Перейти» в promo-блоке animals
 
-City-specific страницы работают с префиксом:
-`/almaty_aubakirova/kontakty/`, `/almaty_aubakirova/uslugi-i-ceny/` и т.д.
+## Что НЕ используется на animals
 
-## Что настроить в WP Admin
+- 3D-тур (`tour-block.php`)
+- Боковые категории FAQ (МРТ/КТ/УЗИ)
+- Интерактив stats/why-us с `home.php` (только standard cities)
+- Нижняя карта на контактах (есть верхняя)
 
-1. Создать рубрику `almaty_aubakirova`
-2. Создать contact-пост (рубрики `almaty_aubakirova` + `contacty`) с телефоном, WhatsApp, картой
-3. Создать страницу с slug `almaty_aubakirova`, шаблон **home-animals**
-4. Импортировать прайс: лист Excel `almaty_aubakirova`
-5. (Опционально) FAQ-посты с рубрикой `almaty_aubakirova`
+## WP Admin (опционально)
 
-## Контекстная реклама
+1. Рубрика `almaty_aubakirova`
+2. Contact-пост (`almaty_aubakirova` + `contacty`) — телефоны, WhatsApp, `contacts_map`
+3. Страница slug `almaty_aubakirova`, шаблон **home-animals**
+4. Прайс: импорт листа `almaty_aubakirova`
+5. Фото центра для блока «Наш центр» на контактах
 
-Локальные материалы: `seov/` (gitignored).  
-RAG и история: `docs/rag/chunks/08-animals-contextual-ads.md`.
-
-## Конфиг в коде
+## Конфиг
 
 ```php
 // inc/mrt-city-config.php
 'almaty_aubakirova' => array(
-    'label'           => 'МРТ животным',
+    'label'           => 'МРТ животным «MRI Animal»',
+    'subtitle'        => 'с. Отеген батыра',
     'type'            => 'animals',
-    'address_full'    => 'ул. Аубакирова, 17/1, село Отеген батыра...',
+    'form_email'      => 'mri-animal@mail.ru',
+    'address_short'   => 'ул. Аубакирова, 17/1',
+    'address_full'    => '...',
     'branch_taxonomy' => 'almaty_aubakirova',
     'home_template'   => 'home-animals.php',
 ),
 ```
+
+## Контекстная реклама
+
+`seov/` (gitignored), RAG: `08-animals-contextual-ads.md`

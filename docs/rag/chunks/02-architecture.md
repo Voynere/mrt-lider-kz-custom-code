@@ -2,13 +2,16 @@
 
 ## Роутинг по филиалам
 
-Город/филиал определяется **без custom rewrite rules** (кроме прайса):
+Файл: `inc/mrt-city-routing.php` + `inc/mrt-header-helpers.php`.
 
-1. Первый сегмент URL: `/{slug}/...`
-2. Cookie `selected_city` (30 дней)
-3. Fallback: `almaty` (или `almaty_aubakirova` на странице животных)
+1. Rewrite rules: `/{city}/`, `/{city}/{page}/`, прайс, посадочные услуг
+2. Query var `mrt_city` — slug из URL
+3. Cookie `selected_city` (30 дней)
+4. Fallback: `almaty`
 
-Логика дублируется в PHP-шаблонах и `assets/js/main.js`. Единый источник — `inc/mrt-city-config.php` + `wp_localize_script('main', 'mrtCityConfig', ...)`.
+`redirect_canonical` и `template_redirect` сохраняют city prefix. JS (`main.js`) синхронизирует ссылки меню с активным городом.
+
+Единый источник slug/label — `inc/mrt-city-config.php` + `wp_localize_script('main', 'mrtCityConfig', ...)`.
 
 ## Структура URL
 
@@ -43,8 +46,13 @@
 | `send_booking_form` | `template-parts/send-popup-form.php` |
 | `send_home_form` | `template-parts/send-home-form.php` |
 | `send_contact_form` | `template-parts/send-contact-form.php` |
+| `send_service_form` | `template-parts/send-service-form.php` |
+| `send_tax_form` | `template-parts/send-tax-form.php` |
 
-Город для маршрутизации писем/Telegram берётся из URL или cookie.
+Email: `mrt_get_form_notification_settings($city)` — config `form_email` → ACF → fallback.  
+Telegram: ACF `telegram_chats` на contact-посте.
+
+См. chunk `10-metrika-forms-routing.md`.
 
 ## Наследие RU-сети
 

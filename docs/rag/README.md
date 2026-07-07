@@ -25,6 +25,8 @@ cat docs/rag/manifest.json
 | deploy-wp-admin | `chunks/07-wp-admin-checklist.md` | Чеклист настройки на проде |
 | animals-contextual-ads | `chunks/08-animals-contextual-ads.md` | Контекстная реклама МРТ животным, seov, UTM, Метрика |
 | seo-module-kz | `chunks/09-seo-module-kz.md` | SEO + Schema.org без AIOSEO |
+| metrika-forms-routing | `chunks/10-metrika-forms-routing.md` | Метрика по городам, email форм, routing |
+| session-2026-07-07 | `chunks/11-session-2026-07-07.md` | Итоги сессии 07.07.2026 |
 
 ## Локальная папка seov (не в Git)
 
@@ -32,7 +34,8 @@ cat docs/rag/manifest.json
 
 ## Ключевые файлы кода
 
-- `wp-content/themes/MRT Lider/inc/mrt-city-config.php` — конфиг филиалов
+- `wp-content/themes/MRT Lider/inc/mrt-city-config.php` — конфиг филиалов, метрика, form_email
+- `wp-content/themes/MRT Lider/inc/mrt-city-routing.php` — rewrite и city URLs
 - `wp-content/themes/MRT Lider/home-animals.php` — лендинг для животных
 - `wp-content/themes/MRT Lider/seo-config.php` — SEO, OG, JSON-LD, sitemap (без AIOSEO)
 - `wp-content/themes/MRT Lider/assets/js/mrt-metrika.js` — UTM + reachGoal

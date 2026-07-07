@@ -23,6 +23,24 @@
 |------|------------|
 | `template-parts/booking-modal.php` | Модальное окно записи |
 | `template-parts/send-*.php` | Обработчики AJAX-форм |
+| `template-parts/search-overlay.php` | Поиск по сайту |
+| `template-parts/tour-or-animals-map.php` | 3D-тур (standard) или карта (animals) |
+| `template-parts/tour-block.php` | Блок 3D-тура |
+| `template-parts/animals-map-block.php` | Яндекс-карта animals |
+| `template-parts/animals-services-content.php` | Прайс animals |
+| `template-parts/animals-about-content.php` | О центре animals |
+| `template-parts/animals-answers-content.php` | FAQ animals |
+
+## Inc-модули
+
+| Файл | Назначение |
+|------|------------|
+| `inc/mrt-city-config.php` | Филиалы, метрика, form_email, карта |
+| `inc/mrt-city-routing.php` | Rewrite, canonical, home template |
+| `inc/mrt-header-helpers.php` | Город в шапке, телефоны |
+| `inc/mrt-service-routing.php` | Посадочные услуг |
+| `inc/mrt-service-helpers.php` | Хелперы прайса/услуг |
+| `inc/mrt-animals-faq.php` | Данные FAQ animals |
 
 ## Определение города в шаблоне
 

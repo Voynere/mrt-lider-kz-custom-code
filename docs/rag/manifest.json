@@ -1,6 +1,6 @@
 {
   "project": "mrt-lider-kz",
-  "version": "2026-07-07",
+  "version": "2026-07-07-session",
   "description": "RAG knowledge base for MRT Lider Kazakhstan WordPress site",
   "chunks": [
     {
@@ -26,7 +26,7 @@
     {
       "id": "animals-branch",
       "file": "chunks/05-animals-branch-almaty-aubakirova.md",
-      "tags": ["animals", "veterinary", "almaty_aubakirova", "filial"]
+      "tags": ["animals", "veterinary", "almaty_aubakirova", "filial", "mri-animal"]
     },
     {
       "id": "templates",
@@ -47,6 +47,16 @@
       "id": "seo-module-kz",
       "file": "chunks/09-seo-module-kz.md",
       "tags": ["seo", "schema", "sitemap", "aioseo", "canonical", "og"]
+    },
+    {
+      "id": "metrika-forms-routing",
+      "file": "chunks/10-metrika-forms-routing.md",
+      "tags": ["metrika", "forms", "email", "routing", "rewrite"]
+    },
+    {
+      "id": "session-2026-07-07",
+      "file": "chunks/11-session-2026-07-07.md",
+      "tags": ["session", "changelog", "animals", "2026-07-07"]
     }
   ]
 }
