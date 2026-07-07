@@ -90,21 +90,20 @@ if (!function_exists('mrt_build_yandex_metrika_snippet')) {
             return '';
         }
 
-        return sprintf(
-            "<!-- Yandex.Metrika counter -->\n"
+        $id = (string) $counter_id;
+
+        return "<!-- Yandex.Metrika counter -->\n"
             . "<script type=\"text/javascript\">\n"
             . "    (function(m,e,t,r,i,k,a){\n"
             . "        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};\n"
             . "        m[i].l=1*new Date();\n"
             . "        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}\n"
             . "        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)\n"
-            . "    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=%1$d', 'ym');\n\n"
-            . "    ym(%1\$d, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:\"dataLayer\", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});\n"
+            . "    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id={$id}', 'ym');\n\n"
+            . "    ym({$id}, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:\"dataLayer\", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});\n"
             . "</script>\n"
-            . "<noscript><div><img src=\"https://mc.yandex.ru/watch/%1\$d\" style=\"position:absolute; left:-9999px;\" alt=\"\" /></div></noscript>\n"
-            . "<!-- /Yandex.Metrika counter -->",
-            $counter_id
-        );
+            . "<noscript><div><img src=\"https://mc.yandex.ru/watch/{$id}\" style=\"position:absolute; left:-9999px;\" alt=\"\" /></div></noscript>\n"
+            . "<!-- /Yandex.Metrika counter -->";
     }
 }
 
