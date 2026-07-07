@@ -38,6 +38,7 @@ seov/
 
 # Yandex Direct CLI secrets and reports
 tools/yandex-direct/.env
+wp-content/mrt-secrets/
 tools/yandex-direct/reports/
 
 # Plugins: ignore all by default, keep only managed ones
