@@ -599,3 +599,61 @@ if (!function_exists('mrt_city_booking_urgency_text')) {
         return null;
     }
 }
+
+if (!function_exists('mrt_apply_city_equipment_branding')) {
+    function mrt_apply_city_equipment_branding(string $text, string $city): string {
+        if ($text === '' || mrt_city_mri_equipment_brand($city) === 'Siemens') {
+            return $text;
+        }
+
+        $brand = mrt_city_mri_equipment_brand($city);
+        $replacements = array(
+            'Siemens Magnetom' => $brand,
+            'томографах Siemens' => 'томографах ' . $brand,
+            'аппаратах Siemens' => 'аппаратах ' . $brand,
+            'оборудование Siemens' => 'оборудование ' . $brand,
+            'Siemens' => $brand,
+        );
+
+        foreach ($replacements as $from => $to) {
+            $text = str_replace($from, $to, $text);
+        }
+
+        return $text;
+    }
+}
+
+if (!function_exists('mrt_posts_have_discounted_price')) {
+    /**
+     * @param iterable<int|string|WP_Post> $posts
+     */
+    function mrt_posts_have_discounted_price(iterable $posts, string $city, string $service_type_slug = '', string $service_type_name = ''): bool {
+        foreach ($posts as $post) {
+            $post_id = $post instanceof WP_Post ? $post->ID : (int) $post;
+            if ($post_id <= 0) {
+                continue;
+            }
+
+            $slug = $service_type_slug;
+            $name = $service_type_name;
+            if ($slug === '' && $name === '') {
+                $types = wp_get_post_terms($post_id, 'service_type');
+                if (!empty($types) && !is_wp_error($types)) {
+                    $slug = (string) ($types[0]->slug ?? '');
+                    $name = (string) ($types[0]->name ?? '');
+                }
+            }
+
+            $price = get_post_meta($post_id, 'si_price', true);
+            $discount = get_post_meta($post_id, 'si_discount', true);
+            if (mrt_service_price_text_label($price, $discount) !== '') {
+                continue;
+            }
+            if (mrt_service_item_has_discounted_price((int) $price, (int) $discount, $city, $slug, $name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
