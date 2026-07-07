@@ -154,7 +154,7 @@ get_header();
         <div class="container">
             <div class="animals-contacts">
                 <div class="animals-contacts__info">
-                    <h2 class="animals-section__title">Контакты филиала</h2>
+                    <h2 class="animals-section__title">Контакты филиала MRI Animal</h2>
                     <p class="animals-contacts__address"><?php echo esc_html($address_full); ?></p>
                     <?php if (!empty($contact_phone['number'])) : ?>
                         <a class="animals-contacts__phone" href="<?php echo esc_attr($contact_phone['href']); ?>">
@@ -178,7 +178,7 @@ get_header();
                             height="360"
                             frameborder="0"
                             allowfullscreen="true"
-                            title="Карта филиала МРТ для животных"
+                            title="Карта филиала MRI Animal"
                         ></iframe>
                         <?php
                     }

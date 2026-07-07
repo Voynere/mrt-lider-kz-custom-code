@@ -51,13 +51,20 @@
 
     $mrt_show_animals_promo = mrt_should_show_animals_promo($selected_city_slug_nav);
     $mrt_animals_promo = $mrt_show_animals_promo ? mrt_get_animals_promo_data() : null;
-    $header_logo_descriptor = mrt_is_animals_branch($selected_city_slug_nav)
-        ? 'мрт животным'
+    $mrt_is_animals_header = mrt_is_animals_branch($selected_city_slug_nav);
+    $header_logo_descriptor = $mrt_is_animals_header
+        ? 'мрт животным «MRI Animal»'
         : 'центр диагностики';
-    $header_logo_file = mrt_is_animals_branch($selected_city_slug_nav)
+    $header_logo_alt = $mrt_is_animals_header
+        ? 'Логотип MRI Animal'
+        : 'Логотип МРТ Лидер';
+    $header_sticky_descriptor = $mrt_is_animals_header
+        ? 'МРТ животным «MRI Animal»'
+        : 'Диагностический центр';
+    $header_logo_file = $mrt_is_animals_header
         ? 'logo-animals.svg'
         : 'logo.svg';
-    $header_logo_sticky_file = mrt_is_animals_branch($selected_city_slug_nav)
+    $header_logo_sticky_file = $mrt_is_animals_header
         ? 'logo-animals.svg'
         : 'logo_no_shadow.svg';
     $theme_img_uri = get_template_directory_uri() . '/assets/img/';
@@ -95,11 +102,11 @@
                     <div class="header__top">
                         <div class="container">
                             <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
-                                <img class="default-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_file); ?>" alt="Логотип МРТ Лидер">
-                                <img class="sticky-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="Логотип">
+                                <img class="default-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_file); ?>" alt="<?php echo esc_attr($header_logo_alt); ?>">
+                                <img class="sticky-logo" src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="<?php echo esc_attr($header_logo_alt); ?>">
                                 <h2 class="title-centre title-centre--default"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                 <h2 class="title-centre title-centre--sticky">
-                                    <span class="header__sticky-descriptor-line">Диагностический центр</span>
+                                    <span class="header__sticky-descriptor-line"><?php echo esc_html($header_sticky_descriptor); ?></span>
                                     <span class="header__sticky-descriptor-city"><?php echo esc_html($sticky_city_line_nav); ?></span>
                                 </h2>
                             </a>
@@ -435,7 +442,7 @@
                             <div class="header__burger-top">
                                 <div class="header__burger-logo">
                                     <a href="<?php echo esc_url($city_home_url); ?>" class="header__logo">
-                                        <img src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="Логотип">
+                                        <img src="<?php echo esc_url($theme_img_uri . $header_logo_sticky_file); ?>" alt="<?php echo esc_attr($header_logo_alt); ?>">
                                         <h2 class="title-centre"><?php echo esc_html($header_logo_descriptor); ?></h2>
                                     </a>
                                 </div>

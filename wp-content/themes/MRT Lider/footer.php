@@ -149,7 +149,11 @@ $contacts_query_footer = new WP_Query($args_footer_contacts);
                         <?php endif; ?>
                         
                         <p>© Все права защищены.</p>
-                        <p>Центр магнитно-резонансной томографии «МРТ Лидер»</p>
+                        <?php if (mrt_is_animals_branch($selected_city_slug_footer_nav)) : ?>
+                            <p>Центр магнитно-резонансной томографии для животных «MRI Animal»</p>
+                        <?php else : ?>
+                            <p>Центр магнитно-резонансной томографии «МРТ Лидер»</p>
+                        <?php endif; ?>
                     </div>
                     <div class="footer__socials footer__bottom-item">
                         <p>Мы в социальных сетях</p>

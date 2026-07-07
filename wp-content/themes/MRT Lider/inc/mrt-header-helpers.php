@@ -122,7 +122,7 @@ if (!function_exists('mrt_get_contacts_page_title')) {
     function mrt_get_contacts_page_title(?string $city_slug = null): string {
         $city_slug = $city_slug ?? mrt_get_selected_city_slug();
         if (mrt_is_animals_branch($city_slug)) {
-            return 'КОНТАКТЫ ЦЕНТРА МРТ ЖИВОТНЫМ';
+            return 'КОНТАКТЫ МРТ ЖИВОТНЫМ «MRI ANIMAL»';
         }
         return 'КОНТАКТЫ ЦЕНТРОВ МРТ ЛИДЕР';
     }
