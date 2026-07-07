@@ -129,6 +129,29 @@ add_action( 'wp_enqueue_scripts', function () {
         );
     }
 
+    if (
+        function_exists('mrt_seo_is_city_home')
+        && mrt_seo_is_city_home()
+        && !(function_exists('mrt_seo_is_animals_context') && mrt_seo_is_animals_context())
+    ) {
+        $about_numbers_js = get_template_directory() . '/assets/js/about-numbers.js';
+        wp_enqueue_script(
+            'about-numbers',
+            get_template_directory_uri() . '/assets/js/about-numbers.js',
+            array(),
+            file_exists($about_numbers_js) ? filemtime($about_numbers_js) : '1.0.0',
+            true
+        );
+        $about_why_js = get_template_directory() . '/assets/js/about-why.js';
+        wp_enqueue_script(
+            'about-why',
+            get_template_directory_uri() . '/assets/js/about-why.js',
+            array(),
+            file_exists($about_why_js) ? filemtime($about_why_js) : '1.0.0',
+            true
+        );
+    }
+
     $request_uri_for_assets = $_SERVER['REQUEST_URI'] ?? '';
     if (preg_match('#/uslugi-i-ceny/price/#', $request_uri_for_assets)) {
         $price_js = get_template_directory() . '/assets/js/price.js';

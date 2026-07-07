@@ -258,22 +258,22 @@ get_header();
                     <div class="about__numbers">
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_1.svg'); ?>" alt="">
-                            <p class="about__numbers-numb">12</p>
+                            <p class="about__numbers-numb" data-count="12">0</p>
                             <p class="about__numbers-text">ЛЕТ ОПЫТА</p>
                         </div>
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_2.svg'); ?>" alt="">
-                            <p class="about__numbers-numb">55</p>
+                            <p class="about__numbers-numb" data-count="55">0</p>
                             <p class="about__numbers-text">ФИЛИАЛОВ МРТ ЛИДЕР</p>
                         </div>
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_3.svg'); ?>" alt="">
-                            <p class="about__numbers-numb">800 000</p>
+                            <p class="about__numbers-numb" data-count="800000">0</p>
                             <p class="about__numbers-text">ИССЛЕДОВАНИЙ <br> ЕЖЕГОДНО</p>
                         </div>
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_4.svg'); ?>" alt="">
-                            <p class="about__numbers-numb">10 000 000</p>
+                            <p class="about__numbers-numb" data-count="10000000">0</p>
                             <p class="about__numbers-text">ОБСЛЕДОВАНИЙ <br> ПРОВЕДЕНО</p>
                         </div>
                     </div>
