@@ -543,9 +543,25 @@
                                         <li><a href="#" data-city="karaganda">Караганда</a></li>
                                         <li class="abc-container"><p class="abc">Т</p></li>
                                         <li><a href="#" data-city="taldykorgan">Талдыкорган</a></li>
-                                        <li class="abc-container"><p class="abc">М</p></li>
-                                        <li><a href="#" data-city="almaty_aubakirova">село Отеген батыра (МРТ животным)</a></li>
                                     </ul>
+                                </div>
+                                <?php
+                                $mrt_animals_picker_branch = mrt_get_branch('almaty_aubakirova');
+                                $mrt_animals_picker_heading = $mrt_animals_picker_branch['label'] ?? 'МРТ животным «MRI Animal»';
+                                $mrt_animals_picker_location = $mrt_animals_picker_branch['subtitle'] ?? 'с. Отеген батыра';
+                                ?>
+                                <div class="modal-city__item modal-city__item--animals">
+                                    <div class="modal-city__animals">
+                                        <p class="modal-city__animals-heading">
+                                            <span class="modal-city__animals-icon" aria-hidden="true">🐾</span>
+                                            <?php echo esc_html($mrt_animals_picker_heading); ?>
+                                        </p>
+                                        <a href="#" data-city="almaty_aubakirova" class="modal-city__animals-link">
+                                            <span class="modal-city__animals-brand">MRI Animal</span>
+                                            <span class="modal-city__animals-sep" aria-hidden="true">·</span>
+                                            <span class="modal-city__animals-location"><?php echo esc_html($mrt_animals_picker_location); ?></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

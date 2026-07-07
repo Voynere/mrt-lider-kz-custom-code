@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'astana': 'Астана',
         'karaganda': 'Караганда',
         'taldykorgan': 'Талдыкорган',
-        'almaty_aubakirova': 'село Отеген батыра (МРТ животным)',
+        'almaty_aubakirova': 'МРТ животным «MRI Animal»',
     };
 
     // --- Известные слаги городов (для парсинга URL) ---

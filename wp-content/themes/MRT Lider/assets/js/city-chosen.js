@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'astana': 'Астана',
         'karaganda': 'Караганда',
         'taldykorgan': 'Талдыкорган',
-        'almaty_aubakirova': 'село Отеген батыра (МРТ животным)',
+        'almaty_aubakirova': 'МРТ животным «MRI Animal»',
     };
 
     // --- Функции для работы с cookies ---
