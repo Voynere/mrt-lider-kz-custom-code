@@ -286,6 +286,34 @@ if (!function_exists('mrt_get_form_notification_settings')) {
     }
 }
 
+if (!function_exists('mrt_get_contact_display_emails')) {
+    /**
+     * Emails for display on contacts page: ACF contacts_emails → branch form_email.
+     *
+     * @return string[]
+     */
+    function mrt_get_contact_display_emails($city_slug, array $emails_group = array()) {
+        $emails = array();
+        for ($i = 1; $i <= 10; $i++) {
+            $key = 'contacts_email_' . $i;
+            if (!empty($emails_group[$key])) {
+                $emails[] = sanitize_email($emails_group[$key]);
+            }
+        }
+
+        if (!empty($emails)) {
+            return $emails;
+        }
+
+        $branch = mrt_get_branch($city_slug);
+        if ($branch && !empty($branch['form_email'])) {
+            return array(sanitize_email($branch['form_email']));
+        }
+
+        return $emails;
+    }
+}
+
 if (!function_exists('mrt_get_contact_phone')) {
     function mrt_get_contact_phone($city_slug) {
         $query = mrt_get_contacts_query($city_slug);

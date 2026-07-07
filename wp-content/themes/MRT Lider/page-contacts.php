@@ -152,13 +152,8 @@ $is_animals_contacts = mrt_is_animals_branch($selected_city);
                                         </svg>
                                         <h4 class="contacts__content-title">E-mail:</h4>
                                         <?php
-                                        $email_index = 1;
-                                        while ($email_index <= 10) {
-                                            $field_key = 'contacts_email_' . $email_index;
-                                            if (!empty($emails_group[$field_key])) {
-                                                echo '<p class="contacts__content-text">' . esc_html($emails_group[$field_key]) . '</p>';
-                                            }
-                                            $email_index++;
+                                        foreach (mrt_get_contact_display_emails($selected_city, $emails_group) as $display_email) {
+                                            echo '<p class="contacts__content-text">' . esc_html($display_email) . '</p>';
                                         }
                                         ?>
                                     </div>
