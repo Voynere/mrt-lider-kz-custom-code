@@ -25,6 +25,7 @@ $args = array(
     )
 );
 $contacts_query = new WP_Query($args);
+$is_animals_contacts = mrt_is_animals_branch($selected_city);
 ?>
 
 <?php get_header(); ?>
@@ -37,7 +38,7 @@ $contacts_query = new WP_Query($args);
             }
         ?>
 
-        <section class="contacts">
+        <section class="contacts<?php echo $is_animals_contacts ? ' animals-contacts-page' : ''; ?>">
             <div class="container">
                 <div class="contacts__inner">
                     <h1 class="contacts__title page-title"><?php echo esc_html(mrt_get_contacts_page_title($selected_city)); ?></h1>
@@ -201,7 +202,7 @@ $contacts_query = new WP_Query($args);
         </section>
 
 
-        <section class="form">
+        <section class="form<?php echo $is_animals_contacts ? ' animals-contacts-form' : ''; ?>">
             <div class="container">
                 <div class="form__inner">
                     <form action="#">
@@ -209,14 +210,16 @@ $contacts_query = new WP_Query($args);
                         <input type="text" class="form__inp" placeholder="Введите телефон" required>
                         <input type="text" class="form__inp" placeholder="Тема вопроса" required>
                         <textarea name="" id="" class="form__inp textarea" placeholder="Текст вопроса"></textarea>
-                        <button class="form__btn">
+                        <button type="submit" class="form__btn<?php echo $is_animals_contacts ? ' animals-btn animals-btn--primary' : ''; ?>">
                             <p>Записаться на приём</p>
+                            <?php if (!$is_animals_contacts) : ?>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#404040" />
                                 <path d="M9.08108 8H16V14.9189M14.8108 9.18919L8 16" stroke="#404040"
                                     stroke-width="1.5" stroke-linecap="round" />
                             </svg>
+                            <?php endif; ?>
                         </button>
                         <p class="form__privacy">
                             Нажимая на кнопку, вы автоматически соглашаетесь с
@@ -227,7 +230,7 @@ $contacts_query = new WP_Query($args);
             </div>
         </section>
 
-        <section class="photos">
+        <section class="photos<?php echo $is_animals_contacts ? ' animals-photos' : ''; ?>">
             <div class="container">
                 <div class="photos__inner">
                     <h2 class="page-title">НАШ ЦЕНТР</h2>
