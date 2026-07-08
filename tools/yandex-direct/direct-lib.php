@@ -338,3 +338,15 @@ function directLibRecommendAction(string $account, array $row): string
     }
     return 'PAUSE + аудит: расход без заявок — audit-rk + fix-links --services-only';
 }
+
+/** Yandex Direct rejects some Unicode punctuation and currency symbols in Title/Text. */
+function directLibSanitizeYandexAdField(string $text): string
+{
+    $text = str_replace(["\u{20B8}", "\u{20BD}", '₸'], ' тг', $text);
+    $text = str_replace(["\u{2014}", "\u{2013}", "\u{2212}", '—', '–', '−'], '-', $text);
+    $text = str_replace("\u{00B7}", '. ', $text);
+    $text = str_replace('~', '', $text);
+    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+    return trim($text);
+}

@@ -257,9 +257,9 @@ function kzAnimalsEnsureAds(string $token, array $env, int $adGroupId, array $ad
         $payload[] = [
             'AdGroupId' => $adGroupId,
             'TextAd' => [
-                'Title' => $ad['title'],
-                'Title2' => $ad['title2'],
-                'Text' => $ad['text'],
+                'Title' => directLibSanitizeYandexAdField($ad['title']),
+                'Title2' => directLibSanitizeYandexAdField($ad['title2']),
+                'Text' => directLibSanitizeYandexAdField($ad['text']),
                 'Href' => $ad['href'],
                 'Mobile' => 'NO',
             ],
