@@ -1178,3 +1178,94 @@ body.mrt-animals-branch .animals-photos .photos__item {
         padding: 32px 0;
     }
 }
+
+/* Click-to-activate maps & lazy 3D tours */
+.mrt-click-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.mrt-click-frame iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  pointer-events: none;
+}
+.mrt-click-frame.is-click-active iframe {
+  pointer-events: auto;
+}
+.mrt-click-frame__activator {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  border: 0;
+  border-radius: inherit;
+  cursor: pointer;
+  font-family: var(--font-f-roboto), Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+  background: rgba(97, 128, 161, 0.42);
+  transition: background 0.25s ease, opacity 0.25s ease;
+}
+.mrt-click-frame__activator:hover,
+.mrt-click-frame__activator:focus-visible {
+  background: rgba(97, 128, 161, 0.55);
+}
+.mrt-click-frame__activator:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+.mrt-click-frame__label {
+  max-width: 16em;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgba(64, 64, 64, 0.88);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+.mrt-click-frame.is-click-active .mrt-click-frame__activator {
+  display: none;
+}
+.tour__inner.mrt-click-frame {
+  max-height: 489px;
+  min-height: 280px;
+}
+.tour__inner.mrt-click-frame .tour__iframe {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  max-height: 489px;
+  border: 0;
+}
+.tour__inner.mrt-click-frame .tour__poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tour__inner.mrt-click-frame.is-click-active .tour__poster {
+  display: none;
+}
+.contacts__map-frame .mrt-click-frame iframe {
+  border-radius: 8px;
+  min-height: 360px;
+}
+
+
+.contacts__content {
+  z-index: 4;
+}
+
+

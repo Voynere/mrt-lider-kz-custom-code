@@ -380,7 +380,12 @@ if (!function_exists('mrt_get_animals_map_html')) {
             $map_html = get_field('contacts_map');
             wp_reset_postdata();
             if (!empty($map_html)) {
-                return $map_html;
+                return function_exists('mrt_wrap_click_activate_frame')
+                    ? mrt_wrap_click_activate_frame($map_html, [
+                        'label' => 'Нажмите, чтобы взаимодействовать с картой',
+                        'class' => 'animals-map-click',
+                    ])
+                    : $map_html;
             }
         }
 
@@ -388,11 +393,18 @@ if (!function_exists('mrt_get_animals_map_html')) {
         $address_full = $branch['address_full'] ?? 'ул. Аубакирова, 17/1, село Отеген батыра, Илийский район, Алматинская область';
         $map_url = 'https://yandex.ru/map-widget/v1/?text=' . rawurlencode($address_full) . '&z=15';
 
-        return sprintf(
+        $fallback = sprintf(
             '<iframe src="%s" width="100%%" height="360" frameborder="0" allowfullscreen="true" title="%s"></iframe>',
             esc_url($map_url),
             esc_attr('Карта филиала MRI Animal')
         );
+
+        return function_exists('mrt_wrap_click_activate_frame')
+            ? mrt_wrap_click_activate_frame($fallback, [
+                'label' => 'Нажмите, чтобы взаимодействовать с картой',
+                'class' => 'animals-map-click',
+            ])
+            : $fallback;
     }
 }
 

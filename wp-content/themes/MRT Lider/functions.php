@@ -6,6 +6,7 @@ require get_template_directory() . '/inc/mrt-service-helpers.php';
 require get_template_directory() . '/inc/mrt-city-routing.php';
 require get_template_directory() . '/inc/mrt-service-routing.php';
 require get_template_directory() . '/inc/mrt-animals-faq.php';
+require get_template_directory() . '/inc/click-activate.php';
 require get_template_directory() . '/seo-config.php';
 
 add_theme_support('title-tag');
@@ -50,6 +51,14 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_script( 'imask', 'https://unpkg.com/imask', array(), null, true );
 	wp_enqueue_script( 'imask', 'https://cdnjs.cloudflare.com/ajax/libs/imask/7.5.3/imask.min.js', array(), '7.5.3', true );
 	wp_enqueue_script( 'main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.6.5', true );
+	$click_activate_path = get_template_directory() . '/assets/js/click-activate.js';
+	wp_enqueue_script(
+		'mrt-click-activate',
+		get_template_directory_uri() . '/assets/js/click-activate.js',
+		array(),
+		file_exists($click_activate_path) ? filemtime($click_activate_path) : '1.0.0',
+		true
+	);
 	wp_enqueue_script( 'cookie', get_template_directory_uri() . '/assets/js/cookie.js', array('jquery'), '1.2.3', true );
 	wp_enqueue_script( 'city-chosen', get_template_directory_uri() . '/assets/js/city-chosen.js', array('jquery'), '1.0.3', true );
 	wp_enqueue_script( 'tax', get_template_directory_uri() . '/assets/js/tax.js', array('jquery'), 'null', true );

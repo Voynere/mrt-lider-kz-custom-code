@@ -80,9 +80,14 @@ $is_animals_contacts = mrt_is_animals_branch($selected_city);
                                 }
                             }
 
-                            // Выводим карту 
+                            // Выводим карту (клик для взаимодействия)
                             if ( ! empty( $map_html ) ) {
-                                echo $map_html;
+                                echo function_exists('mrt_wrap_click_activate_frame')
+                                    ? mrt_wrap_click_activate_frame( $map_html, [
+                                        'label' => 'Нажмите, чтобы взаимодействовать с картой',
+                                        'class' => 'contacts__map-click',
+                                    ] )
+                                    : $map_html;
                             } else {
                                 echo '<!-- Карта не задана для выбранного филиала -->';
                             }
