@@ -363,4 +363,21 @@ foreach ($city_slugs as $slug) {
 
 echo "\nDONE cities={$stats['cities']} renamed_clariscan={$stats['renamed']} created_chol={$stats['created_chol']} created_dota_delta={$stats['created_dota']}"
     . ($dry_run ? " (dry-run)\n" : "\n");
+
+if (!$dry_run) {
+    if (function_exists('mrt_bump_page_cache_version')) {
+        mrt_bump_page_cache_version();
+        echo "page cache version bumped\n";
+    }
+    if (function_exists('wp_cache_flush')) {
+        wp_cache_flush();
+        echo "wp_cache_flush done\n";
+    }
+    foreach (['/var/cache/pagespeed/cache.flush', '/var/cache/mod_pagespeed/cache.flush'] as $flush_file) {
+        if (@touch($flush_file)) {
+            echo "pagespeed flush touched: {$flush_file}\n";
+        }
+    }
+}
+
 exit(0);

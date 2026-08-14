@@ -63,4 +63,7 @@ jobs:
             php "$SCRIPT_DST" $DRY_FLAG
 
             wp --allow-root cache flush --quiet 2>/dev/null || true
+            wp --allow-root eval 'if (function_exists("mrt_bump_page_cache_version")) { mrt_bump_page_cache_version(); echo "bumped\n"; }' 2>/dev/null || true
+            touch /var/cache/pagespeed/cache.flush 2>/dev/null || true
+            find /var/cache/pagespeed -type f -name '*.tmp' -delete 2>/dev/null || true
             rm -rf "$STAGING"
