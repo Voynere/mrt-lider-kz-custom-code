@@ -40,6 +40,8 @@ cat docs/rag/manifest.json
 
 - `wp-content/themes/MRT Lider/inc/mrt-city-config.php` — конфиг филиалов, метрика, form_email
 - `wp-content/themes/MRT Lider/inc/mrt-city-routing.php` — rewrite и city URLs
+- `wp-content/themes/MRT Lider/inc/mrt-service-helpers.php` — льготный прайс, цены, helpers посадочных
+- `wp-content/plugins/services-importer/cli-update-kz-cholesteatoma-dotagita.php` — CLI апдейта Дотагита/холестеатома
 - `wp-content/themes/MRT Lider/home-animals.php` — лендинг для животных
 - `wp-content/themes/MRT Lider/seo-config.php` — SEO, OG, JSON-LD, sitemap (без AIOSEO)
 - `wp-content/themes/MRT Lider/assets/js/mrt-metrika.js` — UTM + reachGoal
