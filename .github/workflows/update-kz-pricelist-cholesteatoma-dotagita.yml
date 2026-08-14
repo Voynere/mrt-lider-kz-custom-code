@@ -1,0 +1,66 @@
+name: Update KZ pricelist (cholesteatoma + Dotagita)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run (no DB writes)'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  update-pricelist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: update-kz-pricelist-kz-domain
+      cancel-in-progress: false
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Upload updater script
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "wp-content/plugins/services-importer/cli-update-kz-cholesteatoma-dotagita.php"
+          target: "/tmp/mrt-kz-pricelist-${{ github.run_id }}"
+          strip_components: 3
+
+      - name: Run pricelist updater on KZ WordPress
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            SITE="${{ secrets.SERVER_PATH }}"
+            STAGING="/tmp/mrt-kz-pricelist-${{ github.run_id }}"
+            SCRIPT_SRC="$STAGING/cli-update-kz-cholesteatoma-dotagita.php"
+            SCRIPT_DST="$SITE/wp-content/plugins/services-importer/cli-update-kz-cholesteatoma-dotagita.php"
+
+            test -f "$SCRIPT_SRC"
+            install -m 644 "$SCRIPT_SRC" "$SCRIPT_DST"
+            chown mrt-lider.kz:mrt-lider.kz "$SCRIPT_DST" 2>/dev/null || true
+
+            cd "$SITE"
+            DRY_FLAG=""
+            if [ "${{ inputs.dry_run }}" = "true" ]; then
+              DRY_FLAG="--dry-run"
+            fi
+
+            echo "=== Running updater ${DRY_FLAG} ==="
+            php "$SCRIPT_DST" $DRY_FLAG
+
+            wp --allow-root cache flush --quiet 2>/dev/null || true
+            rm -rf "$STAGING"
