@@ -98,6 +98,7 @@ $tax_query = array(
 );
 
 $meta_query = null;
+$service_term = null;
 
 if (!empty($service_slug)) {
     $service_term = get_term_by('slug', $service_slug, 'service_type');
@@ -194,9 +195,29 @@ function sort_service_categories($a, $b) {
 }
 
 // --- тенге вместо руб. ---
-$kazakhstan_cities = array('almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova');
+$kazakhstan_cities = function_exists('mrt_get_kz_cities')
+    ? mrt_get_kz_cities()
+    : array('almaty', 'astana', 'karaganda', 'taldykorgan', 'almaty_aubakirova');
 $use_tenge = in_array($selected_city, $kazakhstan_cities, true);
 $currency_symbol = $use_tenge ? '₸' : '₽';
+$service_type_slug_for_pricing = !empty($service_slug) ? (string) $service_slug : '';
+$service_type_name_for_pricing = (!empty($service_term) && $service_term instanceof WP_Term)
+    ? (string) $service_term->name
+    : '';
+$concessional_pricing = mrt_city_uses_concessional_pricing(
+    $selected_city,
+    $service_type_slug_for_pricing,
+    $service_type_name_for_pricing
+);
+$show_concessional_notice = mrt_should_show_concessional_price_notice(
+    $selected_city,
+    mrt_posts_have_discounted_price(
+        $query->posts,
+        $selected_city,
+        $service_type_slug_for_pricing,
+        $service_type_name_for_pricing
+    )
+);
 
 get_header();
 ?>
@@ -208,9 +229,14 @@ get_header();
                 custom_breadcrumbs();
             }
         ?>
-        <section class="price">
+        <section class="price<?php echo $concessional_pricing ? ' price--concessional' : ''; ?>">
             <div class="container">
                 <h1 class="price__title page-title">УСЛУГИ И ЦЕНЫ</h1>
+                <?php
+                if ($show_concessional_notice) {
+                    echo mrt_render_concessional_price_notice($selected_city);
+                }
+                ?>
                 <div class="price__content">
                     <?php if ($query->have_posts()) : 
                         $grouped = array();
@@ -253,7 +279,9 @@ get_header();
                                     <div class="price__item-head">
                                         <p>Область исследования</p>
                                         <p>Цена</p>
-                                        <p>Скидка*</p>
+                                        <?php if (!$concessional_pricing): ?>
+                                            <p>Скидка*</p>
+                                        <?php endif; ?>
                                     </div>
                                     <?php foreach ($items as $item) :
                                         $svc_url = !empty($item['post_slug'])
@@ -272,20 +300,20 @@ get_header();
                                             $price_parts = mrt_service_price_parts_from_meta(
                                                 $item['price'] ?? '',
                                                 $item['discount'] ?? '',
-                                                false
+                                                $concessional_pricing
                                             );
                                             echo mrt_render_price_table_cell($price_parts, $currency_symbol);
                                             ?>
+                                            <?php if (!$concessional_pricing && ($price_parts['mode'] ?? '') !== 'text'): ?>
                                             <p class="price__item-skidka">
                                                 <?php
-                                                if (($price_parts['mode'] ?? '') !== 'text') {
-                                                    $discount_amount = (int) ($price_parts['discount_amount'] ?? 0);
-                                                    echo $discount_amount > 0
-                                                        ? '−' . esc_html(number_format($discount_amount, 0, '', ' ')) . ' ' . esc_html($currency_symbol)
-                                                        : '';
-                                                }
+                                                $discount_amount = (int) ($price_parts['discount_amount'] ?? 0);
+                                                echo $discount_amount > 0
+                                                    ? '−' . esc_html(number_format($discount_amount, 0, '', ' ')) . ' ' . esc_html($currency_symbol)
+                                                    : '';
                                                 ?>
                                             </p>
+                                            <?php endif; ?>
                                             <button class="price__item-button btn-blue booking-btn">
                                                 <p>Записаться</p>
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

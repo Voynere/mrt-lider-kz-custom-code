@@ -375,21 +375,53 @@ if (!function_exists('mrt_city_insurance_hint')) {
     }
 }
 
+if (!function_exists('mrt_city_concessional_pricing_slugs')) {
+    /**
+     * Города, где si_price — основная цена, si_discount — льготная (не для всех).
+     * Как на mrt-lider.ru для Казахстана; филиал животных не входит.
+     *
+     * @return list<string>
+     */
+    function mrt_city_concessional_pricing_slugs(): array {
+        return array('almaty', 'astana', 'karaganda', 'taldykorgan');
+    }
+}
+
 if (!function_exists('mrt_city_uses_concessional_pricing')) {
     function mrt_city_uses_concessional_pricing(string $city, string $service_type_slug = '', string $service_type_name = ''): bool {
-        return false;
+        unset($service_type_slug, $service_type_name);
+
+        return in_array(sanitize_key($city), mrt_city_concessional_pricing_slugs(), true);
+    }
+}
+
+if (!function_exists('mrt_city_concessional_price_notice_paragraphs')) {
+    /**
+     * Текст пояснения к льготной цене по городу (как на RU для KZ).
+     *
+     * @return list<string>
+     */
+    function mrt_city_concessional_price_notice_paragraphs(string $city): array {
+        if (!in_array(sanitize_key($city), mrt_city_concessional_pricing_slugs(), true)) {
+            return array();
+        }
+
+        return array(
+            'Скидка 10% предоставляется повторным клиентам, пенсионерам, инвалидам, многодетным семьям, участникам ВОВ, а также их близким родственникам. Скидки не суммируются.',
+            'Для остальных категорий пациентов скидка действует <strong>после 20:00</strong> и <strong>после 00:00</strong> ежедневно, по прайсу.',
+        );
     }
 }
 
 if (!function_exists('mrt_city_has_concessional_price_notice')) {
     function mrt_city_has_concessional_price_notice(string $city): bool {
-        return false;
+        return mrt_city_concessional_price_notice_paragraphs($city) !== array();
     }
 }
 
 if (!function_exists('mrt_should_show_concessional_price_notice')) {
     function mrt_should_show_concessional_price_notice(string $city, bool $section_has_discounted_prices): bool {
-        return false;
+        return $section_has_discounted_prices && mrt_city_has_concessional_price_notice($city);
     }
 }
 
@@ -421,7 +453,26 @@ if (!function_exists('mrt_service_price_text_label')) {
 }
 
 if (!function_exists('mrt_service_price_parts')) {
+    /**
+     * @return array{mode: string, base?: int, concessional?: int, has_concessional?: bool, current?: int, old?: int, has_discount?: bool, discount_amount?: int, text?: string}
+     */
     function mrt_service_price_parts(int $price, int $discount, bool $concessional_mode): array {
+        if ($concessional_mode) {
+            $base = $price > 0 ? $price : $discount;
+            $concessional = 0;
+            if ($price > 0 && $discount > 0 && $price !== $discount) {
+                $base = max($price, $discount);
+                $concessional = min($price, $discount);
+            }
+
+            return array(
+                'mode'             => 'concessional',
+                'base'             => $base,
+                'concessional'     => $concessional,
+                'has_concessional' => $concessional > 0 && $concessional < $base,
+            );
+        }
+
         $has_discount = ($price > 0 && $discount > 0 && $price !== $discount);
         $current = $has_discount ? min($price, $discount) : $price;
         $old = $has_discount ? max($price, $discount) : 0;
@@ -477,8 +528,13 @@ if (!function_exists('mrt_service_item_has_discounted_price')) {
         if (mrt_service_price_text_label($price, $discount) !== '') {
             return false;
         }
-        $parts = mrt_service_price_parts((int) $price, (int) $discount, false);
-        return !empty($parts['has_discount']);
+
+        $concessional_mode = mrt_city_uses_concessional_pricing($city, $service_type_slug, $service_type_name);
+        $parts = mrt_service_price_parts((int) $price, (int) $discount, $concessional_mode);
+
+        return $concessional_mode
+            ? !empty($parts['has_concessional'])
+            : !empty($parts['has_discount']);
     }
 }
 
@@ -489,6 +545,24 @@ if (!function_exists('mrt_render_price_table_cell')) {
             return '<p class="price__item-cena price__item-cena--text">'
                 . esc_html($text !== '' ? $text : 'Цена не указана')
                 . '</p>';
+        }
+
+        if (($parts['mode'] ?? '') === 'concessional') {
+            $base = (int) ($parts['base'] ?? 0);
+            if ($base <= 0) {
+                return '<p class="price__item-cena price__item-cena--concessional">Цена не указана</p>';
+            }
+            $html = '<p class="price__item-cena price__item-cena--concessional">';
+            $html .= '<span class="price__base">' . esc_html(mrt_format_price_amount($base, $currency_symbol)) . '</span>';
+            if (!empty($parts['has_concessional'])) {
+                $concessional = (int) ($parts['concessional'] ?? 0);
+                $html .= '<span class="price__concessional">';
+                $html .= '<span class="price__concessional-value">от ' . esc_html(mrt_format_price_amount($concessional, $currency_symbol)) . '</span>';
+                $html .= '<span class="price__badge">льготная</span>';
+                $html .= '</span>';
+            }
+            $html .= '</p>';
+            return $html;
         }
 
         $current = (int) ($parts['current'] ?? 0);
@@ -517,7 +591,30 @@ if (!function_exists('mrt_render_price_hero_block')) {
                 . '</div>';
         }
 
-        $parts = mrt_service_price_parts((int) $price, (int) $discount, false);
+        $price = (int) $price;
+        $discount = (int) $discount;
+        $concessional_mode = mrt_city_uses_concessional_pricing($city, $service_type_slug, $service_type_name);
+        $parts = mrt_service_price_parts($price, $discount, $concessional_mode);
+
+        if (($parts['mode'] ?? '') === 'concessional') {
+            $base = (int) ($parts['base'] ?? 0);
+            if ($base <= 0) {
+                return '<div class="' . esc_attr($wrapper_class) . '"><div class="' . esc_attr($wrapper_class) . '__value">Цена уточняется</div></div>';
+            }
+            $html = '<div class="' . esc_attr($wrapper_class) . ' ' . esc_attr($wrapper_class) . '--concessional">';
+            $html .= '<div class="' . esc_attr($wrapper_class) . '__value">'
+                . esc_html(mrt_format_price_amount($base, $currency_symbol)) . '</div>';
+            if (!empty($parts['has_concessional'])) {
+                $concessional = (int) ($parts['concessional'] ?? 0);
+                $html .= '<div class="' . esc_attr($wrapper_class) . '__concessional">';
+                $html .= 'от ' . esc_html(mrt_format_price_amount($concessional, $currency_symbol));
+                $html .= ' <span class="price__badge">льготная</span>';
+                $html .= '</div>';
+            }
+            $html .= '</div>';
+            return $html;
+        }
+
         $current = (int) ($parts['current'] ?? 0);
         $old = (int) ($parts['old'] ?? 0);
         $html = '<div class="' . esc_attr($wrapper_class) . '">';
@@ -538,7 +635,21 @@ if (!function_exists('mrt_render_price_hero_block')) {
 
 if (!function_exists('mrt_render_concessional_price_notice')) {
     function mrt_render_concessional_price_notice(string $city): string {
-        return '';
+        $paragraphs = mrt_city_concessional_price_notice_paragraphs($city);
+        if ($paragraphs === array()) {
+            return '';
+        }
+
+        $html = '<aside class="price-concessional-notice" id="price-concessional-notice">'
+            . '<p class="price-concessional-notice__title">Условия льготной цены</p>';
+        foreach ($paragraphs as $paragraph) {
+            $html .= '<p class="price-concessional-notice__text">'
+                . wp_kses($paragraph, array('strong' => array()))
+                . '</p>';
+        }
+        $html .= '</aside>';
+
+        return $html;
     }
 }
 
@@ -596,8 +707,22 @@ if (!function_exists('mrt_is_service_hidden_for_city')) {
     }
 }
 
+if (!function_exists('mrt_city_discount_marketing_phrase')) {
+    function mrt_city_discount_marketing_phrase(string $city): string {
+        if (in_array(sanitize_key($city), mrt_city_concessional_pricing_slugs(), true)) {
+            return 'Скидки 10%';
+        }
+
+        return 'Скидки до 30%';
+    }
+}
+
 if (!function_exists('mrt_city_discount_benefit_desc')) {
     function mrt_city_discount_benefit_desc(string $city): string {
+        if (in_array(sanitize_key($city), mrt_city_concessional_pricing_slugs(), true)) {
+            return 'Скидка 10% льготным категориям и ночные цены по прайсу';
+        }
+
         return 'Скидки до 30%, акции для постоянных клиентов';
     }
 }
