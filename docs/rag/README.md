@@ -27,6 +27,10 @@ cat docs/rag/manifest.json
 | seo-module-kz | `chunks/09-seo-module-kz.md` | SEO + Schema.org без AIOSEO |
 | metrika-forms-routing | `chunks/10-metrika-forms-routing.md` | Метрика по городам, email форм, routing |
 | session-2026-07-07 | `chunks/11-session-2026-07-07.md` | Итоги сессии 07.07.2026 |
+| service-landing-urls-kz | `chunks/12-service-landing-urls-kz.md` | Посадочные URL услуг по городам |
+| yandex-direct-kz-api | `chunks/13-yandex-direct-kz-api.md` | Яндекс Директ API KZ |
+| session-2026-08-14 | `chunks/14-session-2026-08-14.md` | Сессия 14.08: льготный UI, Дотагита, 13/58 |
+| kz-concessional-pricing | `chunks/15-kz-concessional-pricing.md` | Льготный прайс KZ + CLI апдейтов |
 
 ## Локальная папка seov (не в Git)
 

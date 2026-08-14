@@ -1,6 +1,6 @@
 {
   "project": "mrt-lider-kz",
-  "version": "2026-07-07-session",
+  "version": "2026-08-14-session",
   "description": "RAG knowledge base for MRT Lider Kazakhstan WordPress site",
   "chunks": [
     {
@@ -67,6 +67,16 @@
       "id": "yandex-direct-kz-api",
       "file": "chunks/13-yandex-direct-kz-api.md",
       "tags": ["yandex-direct", "api", "advertising", "kz", "cli"]
+    },
+    {
+      "id": "session-2026-08-14",
+      "file": "chunks/14-session-2026-08-14.md",
+      "tags": ["session", "changelog", "pricing", "concessional", "2026-08-14"]
+    },
+    {
+      "id": "kz-concessional-pricing",
+      "file": "chunks/15-kz-concessional-pricing.md",
+      "tags": ["pricing", "concessional", "discount", "cli", "dotagita", "cholesteatoma"]
     }
   ]
 }
