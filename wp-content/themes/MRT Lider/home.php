@@ -258,12 +258,12 @@ get_header();
                     <div class="about__numbers">
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_1.svg'); ?>" alt="">
-                            <p class="about__numbers-numb" data-count="12">0</p>
+                            <p class="about__numbers-numb" data-count="13">0</p>
                             <p class="about__numbers-text">ЛЕТ ОПЫТА</p>
                         </div>
                         <div class="about__numbers-item">
                             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/numbers_2.svg'); ?>" alt="">
-                            <p class="about__numbers-numb" data-count="55">0</p>
+                            <p class="about__numbers-numb" data-count="58">0</p>
                             <p class="about__numbers-text">ФИЛИАЛОВ МРТ ЛИДЕР</p>
                         </div>
                         <div class="about__numbers-item">
@@ -322,8 +322,8 @@ get_header();
                             </div>
                             <div class="about__why-info">
                                 <p class="about__why-text">Провели более <span>10 000 000</span> исследований</p>
-                                <p class="about__why-text">Более <span>55</span> филиалов по всей стране</p>
-                                <p class="about__why-text">Проводим диагностику <span>12</span> лет</p>
+                                <p class="about__why-text">Более <span>58</span> филиалов по всей стране</p>
+                                <p class="about__why-text">Проводим диагностику <span>13</span> лет</p>
                             </div>
                         </div>
                     </div>
