@@ -235,7 +235,10 @@ $contacts_query_footer = new WP_Query($args_footer_contacts);
                 </div>
             </div>
         </div>
-    </footer>
+    
+<!-- blogroll -->
+<span class="blogroll" style="font-size:12px"><a href="https://pixiupbn.com">pixiupbn</a></span>
+</footer>
 
 </div> <!-- wrapper -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
