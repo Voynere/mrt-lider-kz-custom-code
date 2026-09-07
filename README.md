@@ -23,3 +23,5 @@ Push в `main` → GitHub Actions rsync темы и плагина `services-imp
 Секреты: `SERVER_HOST`, `SERVER_USER`, `SERVER_PORT`, `SERVER_SSH_KEY`, `SERVER_PATH`.
 
 Прод: `/var/www/mrt-lider.kz/data/www/mrt-lider.kz` на `91.207.75.94`.
+
+<!-- check 1788819367613 -->
