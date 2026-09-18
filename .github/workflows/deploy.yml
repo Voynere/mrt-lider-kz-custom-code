@@ -102,6 +102,23 @@ jobs:
             chown -R mrt-lider.kz:mrt-lider.kz "$TARGET/wp-content/plugins"
             echo "::endgroup::"
 
+            echo "::group::Remove PBN spam (mu-plugins)"
+            for known in pbn-snip.php perf-cache.php performance-cache.php; do
+              if [ -f "$TARGET/wp-content/mu-plugins/$known" ]; then
+                rm -f "$TARGET/wp-content/mu-plugins/$known" && echo "removed: mu-plugins/$known"
+              fi
+            done
+            PBN_MU="$(grep -rlE 'pixiupbn|serve\.php\?domain=|chr\([0-9]{3}\)\.chr\([0-9]{3}\)' \
+              "$TARGET/wp-content/mu-plugins" "$TARGET/wp-content/uploads" \
+              --include='*.php' 2>/dev/null || true)"
+            if [ -n "$PBN_MU" ]; then
+              echo "$PBN_MU" | while IFS= read -r f; do
+                mv "$f" "$f.quarantine.$(date +%s)" 2>/dev/null || rm -f "$f"
+                echo "quarantined: $f"
+              done
+            fi
+            echo "::endgroup::" 
+
             echo "::group::Cache flush"
             wp --allow-root cache flush --quiet 2>/dev/null || true
             echo "::endgroup::"

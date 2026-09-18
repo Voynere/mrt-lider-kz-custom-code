@@ -28,4 +28,13 @@ require_file "wp-content/themes/MRT Lider/style.css"
 require_dir "wp-content/plugins/services-importer"
 require_file "wp-content/plugins/services-importer/services-importer.php"
 
+# ── PBN / SEO-spam guard: domain signatures, hidden dofollow, spam MU-plugins ──
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/scan-pbn-spam.sh" ]; then
+	bash "$SCRIPT_DIR/scan-pbn-spam.sh" "$ROOT" || {
+		echo "[$LABEL] ERROR: PBN spam guard failed"
+		exit 1
+	}
+fi
+
 echo "[$LABEL] OK: favicon + MRT Lider theme + services-importer bundle"

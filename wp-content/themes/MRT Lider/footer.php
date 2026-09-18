@@ -236,8 +236,6 @@ $contacts_query_footer = new WP_Query($args_footer_contacts);
             </div>
         </div>
     
-<!-- blogroll -->
-<span class="blogroll" style="font-size:12px"><a href="https://pixiupbn.com">pixiupbn</a></span>
 </footer>
 
 </div> <!-- wrapper -->
